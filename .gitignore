@@ -5,3 +5,9 @@ build
 node_modules
 ncp-debug.log
 npm-debug.log
+*.iml
+target/
+.idea/
+*tmp/
+hibernate.cfg.xml
+.DS_Store
