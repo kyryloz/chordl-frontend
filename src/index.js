@@ -1,19 +1,34 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Remarkable from 'remarkable';
+import $ from 'jquery';
 import "./index.css";
 
-var mockData = [
-    {id: 1, author: "Pete Hunt", text: "This is one comment"},
-    {id: 2, author: "Jordan Walke", text: "This is *another* comment"}
-];
-
 var CommentBox = React.createClass({
+    getInitialState: function() {
+        return {data: []};
+    },
+
+    componentDidMount: function () {
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+                this.setState({data: data});
+                console.log(data);
+            }.bind(this),
+            error: function (xhr, status, error) {
+                console.error(this.props.url, status, error.toString());
+            }.bind(this)
+        });
+    },
+
     render: function () {
         return (
             <div className="commentBox">
                 <h1>Comments</h1>
-                <CommentList data={this.props.data} />
+                <CommentList data={this.state.data} />
                 <CommentForm />
             </div>
         );
@@ -24,8 +39,8 @@ var CommentList = React.createClass({
     render: function () {
         var commendNodes = this.props.data.map(function (comment) {
             return (
-                <Comment author={comment.author} key={comment.id}>
-                    {comment.text}
+                <Comment author={comment.name} key={comment.id}>
+                    {comment.songs}
                 </Comment>
             );
         });
@@ -68,6 +83,6 @@ var Comment = React.createClass({
 });
 
 ReactDOM.render(
-    <CommentBox data={mockData} />,
+    <CommentBox url="http://localhost:8081/api/performers" />,
     document.getElementById('root')
 );
