@@ -1,10 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Remarkable from 'remarkable';
-import $ from 'jquery';
+import $ from "jquery";
 import "./index.css";
 
-var CommentBox = React.createClass({
+var PerformerBox = React.createClass({
     getInitialState: function() {
         return {data: []};
     },
@@ -16,7 +15,6 @@ var CommentBox = React.createClass({
             cache: false,
             success: function (data) {
                 this.setState({data: data});
-                console.log(data);
             }.bind(this),
             error: function (xhr, status, error) {
                 console.error(this.props.url, status, error.toString());
@@ -24,65 +22,111 @@ var CommentBox = React.createClass({
         });
     },
 
-    render: function () {
-        return (
-            <div className="commentBox">
-                <h1>Comments</h1>
-                <CommentList data={this.state.data} />
-                <CommentForm />
-            </div>
-        );
-    }
-});
+    handlePerformerSubmit: function (performer) {
+        var performersOriginal = this.state.data;
+        var performersOptimistic = this.state.data.slice();
 
-var CommentList = React.createClass({
-    render: function () {
-        var commendNodes = this.props.data.map(function (comment) {
-            return (
-                <Comment author={comment.name} key={comment.id}>
-                    {comment.songs}
-                </Comment>
-            );
+        performer.id = Date.now();
+        performersOptimistic.push(performer);
+
+        this.setState({data: performersOptimistic});
+
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            type: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(performer),
+            success: function(data) {
+                performersOriginal.push(data);
+                this.setState({data: performersOriginal});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                this.setState({data: performersOriginal});
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
         });
-
-        return (
-            <div className="commentList">
-                {commendNodes}
-            </div>
-        );
-    }
-});
-
-var CommentForm = React.createClass({
-    render: function () {
-        return (
-            <div className="commentForm">
-                Hello, world! I am a CommentForm.
-            </div>
-        );
-    }
-});
-
-var Comment = React.createClass({
-    rawMarkup: function() {
-        var md = new Remarkable();
-        var rawMarkup = md.render(this.props.children.toString());
-        return { __html: rawMarkup };
     },
 
     render: function () {
         return (
-            <div className="comment">
-                <h2 className="commentAuthor">
-                    {this.props.author}
+            <div className="performerBox">
+                <h1>All performers:</h1>
+                <PerformerList data={this.state.data} />
+                <PerformerForm onPerformerSubmit={this.handlePerformerSubmit}/>
+            </div>
+        );
+    }
+});
+
+var PerformerList = React.createClass({
+    render: function () {
+        var performerNodes = this.props.data.map(function (performer) {
+            return (
+                <Performer name={performer.name} key={performer.id}>
+                    {/*{performer.songs}*/}
+                </Performer>
+            );
+        });
+
+        return (
+            <div className="performerList">
+                {performerNodes}
+            </div>
+        );
+    }
+});
+
+var PerformerForm = React.createClass({
+    getInitialState: function() {
+        return {name: ''};
+    },
+    
+    handleNameChange: function (e) {
+        this.setState({name: e.target.value})
+    },
+
+    handleSubmit: function(e) {
+        e.preventDefault();
+        var name = this.state.name.trim();
+        if (!name) {
+            return;
+        }
+        this.props.onPerformerSubmit({name: name});
+        this.setState({name: ''});
+    },
+
+    render: function () {
+        return (
+            <form className="performerForm" onSubmit={this.handleSubmit}>
+                <input
+                    type="text"
+                    placeholder="Performer title"
+                    value={this.state.name}
+                    onChange={this.handleNameChange}
+                />
+                <input type="submit" value="Add performer" />
+            </form>
+        );
+    }
+});
+
+var Performer = React.createClass({
+    render: function () {
+        return (
+            <div className="performer">
+                <h2 className="performerName">
+                    {this.props.name}
                 </h2>
-                <span dangerouslySetInnerHTML={this.rawMarkup()} />
             </div>
         );
     }
 });
 
 ReactDOM.render(
-    <CommentBox url="http://localhost:8081/api/performers" />,
+    <PerformerBox url="http://localhost:8081/api/performers" />,
     document.getElementById('root')
 );
