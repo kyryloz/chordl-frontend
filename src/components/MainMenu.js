@@ -5,6 +5,7 @@ export default class MainMenu extends React.Component {
     render() {
         return (
             <List>
+                <ListItem primaryText="Home" href="#/"/>
                 <ListItem primaryText="Add song" href="#/add"/>
                 <ListItem primaryText="All songs" href="#/all"/>
                 <ListItem primaryText="About" href="#/about"/>
