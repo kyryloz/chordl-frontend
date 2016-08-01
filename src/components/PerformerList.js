@@ -1,21 +1,18 @@
 import * as React from "react";
-
-import Performer from "./Performer"
+import {List, ListItem} from "material-ui/List";
 
 export default class PerformerList extends React.Component {
     render() {
         var performerNodes = this.props.data.map(function (performer) {
             return (
-                <Performer name={performer.name} key={performer.id}>
-                    {/*{performer.songs}*/}
-                </Performer>
+                <ListItem primaryText={performer.name} key={performer.id}/>
             );
         });
 
         return (
-            <div className="performerList">
+            <List>
                 {performerNodes}
-            </div>
+            </List>
         );
     }
 }
