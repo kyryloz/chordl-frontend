@@ -5,9 +5,9 @@ export default class MainMenu extends React.Component {
     render() {
         return (
             <List>
-                <ListItem primaryText="Performers" key="0"/>
-                <ListItem primaryText="Songs" key="1"/>
-                <ListItem primaryText="About" key="2"/>
+                <ListItem primaryText="Add song" href="#/add"/>
+                <ListItem primaryText="All songs" href="#/all"/>
+                <ListItem primaryText="About" href="#/about"/>
             </List>
         );
     }
