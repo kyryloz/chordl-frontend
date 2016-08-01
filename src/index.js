@@ -2,9 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import $ from "jquery";
 import "./index.css";
+import SearchBar from "./components/SearchBar.jsx";
 
 var PerformerBox = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {data: []};
     },
 
@@ -40,11 +41,11 @@ var PerformerBox = React.createClass({
                 'Content-Type': 'application/json'
             },
             data: JSON.stringify(performer),
-            success: function(data) {
+            success: function (data) {
                 performersOriginal.push(data);
                 this.setState({data: performersOriginal});
             }.bind(this),
-            error: function(xhr, status, err) {
+            error: function (xhr, status, err) {
                 this.setState({data: performersOriginal});
                 console.error(this.props.url, status, err.toString());
             }.bind(this)
@@ -55,7 +56,7 @@ var PerformerBox = React.createClass({
         return (
             <div className="performerBox">
                 <h1>All performers:</h1>
-                <PerformerList data={this.state.data} />
+                <PerformerList data={this.state.data}/>
                 <PerformerForm onPerformerSubmit={this.handlePerformerSubmit}/>
             </div>
         );
@@ -81,15 +82,15 @@ var PerformerList = React.createClass({
 });
 
 var PerformerForm = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {name: ''};
     },
-    
+
     handleNameChange: function (e) {
         this.setState({name: e.target.value})
     },
 
-    handleSubmit: function(e) {
+    handleSubmit: function (e) {
         e.preventDefault();
         var name = this.state.name.trim();
         if (!name) {
@@ -108,7 +109,7 @@ var PerformerForm = React.createClass({
                     value={this.state.name}
                     onChange={this.handleNameChange}
                 />
-                <input type="submit" value="Add performer" />
+                <input type="submit" value="Add performer"/>
             </form>
         );
     }
@@ -127,6 +128,7 @@ var Performer = React.createClass({
 });
 
 ReactDOM.render(
-    <PerformerBox url="http://localhost:8081/api/performers" />,
+    <SearchBar/>,
+    <PerformerBox url="http://localhost:8081/api/performers"/>,
     document.getElementById('root')
 );
