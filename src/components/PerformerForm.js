@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as $ from "jquery";
 
 export default class PerformerForm extends React.Component {
     constructor() {
@@ -16,8 +17,27 @@ export default class PerformerForm extends React.Component {
         if (!name) {
             return;
         }
-        this.props.onPerformerSubmit({name: name});
+        this.handlePerformerSubmit({name: name});
         this.setState({name: ''});
+    };
+
+    handlePerformerSubmit(performer) {
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            type: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(performer),
+            success: function (data) {
+                console.log("Submit success")
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
     };
 
     render() {

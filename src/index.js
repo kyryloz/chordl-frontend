@@ -10,6 +10,7 @@ import {Router, Route, IndexRoute, hashHistory} from 'react-router';
 import PerformerBox from "./components/PerformerBox"
 import Header from "./components/Header"
 import MainMenu from './components/MainMenu';
+import PerformerForm from './components/PerformerForm';
 
 injectTapEventPlugin();
 
@@ -21,7 +22,11 @@ const Home = () => (
     </div>
 );
 
-const AddPage = () => <h1>Add new song here</h1>;
+const AddPage = () => (
+    <div>
+        <PerformerForm url="http://localhost:8081/api/performers"/>
+    </div>
+);
 
 const AllSongsPage = () => <h1>All songs</h1>;
 
