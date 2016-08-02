@@ -21,8 +21,10 @@ export default class AddNewSong extends React.Component {
         super();
         this.state = {
             song: {
-                performerId: -1,
-                performerName: "",
+                performer: {
+                    name: "",
+                    id: -1
+                },
                 title: "",
                 lyrics: "",
             },
@@ -48,26 +50,25 @@ export default class AddNewSong extends React.Component {
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err.toString());
-            }.bind(this)
+            }
         });
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
 
-        console.log(this.state);
-
         var data = {
-            performerId: this.state.song.performerId,
-            performerName: this.state.song.performerName.trim(),
+            performerId: this.state.song.performer.id,
             title: this.state.song.title.trim(),
             lyrics: this.state.song.lyrics.trim(),
         };
 
         this.setState({
             song: {
-                performerId: -1,
-                performerName: "",
+                performer: {
+                    name: "",
+                    id: -1
+                },
                 title: "",
                 lyrics: ""
             }
@@ -87,15 +88,17 @@ export default class AddNewSong extends React.Component {
             },
             error: function (xhr, status, err) {
                 console.error(status, err.toString());
-            }.bind(this)
+            }
         });
     };
 
     handlePerformerChange = (performer) => {
         var newState = update(this.state, {
             song: {
-                performerName: {$set: performer.name},
-                performerId: {$set: performer.id},
+                performer: {$set: {
+                    name: performer.name,
+                    id: performer.id
+                }}
             }
         });
         this.setState(newState)
@@ -130,6 +133,7 @@ export default class AddNewSong extends React.Component {
                     dataSourceConfig={{text: 'name', value: 'id'}}
                     maxSearchResults={5}
                     fullWidth={true}
+                    searchText={this.state.song.performer.name}
                     onNewRequest={this.handlePerformerChange}
                 /><br/>
                 <TextField
