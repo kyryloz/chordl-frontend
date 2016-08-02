@@ -4,6 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import {Router, Route, IndexRoute, hashHistory} from 'react-router';
 
@@ -11,8 +12,24 @@ import PerformerBox from "./components/PerformerBox"
 import Header from "./components/Header"
 import MainMenu from './components/MainMenu';
 import PerformerForm from './components/PerformerForm';
+import colors from './colors'
 
 injectTapEventPlugin();
+
+const muiTheme = getMuiTheme({
+    palette: {
+        // textColor: colors.primaryTextColor,
+        // accentColor: colors.accentColor,
+        // primary1Color: colors.defaultPrimaryColor,
+        // primary2Color: colors.lightPrimaryColor,
+        // primary3Color: colors.darkPrimaryColor,
+        // accent1Color: colors.accentColor,
+        // accent2Color: colors.accentColor,
+        // accent3Color: colors.accentColor,
+        // alternateTextColor: colors.secondaryTextColor,
+        // borderColor: colors.dividerColor,
+    }
+});
 
 const Home = () => (
     <div className="column">
@@ -47,7 +64,7 @@ const Container = (props) => (
 );
 
 const App = () => (
-    <MuiThemeProvider>
+    <MuiThemeProvider muiTheme={muiTheme}>
         <Router history={hashHistory}>
             <Route path='/' component={Container}>
                 <IndexRoute component={Home}/>

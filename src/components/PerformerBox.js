@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as $ from "jquery";
 
-import SearchBar from "./SearchBar";
 import PerformerList from "./PerformerList";
 
 export default class PerformerBox extends React.Component {
@@ -28,7 +27,6 @@ export default class PerformerBox extends React.Component {
     render() {
         return (
             <div className="performerBox">
-                <SearchBar/>
                 <h1>All performers:</h1>
                 <PerformerList data={this.state.data}/>
             </div>
