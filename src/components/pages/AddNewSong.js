@@ -1,9 +1,12 @@
 import React from "react";
+import update from "react-addons-update";
 import TextField from "material-ui/TextField";
 import FlatButton from "material-ui/FlatButton";
+import AutoComplete from "material-ui/AutoComplete";
 import * as $ from "jquery";
 
 const url = 'http://localhost:8081/api/songs';
+const urlGetPerformers = 'http://localhost:8081/api/performers';
 
 const styles = {
     form: {
@@ -17,28 +20,57 @@ export default class AddNewSong extends React.Component {
     constructor() {
         super();
         this.state = {
-            performerId: -1,
-            performerName: "",
-            title: "",
-            lyrics: ""
+            song: {
+                performerId: -1,
+                performerName: "",
+                title: "",
+                lyrics: "",
+            },
+            performers: []
         };
+    }
+
+    componentDidMount() {
+        this.loadAllPerformers();
+    }
+
+    loadAllPerformers() {
+        $.ajax({
+            url: urlGetPerformers,
+            dataType: 'json',
+            type: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            success: function (data) {
+                this.setState({performers: data});
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(status, err.toString());
+            }.bind(this)
+        });
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
 
+        console.log(this.state);
+
         var data = {
-            performerId: this.state.performerId,
-            performerName: this.state.performerName.trim(),
-            title: this.state.title.trim(),
-            lyrics: this.state.lyrics.trim(),
+            performerId: this.state.song.performerId,
+            performerName: this.state.song.performerName.trim(),
+            title: this.state.song.title.trim(),
+            lyrics: this.state.song.lyrics.trim(),
         };
 
         this.setState({
-            performerId: -1,
-            performerName: "",
-            title: "",
-            lyrics: ""
+            song: {
+                performerId: -1,
+                performerName: "",
+                title: "",
+                lyrics: ""
+            }
         });
 
         $.ajax({
@@ -54,37 +86,56 @@ export default class AddNewSong extends React.Component {
                 console.log("Submit success")
             },
             error: function (xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
+                console.error(status, err.toString());
             }.bind(this)
         });
     };
 
-    handlePerformerChange = (e) => {
-        this.setState({performerName: e.target.value, performerId: 1})
+    handlePerformerChange = (performer) => {
+        var newState = update(this.state, {
+            song: {
+                performerName: {$set: performer.name},
+                performerId: {$set: performer.id},
+            }
+        });
+        this.setState(newState)
     };
 
     handleTitleChange = (e) => {
-        this.setState({title: e.target.value})
+        var newState = update(this.state, {
+            song: {
+                title: {$set: e.target.value}
+            }
+        });
+        this.setState(newState);
     };
 
     handleLyricsChange = (e) => {
-        this.setState({lyrics: e.target.value})
+        var newState = update(this.state, {
+            song: {
+                lyrics: {$set: e.target.value}
+            }
+        });
+        this.setState(newState)
     };
 
     render() {
         return (
             <div style={styles.form}>
                 <h3>Add new song</h3>
-                <TextField
+                <AutoComplete
                     floatingLabelText="Artist"
+                    filter={AutoComplete.fuzzyFilter}
+                    dataSource={this.state.performers}
+                    dataSourceConfig={{text: 'name', value: 'id'}}
+                    maxSearchResults={5}
                     fullWidth={true}
-                    value={this.state.performerName}
-                    onChange={this.handlePerformerChange}
+                    onNewRequest={this.handlePerformerChange}
                 /><br/>
                 <TextField
                     floatingLabelText="Title"
                     fullWidth={true}
-                    value={this.state.title}
+                    value={this.state.song.title}
                     onChange={this.handleTitleChange}
                 /><br/>
                 <TextField
@@ -92,10 +143,10 @@ export default class AddNewSong extends React.Component {
                     fullWidth={true}
                     multiLine={true}
                     rows={10}
-                    value={this.state.lyrics}
+                    value={this.state.song.lyrics}
                     onChange={this.handleLyricsChange}
                 /><br/>
-                <FlatButton onClick={this.handleSubmit} label="Submit" primary={true} />
+                <FlatButton onClick={this.handleSubmit} label="Submit" primary={true}/>
             </div>
         )
     }
