@@ -1,5 +1,6 @@
 import React from "react";
 import * as $ from "jquery";
+import SongsList from "../components/SongsList"
 
 const urlGetPerformer = 'http://localhost:8081/api/performers/';
 
@@ -15,7 +16,10 @@ export default class PerformerPage extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {performer: {}}
+        this.state = {performer: {
+            name: "",
+            songs: []
+        }}
     }
 
     componentDidMount() {
@@ -41,10 +45,11 @@ export default class PerformerPage extends React.Component {
     }
 
     render() {
+        console.log(this.state.performer);
         return (
             <div style={styles.page}>
                 <h3>{this.state.performer.name}</h3>
-
+                <SongsList songs={this.state.performer.songs}/>
                 <br/>
             </div>
         )
