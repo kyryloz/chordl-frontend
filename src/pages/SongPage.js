@@ -1,6 +1,7 @@
 import React from "react";
 import * as $ from "jquery";
 import FlatButton from 'material-ui/FlatButton';
+import { hashHistory } from 'react-router';
 
 const urlSong = 'http://localhost:8081/api/songs/';
 
@@ -55,11 +56,7 @@ export default class SongPage extends React.Component {
                 'Content-Type': 'application/json'
             },
             success: function (data) {
-                console.log("success", data);
-                this.setState({song: {
-                    title: "",
-                    lyrics: "Deleted"
-                }});
+                hashHistory.replace('/performer/' + data.performerId);
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err);
