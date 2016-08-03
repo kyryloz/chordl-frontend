@@ -9,7 +9,7 @@ const url = 'http://localhost:8081/api/songs';
 const urlGetPerformers = 'http://localhost:8081/api/performers';
 
 const styles = {
-    form: {
+    page: {
         marginLeft: '70px',
         marginRight: '70px'
     }
@@ -124,7 +124,7 @@ export default class AddNewSong extends React.Component {
 
     render() {
         return (
-            <div style={styles.form}>
+            <div style={styles.page}>
                 <h3>Add new song</h3>
                 <AutoComplete
                     floatingLabelText="Artist"

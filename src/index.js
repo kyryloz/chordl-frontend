@@ -5,10 +5,10 @@ import injectTapEventPlugin from "react-tap-event-plugin";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import {Router, Route, IndexRoute, hashHistory} from "react-router";
-import PerformerBox from "./components/PerformerBox";
 import Header from "./components/Header";
 import MainMenu from "./components/MainMenu";
-import AddNewSong from "./components/pages/AddNewSong";
+import AddNewSongPage from "./pages/AddNewSongPage";
+import AllSongsPage from "./pages/AllSongsPage";
 
 injectTapEventPlugin();
 
@@ -29,18 +29,6 @@ const muiTheme = getMuiTheme({
 
 const Home = () => (
     <h1>Home</h1>
-);
-
-const AddPage = () => (
-    <div>
-        <AddNewSong/>
-    </div>
-);
-
-const AllSongsPage = () => (
-    <div className="columnContent">
-        <PerformerBox url="http://localhost:8081/api/performers"/>
-    </div>
 );
 
 const AboutPage = () => <h1>Chords for guitar</h1>;
@@ -64,8 +52,8 @@ const App = () => (
         <Router history={hashHistory}>
             <Route path='/' component={Container}>
                 <IndexRoute component={Home}/>
-                <Route path='/add' component={AddPage}/>
-                <Route path='/all' component={AllSongsPage}/>
+                <Route path='/add' component={AddNewSongPage}/>
+                <Route path='/all(/:symbol)' component={AllSongsPage}/>
                 <Route path='/about' component={AboutPage}/>
                 <Route path='*' component={NotFound}/>
             </Route>
