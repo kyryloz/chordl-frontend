@@ -9,6 +9,10 @@ const styles = {
     page: {
         marginLeft: '70px',
         marginRight: '70px'
+    },
+
+    active: {
+        color: '#53acff'
     }
 };
 
@@ -21,9 +25,9 @@ class SymbolNavigator extends React.Component {
     render() {
         return (
             <div>
-                <IndexLink activeStyle={{color: '#53acff'}} to='all/a'>A</IndexLink>&nbsp;
-                <IndexLink activeStyle={{color: '#53acff'}} to='all/b'>B</IndexLink>&nbsp;
-                <IndexLink activeStyle={{color: '#53acff'}} to='all/c'>C</IndexLink>
+                <IndexLink activeStyle={styles.active} to='all/a'>A</IndexLink>&nbsp;
+                <IndexLink activeStyle={styles.active} to='all/b'>B</IndexLink>&nbsp;
+                <IndexLink activeStyle={styles.active} to='all/c'>C</IndexLink>
                 {this.props.symbol}
             </div>
         )

@@ -4,9 +4,12 @@ import RaisedButton from "material-ui/RaisedButton";
 import {Toolbar, ToolbarGroup, ToolbarTitle} from "material-ui/Toolbar";
 
 const styles = {
+    appBar: {
+        backgroundColor: '#607D8B'
+    },
     toolbarTitle: {
         fontFamily: 'sans-serif',
-        color: '#777777'
+        color: '#ffffff'
     },
     toolbarSearchBar: {
         marginTop: '6px',
@@ -24,7 +27,7 @@ export default class Header extends React.Component {
                         <ToolbarTitle text="Chords database" style={styles.toolbarTitle}/>
                         <ToolbarGroup lastChild={true}>
                             <SearchBar style={styles.toolbarSearchBar}/>
-                            <RaisedButton label="Search" primary={true}/>
+                            <RaisedButton label="Search" primary={false}/>
                         </ToolbarGroup>
                     </Toolbar>
                 </div>

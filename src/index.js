@@ -39,7 +39,7 @@ const Container = (props) => (
     <div className="mainContainer">
         <div className="header"><Header/></div>
         <div className="wrapper">
-            <div className="menuLeft"><MainMenu/></div>
+            <div className="menuLeft"><MainMenu history={props.history}/></div>
             <div className="content">
                 {props.children}
             </div>
