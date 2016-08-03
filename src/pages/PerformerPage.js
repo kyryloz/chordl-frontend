@@ -1,8 +1,7 @@
 import React from "react";
 import * as $ from "jquery";
-import SymbolNavigator from "../components/SymbolNavigator"
 
-const urlGetPerformers = 'http://localhost:8081/api/performers';
+const urlGetPerformer = 'http://localhost:8081/api/performers/';
 
 const styles = {
     page: {
@@ -11,21 +10,21 @@ const styles = {
     },
 };
 
-export default class AllSongsPage extends React.Component {
+export default class PerformerPage extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.state = {performers: []};
+        this.state = {performer: {}}
     }
 
     componentDidMount() {
-        this.loadAll();
+        this.loadPerformer();
     }
 
-    loadAll() {
+    loadPerformer() {
         $.ajax({
-            url: urlGetPerformers,
+            url: urlGetPerformer + this.props.params.id,
             dataType: 'json',
             type: 'GET',
             headers: {
@@ -33,7 +32,7 @@ export default class AllSongsPage extends React.Component {
                 'Content-Type': 'application/json'
             },
             success: function (data) {
-                this.setState({performers: data});
+                this.setState({performer: data});
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err.toString());
@@ -44,8 +43,9 @@ export default class AllSongsPage extends React.Component {
     render() {
         return (
             <div style={styles.page}>
-                <h3>All songs</h3>
-                <SymbolNavigator performers={this.state.performers} symbol={this.props.params.symbol}/>
+                <h3>Performer: </h3>
+                {this.state.performer.name}
+                <br/>
             </div>
         )
     }

@@ -9,6 +9,7 @@ import Header from "./components/Header";
 import MainMenu from "./components/MainMenu";
 import AddNewSongPage from "./pages/AddNewSongPage";
 import AllSongsPage from "./pages/AllSongsPage";
+import PerformerPage from "./pages/PerformerPage";
 
 injectTapEventPlugin();
 
@@ -54,6 +55,7 @@ const App = () => (
                 <IndexRoute component={Home}/>
                 <Route path='/add' component={AddNewSongPage}/>
                 <Route path='/all(/:symbol)' component={AllSongsPage}/>
+                <Route path='/performer/:id' component={PerformerPage}/>
                 <Route path='/about' component={AboutPage}/>
                 <Route path='*' component={NotFound}/>
             </Route>
