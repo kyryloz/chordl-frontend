@@ -2,8 +2,21 @@ import * as React from "react";
 import {List, ListItem} from "material-ui/List";
 
 export default class PerformerList extends React.Component {
+
+    constructor(props) {
+        super(props)
+    }
+
     render() {
-        var performerNodes = this.props.data.map(function (performer) {
+        var performerNodes = this.props.performers.filter((performer) => {
+            var filterSymbol = this.props.filterSymbol;
+
+            if (!filterSymbol) {
+                return true;
+            }
+
+            return performer.name.toLowerCase().startsWith(filterSymbol);
+        }).map((performer) => {
             return (
                 <ListItem primaryText={performer.name} key={performer.id}/>
             );
