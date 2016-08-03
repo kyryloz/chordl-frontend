@@ -49,7 +49,7 @@ export default class SongPage extends React.Component {
             <div style={styles.page}>
                 <h3>{this.state.song.title}</h3>
                 <br/>
-                <blockquote>{this.state.song.lyrics}</blockquote>
+                <pre>{this.state.song.lyrics}</pre>
             </div>
         )
     }
