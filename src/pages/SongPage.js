@@ -1,8 +1,8 @@
 import React from "react";
 import * as $ from "jquery";
-import SongsList from "../components/SongsList";
+import SongsList from "../components/SongsList"
 
-const urlGetPerformer = 'http://localhost:8081/api/performers/';
+const urlGetSong = 'http://localhost:8081/api/songs/';
 
 const styles = {
     page: {
@@ -11,24 +11,24 @@ const styles = {
     },
 };
 
-export default class PerformerPage extends React.Component {
+export default class SongPage extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.state = {performer: {
-            name: "",
-            songs: []
+        this.state = {song: {
+            title: "",
+            lyrics: ""
         }}
     }
 
     componentDidMount() {
-        this.loadPerformer();
+        this.loadSong();
     }
 
-    loadPerformer() {
+    loadSong() {
         $.ajax({
-            url: urlGetPerformer + this.props.params.id,
+            url: urlGetSong + this.props.params.id,
             dataType: 'json',
             type: 'GET',
             headers: {
@@ -36,7 +36,7 @@ export default class PerformerPage extends React.Component {
                 'Content-Type': 'application/json'
             },
             success: function (data) {
-                this.setState({performer: data});
+                this.setState({song: data});
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err.toString());
@@ -47,8 +47,9 @@ export default class PerformerPage extends React.Component {
     render() {
         return (
             <div style={styles.page}>
-                <h3>{this.state.performer.name}</h3>
-                <SongsList songs={this.state.performer.songs}/>
+                <h3>{this.state.song.title}</h3>
+                <br/>
+                <blockquote>{this.state.song.lyrics}</blockquote>
             </div>
         )
     }
