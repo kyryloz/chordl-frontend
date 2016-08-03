@@ -43,8 +43,8 @@ export default class PerformerPage extends React.Component {
     render() {
         return (
             <div style={styles.page}>
-                <h3>Performer: </h3>
-                {this.state.performer.name}
+                <h3>{this.state.performer.name}</h3>
+
                 <br/>
             </div>
         )

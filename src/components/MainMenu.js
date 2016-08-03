@@ -18,7 +18,6 @@ export default class MainMenu extends React.Component {
 
     getStyle(path) {
         const {history} = this.props;
-
         return history.isActive(path, true) ? styles.active : styles.inactive;
     }
 
