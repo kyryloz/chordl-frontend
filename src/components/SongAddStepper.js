@@ -45,21 +45,28 @@ class SongAddStepper extends React.Component {
 
     handleNext = () => {
         const {stepIndex} = this.state;
-        this.setState({
-            stepIndex: stepIndex + 1,
-            finished: stepIndex >= 2,
+
+        var newState = update(this.state, {
+            stepIndex: {$set: stepIndex + 1},
+            finished: {$set: stepIndex >= 2}
         });
+        this.setState(newState);
     };
 
     handlePrev = () => {
         const {stepIndex} = this.state;
         if (stepIndex > 0) {
-            this.setState({stepIndex: stepIndex - 1});
+            var newState = update(this.state, {
+                stepIndex: {$set: stepIndex - 1}
+            });
+            this.setState(newState);
         }
     };
 
     renderStepActions(step) {
         const {stepIndex} = this.state;
+        const {title} = this.state.song;
+        const {lyrics} = this.state.song;
 
         return (
             <div style={{margin: '12px 0'}}>
@@ -67,6 +74,7 @@ class SongAddStepper extends React.Component {
                     label={stepIndex === 2 ? 'Finish' : 'Next'}
                     disableTouchRipple={true}
                     disableFocusRipple={true}
+                    disabled={stepIndex === 2 ? !lyrics : stepIndex === 1 ? !title : false}
                     primary={true}
                     onTouchTap={this.handleNext}
                     style={{marginRight: 12}}
@@ -119,10 +127,10 @@ class SongAddStepper extends React.Component {
 
         var newState = update(this.state, {
             song: {
-                $set: {performer: performer}
+                performer: {$set: performer}
             }
         });
-        this.setState(newState)
+        this.setState(newState);
     };
 
     handlePerformerChangeUpdate = (input) => {
@@ -130,22 +138,14 @@ class SongAddStepper extends React.Component {
             return e.name === input;
         });
 
-        var performer;
-        if (result.length === 1) {
-            performer = {
-                name: input,
-                id: result[0].id
-            }
-        } else {
-            performer = {
-                name: input,
-                id: -1
-            }
-        }
+        const performer = {
+            name: input,
+            id: result.length ? result[0].id : -1
+        };
 
         var newState = update(this.state, {
             song: {
-                $set: {performer: performer}
+                performer: {$set: performer}
             }
         });
         this.setState(newState);
