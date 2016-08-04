@@ -11,8 +11,10 @@ import TextField from "material-ui/TextField";
 import update from "react-addons-update";
 import AutoComplete from "material-ui/AutoComplete";
 import * as $ from "jquery";
+import LinearProgress from 'material-ui/LinearProgress';
 
-const url = 'http://localhost:8081/api/songs';
+const urlPostSong = 'http://localhost:8081/api/songs';
+const urlPostPerformer = 'http://localhost:8081/api/performers';
 
 const styles = {
     stepper: {
@@ -56,10 +58,6 @@ class SongAddStepper extends React.Component {
         }
     };
 
-    handleCreatePerformer = () => {
-        console.log("create performer: ", this.state.song.performer.name);
-    };
-
     renderStepActions(step) {
         const {stepIndex} = this.state;
 
@@ -91,18 +89,21 @@ class SongAddStepper extends React.Component {
             <div style={{margin: '12px 0'}}>
                 <FlatButton
                     label='Create performer'
-                    disableTouchRipple={true}
-                    disableFocusRipple={true}
+                    disabled={this.isPerformerSubmittingInProgress()}
                     primary={true}
-                    onTouchTap={this.handleCreatePerformer}
-                    style={{marginRight: 12}}
+                    onTouchTap={this.handlePerformerSubmit}
                 />
+                {this.isPerformerSubmittingInProgress() ? <LinearProgress/> : <div></div>}
             </div>
         );
     };
 
     isPerformerExists = () => {
         return this.state.song.performer.id !== -1;
+    };
+
+    isPerformerSubmittingInProgress = () => {
+        return this.state.performerSubmitting;
     };
 
     handlePerformerChange = (input, dataSourceIndex) => {
@@ -168,7 +169,7 @@ class SongAddStepper extends React.Component {
         this.setState(newState);
     };
 
-    handleSubmit = (e) => {
+    handleSongSubmit = (e) => {
         e.preventDefault();
 
         var data = {
@@ -187,11 +188,12 @@ class SongAddStepper extends React.Component {
                 lyrics: ""
             },
             stepIndex: 0,
-            finished: false
+            finished: false,
+            performerSubmitting: false
         });
 
         $.ajax({
-            url: url,
+            url: urlPostSong,
             dataType: 'json',
             type: 'POST',
             headers: {
@@ -200,12 +202,77 @@ class SongAddStepper extends React.Component {
             },
             data: JSON.stringify(data),
             success: function (data) {
-                console.log("Submit success")
+                console.log("Submit success", data)
             },
             error: function (xhr, status, err) {
                 console.error(status, err.toString());
             }
         });
+    };
+
+    handlePerformerSubmit = (e) => {
+        e.preventDefault();
+
+        var data = {
+            name: this.state.song.performer.name
+        };
+
+        this.setState({
+            song: {
+                performer: {
+                    name: this.state.song.performer.name,
+                    id: -1
+                },
+                title: "",
+                lyrics: ""
+            },
+            stepIndex: 0,
+            finished: false,
+            performerSubmitting: true
+        });
+
+        $.ajax({
+            url: urlPostPerformer,
+            dataType: 'json',
+            type: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(data),
+            success: function (data) {
+                console.log("Submit success", data);
+                this.onPerformerSubmitted(data);
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(status, err.toString());
+                this.onPerformerSubmitted();
+            }.bind(this)
+        });
+    };
+
+    onPerformerSubmitted(data) {
+        var newState;
+        if (data) {
+            newState = update(this.state, {
+                performerSubmitting: {$set: false},
+                song: {
+                    performer: {$set: data}
+                }
+            });
+        } else {
+            var empty = {
+                name: "",
+                id: -1
+            };
+            newState = update(this.state, {
+                performerSubmitting: {$set: false},
+                song: {
+                    performer: {$set: empty}
+                }
+            });
+        }
+        this.setState(newState);
     };
 
     render() {
@@ -265,7 +332,7 @@ class SongAddStepper extends React.Component {
                         All done!
                         <br/>
                         <br/>
-                        <FlatButton onClick={this.handleSubmit} label="Submit" primary={true}/>
+                        <FlatButton onClick={this.handleSongSubmit} label="Submit" primary={true}/>
                     </p>
                 )}
             </div>
