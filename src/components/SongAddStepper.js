@@ -254,6 +254,8 @@ class SongAddStepper extends React.Component {
     onPerformerSubmitted(data) {
         var newState;
         if (data) {
+            this.props.performers.push(data);
+
             newState = update(this.state, {
                 performerSubmitting: {$set: false},
                 song: {
