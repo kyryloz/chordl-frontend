@@ -56,6 +56,10 @@ class SongAddStepper extends React.Component {
         }
     };
 
+    handleCreatePerformer = () => {
+        console.log("create performer: ", this.state.song.performer.name);
+    };
+
     renderStepActions(step) {
         const {stepIndex} = this.state;
 
@@ -82,23 +86,68 @@ class SongAddStepper extends React.Component {
         );
     }
 
-    isPerformerChosen = () => {
+    renderCreatePerformerAction = () => {
+        return (
+            <div style={{margin: '12px 0'}}>
+                <FlatButton
+                    label='Create performer'
+                    disableTouchRipple={true}
+                    disableFocusRipple={true}
+                    primary={true}
+                    onTouchTap={this.handleCreatePerformer}
+                    style={{marginRight: 12}}
+                />
+            </div>
+        );
+    };
+
+    isPerformerExists = () => {
         return this.state.song.performer.id !== -1;
     };
 
-    handlePerformerChange = (performer) => {
-        console.log("input performer: ", performer);
+    handlePerformerChange = (input, dataSourceIndex) => {
+        var performer;
+        if (dataSourceIndex === -1) {
+            performer = {
+                name: input,
+                id: -1
+            }
+        } else {
+            performer = input;
+        }
+
         var newState = update(this.state, {
             song: {
-                performer: {
-                    $set: {
-                        name: performer.name,
-                        id: performer.id
-                    }
-                }
+                $set: {performer: performer}
             }
         });
         this.setState(newState)
+    };
+
+    handlePerformerChangeUpdate = (input) => {
+        var result = $.grep(this.props.performers, function (e) {
+            return e.name === input;
+        });
+
+        var performer;
+        if (result.length === 1) {
+            performer = {
+                name: input,
+                id: result[0].id
+            }
+        } else {
+            performer = {
+                name: input,
+                id: -1
+            }
+        }
+
+        var newState = update(this.state, {
+            song: {
+                $set: {performer: performer}
+            }
+        });
+        this.setState(newState);
     };
 
     handleTitleChange = (e) => {
@@ -178,8 +227,9 @@ class SongAddStepper extends React.Component {
                                 fullWidth={true}
                                 searchText={this.state.song.performer.name}
                                 onNewRequest={this.handlePerformerChange}
+                                onUpdateInput={this.handlePerformerChangeUpdate}
                             /><br/>
-                            {this.isPerformerChosen() ? this.renderStepActions(0) : <div></div>}
+                            {this.isPerformerExists() ? this.renderStepActions(0) : this.renderCreatePerformerAction()}
                         </StepContent>
                     </Step>
                     <Step>
@@ -211,12 +261,12 @@ class SongAddStepper extends React.Component {
                 </Stepper>
 
                 {finished && (
-                <p style={{margin: '20px 0', textAlign: 'center'}}>
-                    All done!
-                    <br/>
-                    <br/>
-                    <FlatButton onClick={this.handleSubmit} label="Submit" primary={true}/>
-                </p>
+                    <p style={{margin: '20px 0', textAlign: 'center'}}>
+                        All done!
+                        <br/>
+                        <br/>
+                        <FlatButton onClick={this.handleSubmit} label="Submit" primary={true}/>
+                    </p>
                 )}
             </div>
         );
