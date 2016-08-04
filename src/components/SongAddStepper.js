@@ -1,16 +1,11 @@
-import React from 'react';
-import {
-    Step,
-    Stepper,
-    StepLabel,
-    StepContent,
-} from 'material-ui/Stepper';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
+import React from "react";
+import {Step, Stepper, StepLabel, StepContent} from "material-ui/Stepper";
+import RaisedButton from "material-ui/RaisedButton";
+import FlatButton from "material-ui/FlatButton";
 import TextField from "material-ui/TextField";
 import update from "react-addons-update";
 import * as $ from "jquery";
-import SelectPerformer from "../components/SelectPerformer"
+import SelectPerformer from "../components/SelectPerformer";
 
 const urlPostSong = 'http://localhost:8081/api/songs';
 
@@ -151,18 +146,13 @@ class SongAddStepper extends React.Component {
         });
     };
 
-    performerSubmitCallback = (data) => {
-        const empty = {
-            name: "",
-            id: -1
-        };
-
+    performerDoneCallback = (data) => {
         const newState = update(this.state, {
             song: {
-                performer: {$set: data ? data : empty}
-            }
+                performer: {$set: data}
+            },
+            stepIndex: {$set: 1}
         });
-
         this.setState(newState);
     };
 
@@ -176,8 +166,9 @@ class SongAddStepper extends React.Component {
                         <StepLabel>Select performer</StepLabel>
                         <StepContent>
                             <SelectPerformer
+                                performer={this.state.song.performer}
                                 performers={this.props.performers}
-                                performerSubmitCallback={this.performerSubmitCallback}/>
+                                performerDoneCallback={this.performerDoneCallback}/>
                         </StepContent>
                     </Step>
                     <Step>

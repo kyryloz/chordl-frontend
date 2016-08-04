@@ -1,10 +1,10 @@
-import React from "react"
+import React from "react";
 import AutoComplete from "material-ui/AutoComplete";
 import * as $ from "jquery";
 import update from "react-addons-update";
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import LinearProgress from 'material-ui/LinearProgress';
+import RaisedButton from "material-ui/RaisedButton";
+import FlatButton from "material-ui/FlatButton";
+import LinearProgress from "material-ui/LinearProgress";
 
 const urlPostPerformer = 'http://localhost:8081/api/performers';
 
@@ -14,8 +14,8 @@ export default class SelectPerformer extends React.Component {
         super(props);
 
         this.state = {
-            name: "",
-            id: -1,
+            name: this.props.performer.name,
+            id: this.props.performer.id,
             performerSubmitting: false
         }
     }
@@ -47,12 +47,10 @@ export default class SelectPerformer extends React.Component {
     };
 
     updatePerformer(performer) {
-        this.setState(update(this.state,
-            {
-                name: {$set: performer.name},
-                id: {$set: performer.id}
-            }
-        ));
+        this.setState(update(this.state, {
+            name: {$set: performer.name},
+            id: {$set: performer.id}
+        }));
     }
 
     isPerformerExists = () => {
@@ -68,11 +66,9 @@ export default class SelectPerformer extends React.Component {
 
         const data = {name} = this.state;
 
-        this.setState(update(this.state,
-            {
-                performerSubmitting: {$set: true}
-            }
-        ));
+        this.setState(update(this.state, {
+            performerSubmitting: {$set: true}
+        }));
 
         $.ajax({
             url: urlPostPerformer,
@@ -104,8 +100,14 @@ export default class SelectPerformer extends React.Component {
             id: data.id,
             performerSubmitting: false
         });
+    };
 
-        this.props.performerSubmitCallback(data);
+    handleNextButton = () => {
+        const performer = {
+            name: this.state.name,
+            id: this.state.id
+        };
+        this.props.performerDoneCallback(performer)
     };
 
     renderNextButton() {
@@ -116,7 +118,7 @@ export default class SelectPerformer extends React.Component {
                     disableTouchRipple={true}
                     disableFocusRipple={true}
                     primary={true}
-                    onTouchTap={this.handleNext}
+                    onTouchTap={this.handleNextButton}
                     style={{marginRight: 12}}
                 />
             </div>
