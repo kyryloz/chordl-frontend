@@ -4,8 +4,8 @@ import TextField from "material-ui/TextField";
 import FlatButton from "material-ui/FlatButton";
 import AutoComplete from "material-ui/AutoComplete";
 import * as $ from "jquery";
+import SongAddStepper from "../components/SongAddStepper"
 
-const url = 'http://localhost:8081/api/songs';
 const urlGetPerformers = 'http://localhost:8081/api/performers';
 
 const styles = {
@@ -54,44 +54,6 @@ export default class AddNewSong extends React.Component {
         });
     }
 
-    handleSubmit = (e) => {
-        e.preventDefault();
-
-        var data = {
-            performerId: this.state.song.performer.id,
-            title: this.state.song.title.trim(),
-            lyrics: this.state.song.lyrics.trim(),
-        };
-
-        this.setState({
-            song: {
-                performer: {
-                    name: "",
-                    id: -1
-                },
-                title: "",
-                lyrics: ""
-            }
-        });
-
-        $.ajax({
-            url: url,
-            dataType: 'json',
-            type: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            data: JSON.stringify(data),
-            success: function (data) {
-                console.log("Submit success")
-            },
-            error: function (xhr, status, err) {
-                console.error(status, err.toString());
-            }
-        });
-    };
-
     handlePerformerChange = (performer) => {
         var newState = update(this.state, {
             song: {
@@ -126,32 +88,34 @@ export default class AddNewSong extends React.Component {
         return (
             <div style={styles.page}>
                 <h3>Add new song</h3>
-                <AutoComplete
-                    floatingLabelText="Artist"
-                    filter={AutoComplete.fuzzyFilter}
-                    dataSource={this.state.performers}
-                    dataSourceConfig={{text: 'name', value: 'id'}}
-                    maxSearchResults={5}
-                    fullWidth={true}
-                    searchText={this.state.song.performer.name}
-                    onNewRequest={this.handlePerformerChange}
-                /><br/>
-                <TextField
-                    floatingLabelText="Title"
-                    fullWidth={true}
-                    value={this.state.song.title}
-                    onChange={this.handleTitleChange}
-                /><br/>
-                <TextField
-                    floatingLabelText="Lyrics"
-                    fullWidth={true}
-                    multiLine={true}
-                    rows={10}
-                    value={this.state.song.lyrics}
-                    onChange={this.handleLyricsChange}
-                /><br/>
-                <FlatButton onClick={this.handleSubmit} label="Submit" primary={true}/>
+                <SongAddStepper performers={this.state.performers}/>
             </div>
         )
     }
 }
+
+//     <AutoComplete
+//         floatingLabelText="Artist"
+//         filter={AutoComplete.fuzzyFilter}
+//         dataSource={this.state.performers}
+//         dataSourceConfig={{text: 'name', value: 'id'}}
+//         maxSearchResults={5}
+//         fullWidth={true}
+//         searchText={this.state.song.performer.name}
+//         onNewRequest={this.handlePerformerChange}
+//     /><br/>
+//     <TextField
+//         floatingLabelText="Title"
+//         fullWidth={true}
+//         value={this.state.song.title}
+//         onChange={this.handleTitleChange}
+//     /><br/>
+//     <TextField
+//         floatingLabelText="Lyrics"
+//         fullWidth={true}
+//         multiLine={true}
+//         rows={10}
+//         value={this.state.song.lyrics}
+//         onChange={this.handleLyricsChange}
+//     /><br/>
+//     <FlatButton onClick={this.handleSubmit} label="Submit" primary={true}/>
