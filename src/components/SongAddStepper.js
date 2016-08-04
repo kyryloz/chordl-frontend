@@ -20,7 +20,7 @@ const styles = {
     stepper: {
         maxWidth: 640,
         fontFamily: 'sans-serif'
-    },
+    }
 };
 
 class SongAddStepper extends React.Component {
@@ -37,7 +37,7 @@ class SongAddStepper extends React.Component {
                     id: -1
                 },
                 title: "",
-                lyrics: "",
+                lyrics: ""
             }
         }
     }
@@ -46,11 +46,16 @@ class SongAddStepper extends React.Component {
     handleNext = () => {
         const {stepIndex} = this.state;
 
-        var newState = update(this.state, {
+        const finished = stepIndex >= 2;
+        const newState = update(this.state, {
             stepIndex: {$set: stepIndex + 1},
-            finished: {$set: stepIndex >= 2}
+            finished: {$set: finished}
         });
         this.setState(newState);
+
+        if (finished) {
+            this.handleSongSubmit();
+        }
     };
 
     handlePrev = () => {
@@ -71,7 +76,7 @@ class SongAddStepper extends React.Component {
         return (
             <div style={{margin: '12px 0'}}>
                 <RaisedButton
-                    label={stepIndex === 2 ? 'Finish' : 'Next'}
+                    label={stepIndex === 2 ? 'Submit' : 'Next'}
                     disableTouchRipple={true}
                     disableFocusRipple={true}
                     disabled={stepIndex === 2 ? !lyrics : stepIndex === 1 ? !title : false}
@@ -169,9 +174,7 @@ class SongAddStepper extends React.Component {
         this.setState(newState);
     };
 
-    handleSongSubmit = (e) => {
-        e.preventDefault();
-
+    handleSongSubmit = () => {
         var data = {
             performerId: this.state.song.performer.id,
             title: this.state.song.title.trim(),
@@ -253,27 +256,23 @@ class SongAddStepper extends React.Component {
 
     onPerformerSubmitted(data) {
         var newState;
+
+        const empty = {
+            name: "",
+            id: -1
+        };
+
         if (data) {
             this.props.performers.push(data);
-
-            newState = update(this.state, {
-                performerSubmitting: {$set: false},
-                song: {
-                    performer: {$set: data}
-                }
-            });
-        } else {
-            var empty = {
-                name: "",
-                id: -1
-            };
-            newState = update(this.state, {
-                performerSubmitting: {$set: false},
-                song: {
-                    performer: {$set: empty}
-                }
-            });
         }
+
+        newState = update(this.state, {
+            performerSubmitting: {$set: false},
+            song: {
+                performer: {$set: data ? data : empty}
+            }
+        });
+
         this.setState(newState);
     };
 
@@ -331,10 +330,7 @@ class SongAddStepper extends React.Component {
 
                 {finished && (
                     <p style={{margin: '20px 0', textAlign: 'center'}}>
-                        All done!
-                        <br/>
-                        <br/>
-                        <FlatButton onClick={this.handleSongSubmit} label="Submit" primary={true}/>
+                        Submitting...
                     </p>
                 )}
             </div>
