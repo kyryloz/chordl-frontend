@@ -6,6 +6,7 @@ import TextField from "material-ui/TextField";
 import update from "react-addons-update";
 import * as $ from "jquery";
 import SelectPerformer from "../components/SelectPerformer";
+import Snackbar from 'material-ui/Snackbar';
 
 const urlPostSong = 'http://localhost:8081/api/songs';
 
@@ -31,7 +32,8 @@ class SongAddStepper extends React.Component {
                 },
                 title: "",
                 lyrics: ""
-            }
+            },
+            snackbarOpen: false
         }
     }
 
@@ -108,25 +110,19 @@ class SongAddStepper extends React.Component {
         this.setState(newState);
     };
 
+    handleSnackbarRequestClose = () => {
+        const newState = update(this.state, {
+            snackbarOpen: {$set: false}
+        });
+        this.setState(newState);
+    };
+
     handleSongSubmit = () => {
         var data = {
             performerId: this.state.song.performer.id,
             title: this.state.song.title.trim(),
             lyrics: this.state.song.lyrics.trim(),
         };
-
-        this.setState({
-            song: {
-                performer: {
-                    name: "",
-                    id: -1
-                },
-                title: "",
-                lyrics: ""
-            },
-            stepIndex: 0,
-            finished: false,
-        });
 
         $.ajax({
             url: urlPostSong,
@@ -138,13 +134,35 @@ class SongAddStepper extends React.Component {
             },
             data: JSON.stringify(data),
             success: function (data) {
-                console.log("Submit success", data)
-            },
+                console.log("Submit success", data);
+                this.onSongSubmitted(data);
+            }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err.toString());
-            }
+                this.onSongSubmitted();
+            }.bind(this)
         });
     };
+
+    onSongSubmitted(data) {
+        if (data) {
+            this.setState({
+                song: {
+                    performer: {
+                        name: "",
+                        id: -1
+                    },
+                    title: "",
+                    lyrics: ""
+                },
+                stepIndex: 0,
+                finished: false,
+                snackbarOpen: true
+            });
+        } else {
+            // TODO handle error
+        }
+    }
 
     performerDoneCallback = (data) => {
         const newState = update(this.state, {
@@ -157,7 +175,7 @@ class SongAddStepper extends React.Component {
     };
 
     render() {
-        const {finished, stepIndex} = this.state;
+        const {stepIndex} = this.state;
 
         return (
             <div style={styles.stepper}>
@@ -198,12 +216,12 @@ class SongAddStepper extends React.Component {
                         </StepContent>
                     </Step>
                 </Stepper>
-
-                {finished && (
-                    <p style={{margin: '20px 0', textAlign: 'center'}}>
-                        Submitting...
-                    </p>
-                )}
+                <Snackbar
+                    open={this.state.snackbarOpen}
+                    message="Song added successfully"
+                    autoHideDuration={3000}
+                    onRequestClose={this.handleSnackbarRequestClose}
+                />
             </div>
         );
     }

@@ -5,6 +5,7 @@ import update from "react-addons-update";
 import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton";
 import LinearProgress from "material-ui/LinearProgress";
+import Snackbar from 'material-ui/Snackbar';
 
 const urlPostPerformer = 'http://localhost:8081/api/performers';
 
@@ -16,7 +17,8 @@ export default class SelectPerformer extends React.Component {
         this.state = {
             name: this.props.performer.name,
             id: this.props.performer.id,
-            performerSubmitting: false
+            performerSubmitting: false,
+            snackbarOpen: false
         }
     }
 
@@ -93,13 +95,16 @@ export default class SelectPerformer extends React.Component {
     onPerformerSubmitted(data) {
         if (data) {
             this.props.performers.push(data);
-        }
 
-        this.setState({
-            name: data.name,
-            id: data.id,
-            performerSubmitting: false
-        });
+            this.setState({
+                name: data.name,
+                id: data.id,
+                performerSubmitting: false,
+                snackbarOpen: true
+            });
+        } else {
+            // TODO handle error
+        }
     };
 
     handleNextButton = () => {
@@ -108,6 +113,13 @@ export default class SelectPerformer extends React.Component {
             id: this.state.id
         };
         this.props.performerDoneCallback(performer)
+    };
+
+    handleSnackbarRequestClose = () => {
+        const newState = update(this.state, {
+            snackbarOpen: {$set: false}
+        });
+        this.setState(newState);
     };
 
     renderNextButton() {
@@ -130,7 +142,7 @@ export default class SelectPerformer extends React.Component {
             <div style={{margin: '12px 0'}}>
                 <FlatButton
                     label='Create performer'
-                    disabled={this.isPerformerSubmittingInProgress()}
+                    disabled={this.isPerformerSubmittingInProgress() || !this.state.name}
                     primary={true}
                     onTouchTap={this.handlePerformerSubmit}
                 />
@@ -155,6 +167,12 @@ export default class SelectPerformer extends React.Component {
                     onUpdateInput={this.handlePerformerChangeUpdate}
                 /><br/>
                 {this.isPerformerExists() ? this.renderNextButton() : this.renderCreatePerformerButton()}
+                <Snackbar
+                    open={this.state.snackbarOpen}
+                    message="Performer added successfully"
+                    autoHideDuration={3000}
+                    onRequestClose={this.handleSnackbarRequestClose}
+                />
             </div>
         )
     }
