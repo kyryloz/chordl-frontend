@@ -63,10 +63,6 @@ export default class PerformerPage extends React.Component {
         });
     }
 
-    handleEdit = () => {
-
-    };
-
     handleDelete = () => {
         this.deletePerformer();
     };
@@ -82,7 +78,7 @@ export default class PerformerPage extends React.Component {
                     <FlatButton
                         label="Edit"
                         primary={true}
-                        onTouchTap={this.handleEdit}
+                        href={"#/performer/" + this.state.performer.id + "/edit"}
                     />
                     <FlatButton
                         label="Delete"

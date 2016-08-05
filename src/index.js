@@ -8,10 +8,10 @@ import {Router, Route, IndexRoute, hashHistory} from "react-router";
 import Header from "./components/Header";
 import MainMenu from "./components/MainMenu";
 import AddNewSongPage from "./pages/AddNewSongPage";
-import AllSongsPage from "./pages/AllSongsPage";
 import PerformerPage from "./pages/PerformerPage";
 import SongPage from "./pages/SongPage";
 import HomePage from "./pages/HomePage";
+import EditPerformerPage from "./pages/EditPerformerPage";
 
 injectTapEventPlugin();
 
@@ -43,6 +43,7 @@ const App = () => (
                 <Route path='/add' component={AddNewSongPage}/>
                 <Route path='/index(/:symbol)' component={HomePage}/>
                 <Route path='/performer/:id' component={PerformerPage}/>
+                <Route path='/performer/:id/edit' component={EditPerformerPage}/>
                 <Route path='/song/:id' component={SongPage}/>
                 <Route path='*' component={NotFound}/>
             </Route>
