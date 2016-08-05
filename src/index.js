@@ -41,7 +41,7 @@ const App = () => (
             <Route path='/' component={Container}>
                 <IndexRoute component={HomePage}/>
                 <Route path='/add' component={AddNewSongPage}/>
-                <Route path='/all(/:symbol)' component={HomePage}/>
+                <Route path='/index(/:symbol)' component={HomePage}/>
                 <Route path='/performer/:id' component={PerformerPage}/>
                 <Route path='/song/:id' component={SongPage}/>
                 <Route path='*' component={NotFound}/>

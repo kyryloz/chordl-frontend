@@ -15,7 +15,7 @@ export default class PerformerList extends React.Component {
                 return true;
             }
 
-            return performer.name.toLowerCase().startsWith(filterSymbol);
+            return performer.name.toLowerCase().startsWith(filterSymbol.toLowerCase());
         }).map((performer) => {
             return (
                 <ListItem href={"#/performer/" + performer.id} primaryText={performer.name} key={performer.id}/>
