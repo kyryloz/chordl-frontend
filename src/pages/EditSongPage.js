@@ -2,6 +2,8 @@ import React from "react";
 import * as $ from "jquery";
 import FlatButton from 'material-ui/FlatButton';
 import { hashHistory } from 'react-router';
+import update from "react-addons-update";
+import TextField from "material-ui/TextField"
 
 const urlSong = 'http://localhost:8081/api/songs/';
 
@@ -47,16 +49,17 @@ export default class SongPage extends React.Component {
         });
     }
 
-    handleDelete() {
+    updateSong() {
         $.ajax({
             url: this.urlGetSong,
-            type: 'DELETE',
+            type: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
+            data: JSON.stringify(this.state.song),
             success: function (data) {
-                hashHistory.replace('/performer/' + data.performerId);
+                this.handleCancel();
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err);
@@ -64,24 +67,65 @@ export default class SongPage extends React.Component {
         });
     }
 
+    handleSave = () => {
+        this.updateSong();
+    };
+
+    handleCancel = () => {
+        hashHistory.replace("/song/" + this.state.song.id)
+    };
+
+    handleTitleChange = (e) => {
+        var newState = update(this.state, {
+            song: {
+                title: {$set: e.target.value}
+            }
+        });
+        this.setState(newState);
+    };
+
+    handleLyricsChange = (e) => {
+        var newState = update(this.state, {
+            song: {
+                lyrics: {$set: e.target.value}
+            }
+        });
+        this.setState(newState);
+    };
+
     render() {
         return (
             <div style={styles.page}>
-                <div style={{float: 'left'}}>
-                    <h3>{this.state.song.title}</h3>
+                <div style={{float: 'left', minWidth: 460, marginTop: 70}}>
+                    <TextField
+                        floatingLabelText="Title"
+                        floatingLabelFixed={true}
+                        fullWidth={true}
+                        value={this.state.song.title}
+                        onChange={this.handleTitleChange}
+                    /><br/>
                     <br/>
-                    <pre>{this.state.song.lyrics}</pre>
+                    <TextField
+                        floatingLabelText="Lyrics"
+                        floatingLabelFixed={true}
+                        fullWidth={true}
+                        multiLine={true}
+                        rows={10}
+                        value={this.state.song.lyrics}
+                        onChange={this.handleLyricsChange}
+                    />
                 </div>
                 <div style={{float: 'right', marginTop: 10}}>
                     <FlatButton
-                        label="Edit"
+                        label="Save"
                         primary={true}
-                        href={"#/song/" + this.state.song.id + "/edit"}
+                        disabled={!this.state.song.title && !this.state.song.lyrics}
+                        onTouchTap={this.handleSave}
                     />
                     <FlatButton
-                        label="Delete"
+                        label="Cancel"
                         labelStyle={{color: 'red'}}
-                        onTouchTap={this.handleDelete}
+                        onTouchTap={this.handleCancel}
                     />
                 </div>
             </div>

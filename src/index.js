@@ -12,6 +12,7 @@ import PerformerPage from "./pages/PerformerPage";
 import SongPage from "./pages/SongPage";
 import HomePage from "./pages/HomePage";
 import EditPerformerPage from "./pages/EditPerformerPage";
+import EditSongPage from "./pages/EditSongPage";
 
 injectTapEventPlugin();
 
@@ -45,6 +46,7 @@ const App = () => (
                 <Route path='/performer/:id' component={PerformerPage}/>
                 <Route path='/performer/:id/edit' component={EditPerformerPage}/>
                 <Route path='/song/:id' component={SongPage}/>
+                <Route path='/song/:id/edit' component={EditSongPage}/>
                 <Route path='*' component={NotFound}/>
             </Route>
         </Router>

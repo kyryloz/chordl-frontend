@@ -88,7 +88,7 @@ export default class EditPerformerPage extends React.Component {
         console.log(this.state.performer);
         return (
             <div style={styles.page}>
-                <div style={{float: 'left', marginTop: 70}}>
+                <div style={{float: 'left', minWidth: 460, marginTop: 70}}>
                     <TextField
                         id="text-field-controlled"
                         value={this.state.performer.name}
