@@ -20,6 +20,8 @@ export default class SongPage extends React.Component {
         this.urlGetSong = urlSong + this.props.params.id;
 
         this.state = {song: {
+            id: -1,
+            performerId: -1,
             title: "",
             lyrics: ""
         }}
@@ -47,7 +49,7 @@ export default class SongPage extends React.Component {
         });
     }
 
-    handleDelete() {
+    handleDelete = () => {
         $.ajax({
             url: this.urlGetSong,
             type: 'DELETE',
@@ -56,7 +58,7 @@ export default class SongPage extends React.Component {
                 'Content-Type': 'application/json'
             },
             success: function (data) {
-                hashHistory.replace('/performer/' + data.performerId);
+                hashHistory.replace('/performer/' + this.state.song.performerId);
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err);
