@@ -11,31 +11,17 @@ import AddNewSongPage from "./pages/AddNewSongPage";
 import AllSongsPage from "./pages/AllSongsPage";
 import PerformerPage from "./pages/PerformerPage";
 import SongPage from "./pages/SongPage";
+import HomePage from "./pages/HomePage";
 
 injectTapEventPlugin();
 
 const muiTheme = getMuiTheme({
     palette: {
-        // textColor: colors.primaryTextColor,
-        // accentColor: colors.accentColor,
-        // primary1Color: colors.defaultPrimaryColor,
-        // primary2Color: colors.lightPrimaryColor,
-        // primary3Color: colors.darkPrimaryColor,
-        // accent1Color: colors.accentColor,
-        // accent2Color: colors.accentColor,
-        // accent3Color: colors.accentColor,
-        // alternateTextColor: colors.secondaryTextColor,
-        // borderColor: colors.dividerColor,
+        // TODO theme
     }
 });
 
-const Home = () => (
-    <h1>Home</h1>
-);
-
-const AboutPage = () => <h1>Chords for guitar</h1>;
-
-const NotFound = () => ( <h1>404!</h1>);
+const NotFound = () => ( <h1>Not found!</h1>);
 
 const Container = (props) => (
     <div className="mainContainer">
@@ -53,12 +39,11 @@ const App = () => (
     <MuiThemeProvider muiTheme={muiTheme}>
         <Router history={hashHistory}>
             <Route path='/' component={Container}>
-                <IndexRoute component={Home}/>
+                <IndexRoute component={HomePage}/>
                 <Route path='/add' component={AddNewSongPage}/>
-                <Route path='/all(/:symbol)' component={AllSongsPage}/>
+                <Route path='/all(/:symbol)' component={HomePage}/>
                 <Route path='/performer/:id' component={PerformerPage}/>
                 <Route path='/song/:id' component={SongPage}/>
-                <Route path='/about' component={AboutPage}/>
                 <Route path='*' component={NotFound}/>
             </Route>
         </Router>

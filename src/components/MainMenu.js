@@ -26,8 +26,6 @@ export default class MainMenu extends React.Component {
             <List>
                 <ListItem style={this.getStyle("")} primaryText="Home" href="#/"/>
                 <ListItem style={this.getStyle("add")} primaryText="Add song" href="#/add"/>
-                <ListItem style={this.getStyle("all")} primaryText="All songs" href="#/all"/>
-                <ListItem style={this.getStyle("about")} primaryText="About" href="#/about"/>
             </List>
         );
     }
