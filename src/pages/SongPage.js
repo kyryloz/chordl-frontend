@@ -1,7 +1,7 @@
 import React from "react";
 import * as $ from "jquery";
 import FlatButton from 'material-ui/FlatButton';
-import { hashHistory } from 'react-router';
+import {Link, hashHistory} from 'react-router';
 
 const urlSong = 'http://localhost:8081/api/songs/';
 
@@ -19,12 +19,15 @@ export default class SongPage extends React.Component {
 
         this.urlGetSong = urlSong + this.props.params.id;
 
-        this.state = {song: {
-            id: -1,
-            performerId: -1,
-            title: "",
-            lyrics: ""
-        }}
+        this.state = {
+            song: {
+                id: -1,
+                performerId: -1,
+                performerName: "",
+                title: "",
+                lyrics: ""
+            }
+        }
     }
 
     componentDidMount() {
@@ -58,19 +61,26 @@ export default class SongPage extends React.Component {
                 'Content-Type': 'application/json'
             },
             success: function (data) {
-                hashHistory.replace('/performer/' + this.state.song.performerId);
+                hashHistory.replace('performer/' + this.state.song.performerId);
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err);
             }
         });
-    }
+    };
 
     render() {
         return (
             <div style={styles.page}>
                 <div style={{float: 'left'}}>
-                    <h3>{this.state.song.title}</h3>
+                    <h3>
+                        <Link
+                            to={'performer/' + this.state.song.performerId}>
+                            {this.state.song.performerName}
+                        </Link>
+                        &nbsp;–&nbsp;
+                        {this.state.song.title}
+                    </h3>
                     <br/>
                     <pre>{this.state.song.lyrics}</pre>
                 </div>

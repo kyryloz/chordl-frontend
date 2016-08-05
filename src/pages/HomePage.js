@@ -44,7 +44,7 @@ export default class HomePage extends React.Component {
     render() {
         return (
             <div style={styles.page}>
-                <h3>All songs</h3>
+                <h3>Select performer</h3>
                 <SymbolNavigator performers={this.state.performers} symbol={this.props.params.symbol}/>
             </div>
         )
