@@ -4,6 +4,8 @@ import ReactDOM from "react-dom";
 import injectTapEventPlugin from "react-tap-event-plugin";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 import {Router, Route, IndexRoute, hashHistory} from "react-router";
 import Header from "./components/Header";
 import MainMenu from "./components/MainMenu";
@@ -22,16 +24,56 @@ const muiTheme = getMuiTheme({
     }
 });
 
+const styles = {
+    header: {
+        width: '100%'
+    },
+
+    main: {
+        display: 'flex',
+        flexDirection: 'column'
+    },
+
+    contentWrapper: {
+        display: 'flex',
+        flexDirection: 'row'
+    },
+
+    menuLeft: {
+        height: '1000px',
+        width: '300px',
+        borderRight: '1px solid #dedede'
+    },
+
+    content: {
+        paddingLeft: '16px',
+        paddingRight: '16px',
+        width: '100%',
+        height: '100%'
+    },
+
+    fabAdd: {
+        display: 'inline-block',
+        position: 'fixed',
+        bottom: '22px',
+        right: '20px'
+    }
+};
+
 const NotFound = () => ( <h1>Not found!</h1>);
 
 const Container = (props) => (
-    <div className="mainContainer">
-        <div className="header"><Header/></div>
-        <div className="wrapper">
-            <div className="menuLeft"><MainMenu history={props.history}/></div>
-            <div className="content">
-                {props.children}
-            </div>
+    <div style={styles.main}>
+        <div style={styles.header}><Header/></div>
+        <div style={styles.content}>
+            {props.children}
+            {!props.history.isActive('add') &&
+                (<FloatingActionButton
+                    style={styles.fabAdd}
+                    href="#/add">
+                    <ContentAdd />
+                </FloatingActionButton>)
+            }
         </div>
     </div>
 );

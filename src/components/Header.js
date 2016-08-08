@@ -23,7 +23,7 @@ export default class Header extends React.Component {
         return (
             <div className="header">
                 <div>
-                    <Toolbar style={styles.appBar}>
+                    <Toolbar style={styles.appBar} zDepth={2}>
                         <ToolbarTitle text="Chords database" style={styles.toolbarTitle}/>
                         <ToolbarGroup lastChild={true}>
                             <SearchBar style={styles.toolbarSearchBar}/>
