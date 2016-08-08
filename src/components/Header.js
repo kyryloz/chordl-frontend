@@ -2,8 +2,7 @@ import React from "react";
 import SearchBar from "./SearchBar";
 import RaisedButton from "material-ui/RaisedButton";
 import AppBar from "material-ui/AppBar";
-import {Toolbar, ToolbarGroup, ToolbarTitle} from "material-ui/Toolbar";
-import {hashHistory} from 'react-router';
+import {hashHistory} from "react-router";
 
 const styles = {
     appBar: {

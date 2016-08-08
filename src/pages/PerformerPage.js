@@ -2,15 +2,26 @@ import React from "react";
 import * as $ from "jquery";
 import SongsList from "../components/SongsList";
 import FlatButton from "material-ui/FlatButton";
-import { hashHistory } from 'react-router';
+import {Link, hashHistory} from "react-router";
 
 const urlGetPerformer = 'http://localhost:8081/api/performers/';
 
 const styles = {
     page: {
         marginLeft: '70px',
-        marginRight: '70px'
+        marginRight: '70px',
+        display: 'flex',
+        flexDirection: 'column'
     },
+
+    pageTitle: {
+        display: 'flex',
+        flexDirection: 'row'
+    },
+
+    title: {
+        flexGrow: 1
+    }
 };
 
 export default class PerformerPage extends React.Component {
@@ -70,22 +81,28 @@ export default class PerformerPage extends React.Component {
     render() {
         return (
             <div style={styles.page}>
-                <div style={{float: 'left'}}>
-                    <h3>{this.state.performer.name}</h3>
-                    <SongsList songs={this.state.performer.songs}/>
+                <div style={styles.pageTitle}>
+                    <div style={styles.title}>
+                        <h3>
+                            <Link to={'/'}>#</Link>
+                            &nbsp;–&nbsp;
+                            {this.state.performer.name}
+                        </h3>
+                    </div>
+                    <div style={{marginTop: 10}}>
+                        <FlatButton
+                            label="Edit"
+                            primary={true}
+                            href={"#/performer/" + this.state.performer.id + "/edit"}
+                        />
+                        <FlatButton
+                            label="Delete"
+                            labelStyle={{color: 'red'}}
+                            onTouchTap={this.handleDelete}
+                        />
+                    </div>
                 </div>
-                <div style={{float: 'right', marginTop: 10}}>
-                    <FlatButton
-                        label="Edit"
-                        primary={true}
-                        href={"#/performer/" + this.state.performer.id + "/edit"}
-                    />
-                    <FlatButton
-                        label="Delete"
-                        labelStyle={{color: 'red'}}
-                        onTouchTap={this.handleDelete}
-                    />
-                </div>
+                <SongsList songs={this.state.performer.songs}/>
             </div>
         )
     }

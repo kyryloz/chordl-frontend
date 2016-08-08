@@ -8,8 +8,19 @@ const urlSong = 'http://localhost:8081/api/songs/';
 const styles = {
     page: {
         marginLeft: '70px',
-        marginRight: '70px'
+        marginRight: '70px',
+        display: 'flex',
+        flexDirection: 'column'
     },
+
+    pageTitle: {
+        display: 'flex',
+        flexDirection: 'row'
+    },
+
+    title: {
+        flexGrow: 1
+    }
 };
 
 export default class SongPage extends React.Component {
@@ -72,30 +83,31 @@ export default class SongPage extends React.Component {
     render() {
         return (
             <div style={styles.page}>
-                <div style={{float: 'left'}}>
-                    <h3>
-                        <Link
-                            to={'performer/' + this.state.song.performerId}>
-                            {this.state.song.performerName}
-                        </Link>
-                        &nbsp;–&nbsp;
-                        {this.state.song.title}
-                    </h3>
-                    <br/>
-                    <pre>{this.state.song.lyrics}</pre>
+                <div style={styles.pageTitle}>
+                    <div style={styles.title}>
+                        <h3>
+                            <Link
+                                to={'performer/' + this.state.song.performerId}>
+                                {this.state.song.performerName}
+                            </Link>
+                            &nbsp;–&nbsp;
+                            {this.state.song.title}
+                        </h3>
+                    </div>
+                    <div style={{marginTop: 10}}>
+                        <FlatButton
+                            label="Edit"
+                            primary={true}
+                            href={"#/song/" + this.state.song.id + "/edit"}
+                        />
+                        <FlatButton
+                            label="Delete"
+                            labelStyle={{color: 'red'}}
+                            onTouchTap={this.handleDelete}
+                        />
+                    </div>
                 </div>
-                <div style={{float: 'right', marginTop: 10}}>
-                    <FlatButton
-                        label="Edit"
-                        primary={true}
-                        href={"#/song/" + this.state.song.id + "/edit"}
-                    />
-                    <FlatButton
-                        label="Delete"
-                        labelStyle={{color: 'red'}}
-                        onTouchTap={this.handleDelete}
-                    />
-                </div>
+                <pre>{this.state.song.lyrics}</pre>
             </div>
         )
     }

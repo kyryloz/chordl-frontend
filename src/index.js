@@ -57,7 +57,8 @@ const styles = {
     paper: {
         margin: '0 auto',
         display: 'inline-block',
-        width: 800
+        width: 800,
+        flexGrow: 1
     }
 };
 
