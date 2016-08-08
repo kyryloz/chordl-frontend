@@ -1,6 +1,5 @@
 import React from "react";
 import SearchBar from "./SearchBar";
-import RaisedButton from "material-ui/RaisedButton";
 import AppBar from "material-ui/AppBar";
 import {hashHistory} from "react-router";
 
@@ -25,7 +24,6 @@ export default class Header extends React.Component {
         return (
             <div>
                 <SearchBar style={styles.toolbarSearchBar}/>
-                <RaisedButton label="Search" primary={false}/>
             </div>
         )
     }

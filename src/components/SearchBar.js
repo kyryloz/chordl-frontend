@@ -1,19 +1,54 @@
 import React from "react";
 import TextField from 'material-ui/TextField';
+import {Link, hashHistory} from "react-router";
+import RaisedButton from "material-ui/RaisedButton";
 
 export default class SearchBar extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            query: ""
+        }
+    }
+
+    handleQueryChange = (e) => {
+        this.setState({
+            query: e.target.value
+        })
+    };
+
+    handleKeyDown = (e) => {
+        if (e.keyCode === 13) {
+            this.handleSearch();
+        }
+    };
+
+    handleSearch = () => {
+        console.log("Search: " + this.state.query);
+        hashHistory.push("search/" + this.state.query);
+    };
+
     render() {
         return (
-            <TextField
-                hintText="Search database"
-                style={this.props.style}
-                inputStyle={{
-                    color: '#d7d7d7'
-                }}
-                hintStyle={{
-                    color: '#7e98a5'
-                }}
-            />
-        )
+            <div>
+                <TextField
+                    id="text-field-controlled"
+                    hintText="Search database"
+                    style={this.props.style}
+                    inputStyle={{
+                        color: '#d7d7d7'
+                    }}
+                    hintStyle={{
+                        color: '#7e98a5'
+                    }}
+                    onKeyDown={this.handleKeyDown}
+                    onChange={this.handleQueryChange}
+                    value={this.state.query}
+                />
+                <RaisedButton label="Search" primary={false} onTouchTap={this.handleSearch}/>
+            </div>
+    )
     }
 }
