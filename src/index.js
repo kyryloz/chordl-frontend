@@ -33,7 +33,7 @@ const styles = {
     main: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100vmax',
+        height: '100%',
         paddingBottom: 16,
         flexGrow: 1
     },
@@ -54,6 +54,7 @@ const styles = {
     paper: {
         margin: '0 auto',
         display: 'inline-block',
+        paddingBottom: 32,
         width: 800,
         flexGrow: 1
     }
