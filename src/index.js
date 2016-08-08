@@ -5,6 +5,7 @@ import injectTapEventPlugin from "react-tap-event-plugin";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import FloatingActionButton from 'material-ui/FloatingActionButton';
+import Paper from 'material-ui/Paper';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import {Router, Route, IndexRoute, hashHistory} from "react-router";
 import Header from "./components/Header";
@@ -31,7 +32,8 @@ const styles = {
 
     main: {
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        paddingBottom: 16
     },
 
     contentWrapper: {
@@ -45,18 +47,17 @@ const styles = {
         borderRight: '1px solid #dedede'
     },
 
-    content: {
-        paddingLeft: '16px',
-        paddingRight: '16px',
-        width: '100%',
-        height: '100%'
-    },
-
     fabAdd: {
         display: 'inline-block',
         position: 'fixed',
         bottom: '22px',
         right: '20px'
+    },
+
+    paper: {
+        margin: '0 auto',
+        display: 'inline-block',
+        width: 800
     }
 };
 
@@ -65,16 +66,18 @@ const NotFound = () => ( <h1>Not found!</h1>);
 const Container = (props) => (
     <div style={styles.main}>
         <div style={styles.header}><Header/></div>
-        <div style={styles.content}>
-            {props.children}
-            {!props.history.isActive('add') &&
-                (<FloatingActionButton
-                    style={styles.fabAdd}
-                    href="#/add">
-                    <ContentAdd />
-                </FloatingActionButton>)
-            }
-        </div>
+        <Paper style={styles.paper} zDepth={1}>
+            <div>
+                {props.children}
+                {!props.history.isActive('add') &&
+                    (<FloatingActionButton
+                        style={styles.fabAdd}
+                        href="#/add">
+                        <ContentAdd />
+                    </FloatingActionButton>)
+                }
+            </div>
+        </Paper>
     </div>
 );
 
