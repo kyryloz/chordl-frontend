@@ -1,10 +1,8 @@
 import React from "react";
 import * as $ from "jquery";
-import SongsList from "../components/SongsList";
-import FlatButton from "material-ui/FlatButton";
-import {Link, hashHistory} from "react-router";
+import SearchResultList from "../components/SearchResultList";
 
-const urlGetPerformer = 'http://localhost:8081/api/performers/';
+const urlSearch = 'http://localhost:8081/api/search/';
 
 const styles = {
     page: {
@@ -30,16 +28,17 @@ export default class SearchPage extends React.Component {
         super(props);
 
         this.state = {
-            result: []
+            results: []
         }
     }
 
     componentDidMount() {
+        this.search(this.props.params.query);
     }
 
-    loadPerformer() {
+    search(query) {
         $.ajax({
-            url: urlGetPerformer + this.props.params.id,
+            url: urlSearch + query,
             dataType: 'json',
             type: 'GET',
             headers: {
@@ -47,17 +46,13 @@ export default class SearchPage extends React.Component {
                 'Content-Type': 'application/json'
             },
             success: function (data) {
-                this.setState({performer: data});
+                this.setState({results: data});
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err.toString());
             }
         });
     }
-
-    handleDelete = () => {
-        this.deletePerformer();
-    };
 
     render() {
         return (
@@ -67,8 +62,8 @@ export default class SearchPage extends React.Component {
                         <h3>Search results:</h3>
                     </div>
                 </div>
-                Results for {this.props.params.query}
-                {/*<SearchResultList songs={this.state.performer.songs}/>*/}
+
+                <SearchResultList results={this.state.results}/>
             </div>
         )
     }
