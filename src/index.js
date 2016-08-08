@@ -33,12 +33,9 @@ const styles = {
     main: {
         display: 'flex',
         flexDirection: 'column',
-        paddingBottom: 16
-    },
-
-    contentWrapper: {
-        display: 'flex',
-        flexDirection: 'row'
+        height: '100vmax',
+        paddingBottom: 16,
+        flexGrow: 1
     },
 
     menuLeft: {
@@ -71,11 +68,11 @@ const Container = (props) => (
             <div>
                 {props.children}
                 {!props.history.isActive('add') &&
-                    (<FloatingActionButton
-                        style={styles.fabAdd}
-                        href="#/add">
-                        <ContentAdd />
-                    </FloatingActionButton>)
+                (<FloatingActionButton
+                    style={styles.fabAdd}
+                    href="#/add">
+                    <ContentAdd />
+                </FloatingActionButton>)
                 }
             </div>
         </Paper>
