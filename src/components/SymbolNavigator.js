@@ -66,7 +66,7 @@ export default class SymbolNavigator extends React.Component {
 
     render() {
         return (
-            <div>
+            <div style={{marginTop: 16}}>
                 {this.renderIndex()}
                 <PerformerList performers={this.props.performers} filterSymbol={this.props.symbol}/>
             </div>

@@ -1,14 +1,11 @@
 import React from "react";
 import * as $ from "jquery";
-import SymbolNavigator from "../components/SymbolNavigator"
+import SymbolNavigator from "../components/SymbolNavigator";
+import BasePageTemplate from "./BasePageTemplate"
 
 const urlGetPerformers = 'http://localhost:8081/api/performers';
 
 const styles = {
-    page: {
-        marginLeft: '70px',
-        marginRight: '70px'
-    },
 };
 
 export default class HomePage extends React.Component {
@@ -41,12 +38,25 @@ export default class HomePage extends React.Component {
         });
     }
 
+    renderHeader = () => {
+        return <h3>Select performer</h3>
+    };
+
+    renderOverflowMenu = () => {
+        return <div></div>
+    };
+
+    renderContent = () => {
+        return <SymbolNavigator performers={this.state.performers} symbol={this.props.params.symbol}/>
+    };
+
     render() {
         return (
-            <div style={styles.page}>
-                <h3>Select performer</h3>
-                <SymbolNavigator performers={this.state.performers} symbol={this.props.params.symbol}/>
-            </div>
+            <BasePageTemplate
+                header={this.renderHeader()}
+                overflowMenu={this.renderOverflowMenu()}
+                content={this.renderContent()}
+            />
         )
     }
 }
