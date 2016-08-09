@@ -59,7 +59,7 @@ export default class PerformerPage extends React.Component {
                 'Content-Type': 'application/json'
             },
             success: function (data) {
-                hashHistory.replace('/all');
+                hashHistory.replace('/');
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err.toString());

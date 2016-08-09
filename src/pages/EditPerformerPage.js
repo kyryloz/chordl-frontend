@@ -85,7 +85,6 @@ export default class EditPerformerPage extends React.Component {
     };
 
     render() {
-        console.log(this.state.performer);
         return (
             <div style={styles.page}>
                 <div style={{float: 'left', minWidth: 460, marginTop: 70}}>
