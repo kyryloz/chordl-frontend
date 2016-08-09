@@ -4,12 +4,11 @@ import ReactDOM from "react-dom";
 import injectTapEventPlugin from "react-tap-event-plugin";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import Paper from 'material-ui/Paper';
-import ContentAdd from 'material-ui/svg-icons/content/add';
+import FloatingActionButton from "material-ui/FloatingActionButton";
+import Paper from "material-ui/Paper";
+import ContentAdd from "material-ui/svg-icons/content/add";
 import {Router, Route, IndexRoute, hashHistory} from "react-router";
 import Header from "./components/Header";
-import MainMenu from "./components/MainMenu";
 import AddNewSongPage from "./pages/AddNewSongPage";
 import PerformerPage from "./pages/PerformerPage";
 import SongPage from "./pages/SongPage";
@@ -61,7 +60,7 @@ const styles = {
     }
 };
 
-const NotFound = () => ( <h1>Not found!</h1>);
+const NotFound = () => ( <div style={{textAlign: "center", marginTop: 32}}><h3>404. Not found :,(</h3></div>);
 
 const Container = (props) => (
     <div style={styles.main}>
