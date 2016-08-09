@@ -2,6 +2,7 @@ import React from "react";
 import * as $ from "jquery";
 import FlatButton from 'material-ui/FlatButton';
 import {Link, hashHistory} from 'react-router';
+import colors from "../colors";
 
 const urlSong = 'http://localhost:8081/api/songs/';
 
@@ -20,6 +21,10 @@ const styles = {
 
     title: {
         flexGrow: 1
+    },
+
+    link: {
+        color: colors.defaultPrimaryColor
     }
 };
 
@@ -87,6 +92,13 @@ export default class SongPage extends React.Component {
                     <div style={styles.title}>
                         <h3>
                             <Link
+                                style={styles.link}
+                                to={'/'}>
+                                #
+                            </Link>
+                            &nbsp;&nbsp;|&nbsp;&nbsp;
+                            <Link
+                                style={styles.link}
                                 to={'performer/' + this.state.song.performerId}>
                                 {this.state.song.performerName}
                             </Link>

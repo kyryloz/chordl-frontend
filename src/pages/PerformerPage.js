@@ -3,6 +3,7 @@ import * as $ from "jquery";
 import SongsList from "../components/SongsList";
 import FlatButton from "material-ui/FlatButton";
 import {Link, hashHistory} from "react-router";
+import colors from "../colors";
 
 const urlGetPerformer = 'http://localhost:8081/api/performers/';
 
@@ -21,6 +22,10 @@ const styles = {
 
     title: {
         flexGrow: 1
+    },
+
+    link: {
+        color: colors.defaultPrimaryColor
     }
 };
 
@@ -84,8 +89,8 @@ export default class PerformerPage extends React.Component {
                 <div style={styles.pageTitle}>
                     <div style={styles.title}>
                         <h3>
-                            <Link to={'/'}>#</Link>
-                            &nbsp;–&nbsp;
+                            <Link to={'/'} style={styles.link}>#</Link>
+                            &nbsp;&nbsp;|&nbsp;&nbsp;
                             {this.state.performer.name}
                         </h3>
                     </div>
