@@ -4,9 +4,8 @@ import ReactDOM from "react-dom";
 import injectTapEventPlugin from "react-tap-event-plugin";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
-import FloatingActionButton from "material-ui/FloatingActionButton";
 import Paper from "material-ui/Paper";
-import ContentAdd from "material-ui/svg-icons/content/add";
+import FabAdd from "./components/FabAdd";
 import {Router, Route, IndexRoute, hashHistory} from "react-router";
 import Header from "./components/Header";
 import AddNewSongPage from "./pages/AddNewSongPage";
@@ -44,13 +43,6 @@ const styles = {
         borderRight: '1px solid #dedede'
     },
 
-    fabAdd: {
-        display: 'inline-block',
-        position: 'fixed',
-        bottom: '22px',
-        right: '20px'
-    },
-
     paper: {
         margin: '0 auto',
         display: 'inline-block',
@@ -68,13 +60,7 @@ const Container = (props) => (
         <Paper style={styles.paper} zDepth={1}>
             <div>
                 {props.children}
-                {!props.history.isActive('add') &&
-                (<FloatingActionButton
-                    style={styles.fabAdd}
-                    href="#/add">
-                    <ContentAdd />
-                </FloatingActionButton>)
-                }
+                {!props.history.isActive('add') && (<FabAdd/>) }
             </div>
         </Paper>
     </div>

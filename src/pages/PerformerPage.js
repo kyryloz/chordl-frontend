@@ -111,3 +111,7 @@ export default class PerformerPage extends React.Component {
         )
     }
 }
+
+PerformerPage.contextTypes = {
+    router: React.PropTypes.object
+};
