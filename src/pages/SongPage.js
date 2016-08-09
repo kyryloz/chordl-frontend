@@ -1,39 +1,16 @@
 import React from "react";
 import * as $ from "jquery";
-import FlatButton from 'material-ui/FlatButton';
-import {Link, hashHistory} from 'react-router';
+import {Link, hashHistory} from "react-router";
 import colors from "../colors";
-import PopoverItemMenu from "../components/PopoverItemMenu";
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import Divider from 'material-ui/Divider';
+import IconMenu from "material-ui/IconMenu";
+import MenuItem from "material-ui/MenuItem";
+import IconButton from "material-ui/IconButton/IconButton";
+import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
+import BasePageTemplate from "./BasePageTemplate";
 
 const urlSong = 'http://localhost:8081/api/songs/';
 
 const styles = {
-    page: {
-        display: 'flex',
-        flexDirection: 'column'
-    },
-
-    pageTitle: {
-        marginLeft: 70,
-        marginRight: 16,
-        display: 'flex',
-        flexDirection: 'row'
-    },
-
-    title: {
-        flexGrow: 1
-    },
-
-    content: {
-        marginLeft: 70,
-        marginRight: 70
-    },
-
     link: {
         color: colors.defaultPrimaryColor
     }
@@ -104,45 +81,48 @@ export default class SongPage extends React.Component {
         hashHistory.push("song/" + this.state.song.id + "/edit");
     };
 
+    renderHeader = () => {
+        return <h3>
+            <Link
+                style={styles.link}
+                to={'/'}>
+                #
+            </Link>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <Link
+                style={styles.link}
+                to={'performer/' + this.state.song.performerId}>
+                {this.state.song.performerName}
+            </Link>
+            &nbsp;–&nbsp;
+            {this.state.song.title}
+        </h3>
+    };
+
+    renderOverflowMenu = () => {
+        return <IconMenu
+            iconButtonElement={<IconButton>
+                <MoreVertIcon color={colors.defaultPrimaryColor}/>
+            </IconButton>}
+            anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+        >
+            <MenuItem primaryText="Edit" onTouchTap={this.handleEdit}/>
+            <MenuItem style={{color: "red"}} primaryText="Delete" onTouchTap={this.handleDelete}/>
+        </IconMenu>
+    };
+
+    renderContent = () => {
+        return <pre>{this.state.song.lyrics}</pre>
+    };
+
     render() {
         return (
-            <div style={styles.page}>
-                <div style={styles.pageTitle}>
-                    <div style={styles.title}>
-                        <h3>
-                            <Link
-                                style={styles.link}
-                                to={'/'}>
-                                #
-                            </Link>
-                            &nbsp;&nbsp;|&nbsp;&nbsp;
-                            <Link
-                                style={styles.link}
-                                to={'performer/' + this.state.song.performerId}>
-                                {this.state.song.performerName}
-                            </Link>
-                            &nbsp;–&nbsp;
-                            {this.state.song.title}
-                        </h3>
-                    </div>
-                    <div style={{marginTop: 6}}>
-                        <IconMenu
-                            iconButtonElement={<IconButton>
-                                <MoreVertIcon color={colors.defaultPrimaryColor}/>
-                            </IconButton>}
-                            anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                            targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                        >
-                            <MenuItem primaryText="Edit" onTouchTap={this.handleEdit}/>
-                            <MenuItem style={{color: "red"}} primaryText="Delete" onTouchTap={this.handleDelete}/>
-                        </IconMenu>
-                    </div>
-                </div>
-                <Divider />
-                <div style={styles.content}>
-                    <pre>{this.state.song.lyrics}</pre>
-                </div>
-            </div>
+            <BasePageTemplate
+                header={this.renderHeader()}
+                overflowMenu={this.renderOverflowMenu()}
+                content={this.renderContent()}
+            />
         )
     }
 }

@@ -1,29 +1,17 @@
 import React from "react";
 import * as $ from "jquery";
 import SongsList from "../components/SongsList";
-import FlatButton from "material-ui/FlatButton";
 import {Link, hashHistory} from "react-router";
 import colors from "../colors";
+import IconMenu from "material-ui/IconMenu";
+import MenuItem from "material-ui/MenuItem";
+import IconButton from "material-ui/IconButton/IconButton";
+import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
+import BasePageTemplate from "./BasePageTemplate"
 
 const urlGetPerformer = 'http://localhost:8081/api/performers/';
 
 const styles = {
-    page: {
-        marginLeft: '70px',
-        marginRight: '70px',
-        display: 'flex',
-        flexDirection: 'column'
-    },
-
-    pageTitle: {
-        display: 'flex',
-        flexDirection: 'row'
-    },
-
-    title: {
-        flexGrow: 1
-    },
-
     link: {
         color: colors.defaultPrimaryColor
     }
@@ -83,32 +71,43 @@ export default class PerformerPage extends React.Component {
         this.deletePerformer();
     };
 
+    handleEdit = (e) => {
+        e.preventDefault();
+        hashHistory.push("performer/" + this.state.performer.id + "/edit");
+    };
+
+    renderHeader = () => {
+        return <h3>
+            <Link to={'/'} style={styles.link}>#</Link>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            {this.state.performer.name}
+        </h3>
+    };
+
+    renderOverflowMenu = () => {
+        return <IconMenu
+            iconButtonElement={<IconButton>
+                <MoreVertIcon color={colors.defaultPrimaryColor}/>
+            </IconButton>}
+            anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+        >
+            <MenuItem primaryText="Edit" onTouchTap={this.handleEdit}/>
+            <MenuItem style={{color: "red"}} primaryText="Delete" onTouchTap={this.handleDelete}/>
+        </IconMenu>
+    };
+
+    renderContent = () => {
+        return <SongsList songs={this.state.performer.songs}/>
+    };
+
     render() {
         return (
-            <div style={styles.page}>
-                <div style={styles.pageTitle}>
-                    <div style={styles.title}>
-                        <h3>
-                            <Link to={'/'} style={styles.link}>#</Link>
-                            &nbsp;&nbsp;|&nbsp;&nbsp;
-                            {this.state.performer.name}
-                        </h3>
-                    </div>
-                    <div style={{marginTop: 10}}>
-                        <FlatButton
-                            label="Edit"
-                            primary={true}
-                            href={"#/performer/" + this.state.performer.id + "/edit"}
-                        />
-                        <FlatButton
-                            label="Delete"
-                            labelStyle={{color: 'red'}}
-                            onTouchTap={this.handleDelete}
-                        />
-                    </div>
-                </div>
-                <SongsList songs={this.state.performer.songs}/>
-            </div>
+            <BasePageTemplate
+                header={this.renderHeader()}
+                overflowMenu={this.renderOverflowMenu()}
+                content={this.renderContent()}
+            />
         )
     }
 }
