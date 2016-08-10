@@ -1,9 +1,8 @@
 import React from "react";
 import * as $ from "jquery";
-import FlatButton from 'material-ui/FlatButton';
-import { hashHistory } from 'react-router';
+import FlatButton from "material-ui/FlatButton";
 import update from "react-addons-update";
-import TextField from "material-ui/TextField"
+import TextField from "material-ui/TextField";
 
 const urlSong = 'http://localhost:8081/api/songs/';
 
@@ -14,7 +13,7 @@ const styles = {
     },
 };
 
-export default class SongPage extends React.Component {
+export default class EditSongPage extends React.Component {
 
     constructor(props) {
         super(props);
@@ -72,7 +71,7 @@ export default class SongPage extends React.Component {
     };
 
     handleCancel = () => {
-        hashHistory.replace("/song/" + this.state.song.id)
+        this.context.router.replace("/song/" + this.state.song.id)
     };
 
     handleTitleChange = (e) => {
@@ -132,3 +131,7 @@ export default class SongPage extends React.Component {
         )
     }
 }
+
+EditSongPage.contextTypes = {
+    router: React.PropTypes.object
+};

@@ -3,10 +3,6 @@ import {List, ListItem} from "material-ui/List";
 
 export default class SearchResultList extends React.Component {
 
-    constructor(props) {
-        super(props)
-    }
-
     render() {
         var resultNodes = this.props.results.map((result) => {
             return (

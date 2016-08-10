@@ -17,7 +17,7 @@ const styles = {
     }
 };
 
-class SongAddStepper extends React.Component {
+export default class SongAddStepper extends React.Component {
 
     constructor(props) {
         super(props);
@@ -226,5 +226,3 @@ class SongAddStepper extends React.Component {
         );
     }
 }
-
-export default SongAddStepper;

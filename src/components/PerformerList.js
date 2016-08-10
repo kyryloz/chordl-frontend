@@ -3,10 +3,6 @@ import {List, ListItem} from "material-ui/List";
 
 export default class PerformerList extends React.Component {
 
-    constructor(props) {
-        super(props)
-    }
-
     render() {
         var performerNodes = this.props.performers.filter((performer) => {
             var filterSymbol = this.props.filterSymbol;

@@ -1,6 +1,5 @@
 import React from "react";
-import TextField from 'material-ui/TextField';
-import {Link, hashHistory} from "react-router";
+import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
 
 export default class SearchBar extends React.Component {
@@ -26,8 +25,11 @@ export default class SearchBar extends React.Component {
     };
 
     handleSearch = () => {
-        console.log("Search: " + this.state.query);
-        hashHistory.push("search/" + this.state.query);
+        this.context.router.push("search/" + this.state.query);
+
+        this.setState({
+            query: ""
+        })
     };
 
     render() {
@@ -52,3 +54,7 @@ export default class SearchBar extends React.Component {
     )
     }
 }
+
+SearchBar.contextTypes = {
+    router: React.PropTypes.object
+};

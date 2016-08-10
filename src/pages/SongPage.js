@@ -1,6 +1,6 @@
 import React from "react";
 import * as $ from "jquery";
-import {Link, hashHistory} from "react-router";
+import {Link} from "react-router";
 import colors from "../colors";
 import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
@@ -68,7 +68,7 @@ export default class SongPage extends React.Component {
                 'Content-Type': 'application/json'
             },
             success: function (data) {
-                hashHistory.replace('performer/' + this.state.song.performerId);
+                this.context.router.replace('performer/' + this.state.song.performerId);
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err);
@@ -78,7 +78,7 @@ export default class SongPage extends React.Component {
 
     handleEdit = (e) => {
         e.preventDefault();
-        hashHistory.push("song/" + this.state.song.id + "/edit");
+        this.context.router.push("song/" + this.state.song.id + "/edit");
     };
 
     renderHeader = () => {
@@ -126,3 +126,7 @@ export default class SongPage extends React.Component {
         )
     }
 }
+
+SongPage.contextTypes = {
+    router: React.PropTypes.object
+};

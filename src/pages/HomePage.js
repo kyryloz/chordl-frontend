@@ -1,12 +1,9 @@
 import React from "react";
 import * as $ from "jquery";
 import SymbolNavigator from "../components/SymbolNavigator";
-import BasePageTemplate from "./BasePageTemplate"
+import BasePageTemplate from "./BasePageTemplate";
 
 const urlGetPerformers = 'http://localhost:8081/api/performers';
-
-const styles = {
-};
 
 export default class HomePage extends React.Component {
 

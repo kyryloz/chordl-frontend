@@ -1,7 +1,6 @@
 import React from "react";
 import * as $ from "jquery";
 import FlatButton from "material-ui/FlatButton";
-import {hashHistory} from "react-router";
 import update from "react-addons-update";
 import TextField from "material-ui/TextField"
 
@@ -81,7 +80,7 @@ export default class EditPerformerPage extends React.Component {
     };
 
     handleCancel = () => {
-        hashHistory.replace("/performer/" + this.state.performer.id)
+        this.context.router.replace("/performer/" + this.state.performer.id)
     };
 
     render() {
@@ -113,3 +112,7 @@ export default class EditPerformerPage extends React.Component {
         )
     }
 }
+
+EditPerformerPage.contextTypes = {
+    router: React.PropTypes.object
+};

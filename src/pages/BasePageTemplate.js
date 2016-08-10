@@ -26,10 +26,6 @@ const styles = {
 
 export default class BasePageTemplate extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <div style={styles.page}>

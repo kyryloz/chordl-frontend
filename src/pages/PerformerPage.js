@@ -1,13 +1,13 @@
 import React from "react";
 import * as $ from "jquery";
 import SongsList from "../components/SongsList";
-import {Link, hashHistory} from "react-router";
+import {Link} from "react-router";
 import colors from "../colors";
 import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
 import IconButton from "material-ui/IconButton/IconButton";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
-import BasePageTemplate from "./BasePageTemplate"
+import BasePageTemplate from "./BasePageTemplate";
 
 const urlGetPerformer = 'http://localhost:8081/api/performers/';
 
@@ -22,13 +22,16 @@ export default class PerformerPage extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {performer: {
-            name: "",
-            songs: []
-        }}
+        this.state = {
+            performer: {
+                name: "",
+                songs: []
+            }
+        };
     }
 
     componentDidMount() {
+        this.router = this.context.router;
         this.loadPerformer();
     }
 
@@ -59,7 +62,7 @@ export default class PerformerPage extends React.Component {
                 'Content-Type': 'application/json'
             },
             success: function (data) {
-                hashHistory.replace('/');
+                this.router.replace('/');
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err.toString());
@@ -73,7 +76,7 @@ export default class PerformerPage extends React.Component {
 
     handleEdit = (e) => {
         e.preventDefault();
-        hashHistory.push("performer/" + this.state.performer.id + "/edit");
+        this.router.push("performer/" + this.state.performer.id + "/edit");
     };
 
     renderHeader = () => {

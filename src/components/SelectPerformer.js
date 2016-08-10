@@ -15,7 +15,7 @@ export default class SelectPerformer extends React.Component {
         super(props);
 
         this.state = {
-            name: this.props.performer.name,
+            performerName: this.props.performer.name,
             id: this.props.performer.id,
             performerSubmitting: false,
             snackbarOpen: false
@@ -26,7 +26,7 @@ export default class SelectPerformer extends React.Component {
         var performer;
         if (dataSourceIndex === -1) {
             performer = {
-                name: input,
+                performerName: input,
                 id: -1
             }
         } else {
@@ -38,11 +38,11 @@ export default class SelectPerformer extends React.Component {
 
     handlePerformerChangeUpdate = (input) => {
         var result = $.grep(this.props.performers, function (e) {
-            return e.name === input;
+            return e.performerName === input;
         });
 
         const performer = {
-            name: input,
+            performerName: input,
             id: result.length ? result[0].id : -1
         };
         this.updatePerformer(performer);
@@ -50,7 +50,7 @@ export default class SelectPerformer extends React.Component {
 
     updatePerformer(performer) {
         this.setState(update(this.state, {
-            name: {$set: performer.name},
+            performerName: {$set: performer.name},
             id: {$set: performer.id}
         }));
     }
@@ -66,7 +66,9 @@ export default class SelectPerformer extends React.Component {
     handlePerformerSubmit = (e) => {
         e.preventDefault();
 
-        const data = {name} = this.state;
+        const data = {
+            name: this.state.performerName
+        };
 
         this.setState(update(this.state, {
             performerSubmitting: {$set: true}
@@ -97,7 +99,7 @@ export default class SelectPerformer extends React.Component {
             this.props.performers.push(data);
 
             this.setState({
-                name: data.name,
+                performerName: data.name,
                 id: data.id,
                 performerSubmitting: false,
                 snackbarOpen: true
@@ -109,7 +111,7 @@ export default class SelectPerformer extends React.Component {
 
     handleNextButton = () => {
         const performer = {
-            name: this.state.name,
+            performerName: this.state.name,
             id: this.state.id
         };
         this.props.performerDoneCallback(performer)
@@ -142,7 +144,7 @@ export default class SelectPerformer extends React.Component {
             <div style={{margin: '12px 0'}}>
                 <FlatButton
                     label='Create performer'
-                    disabled={this.isPerformerSubmittingInProgress() || !this.state.name}
+                    disabled={this.isPerformerSubmittingInProgress() || !this.state.performerName}
                     primary={true}
                     onTouchTap={this.handlePerformerSubmit}
                 />
@@ -162,7 +164,7 @@ export default class SelectPerformer extends React.Component {
                     dataSourceConfig={{text: 'name', value: 'id'}}
                     maxSearchResults={5}
                     fullWidth={true}
-                    searchText={this.state.name}
+                    searchText={this.state.performerName}
                     onNewRequest={this.handlePerformerChange}
                     onUpdateInput={this.handlePerformerChangeUpdate}
                 /><br/>

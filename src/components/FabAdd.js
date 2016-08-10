@@ -1,7 +1,6 @@
 import * as React from "react";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import ContentAdd from "material-ui/svg-icons/content/add";
-import {hashHistory} from "react-router";
 
 const styles = {
     fabAdd: {
@@ -14,13 +13,9 @@ const styles = {
 
 export default class FabAdd extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     handleAddPress = (e) => {
         e.preventDefault();
-        hashHistory.push("/add")
+        this.context.router.push("/add")
     };
 
     render() {
@@ -33,3 +28,7 @@ export default class FabAdd extends React.Component {
         )
     }
 }
+
+FabAdd.contextTypes = {
+    router: React.PropTypes.object
+};
