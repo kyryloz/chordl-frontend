@@ -10,10 +10,19 @@ export default class SearchResultList extends React.Component {
             );
         });
 
-        return (
-            <List>
-                {resultNodes}
-            </List>
-        );
+        var result;
+        if (resultNodes.length) {
+            result = (
+                <List>
+                    {resultNodes}
+                </List>
+            );
+        } else {
+            result = (
+                <div style={{textAlign: "center"}}><p>Nothing found</p></div>
+            );
+        }
+
+        return result;
     }
 }
