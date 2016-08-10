@@ -32,8 +32,9 @@ export default class SearchPage extends React.Component {
         }
     }
 
-    componentDidMount() {
-        this.search(this.props.params.query);
+    componentWillReceiveProps(nextProps) {
+        var query = nextProps.params.query;
+        this.search(query);
     }
 
     search(query) {
@@ -46,7 +47,9 @@ export default class SearchPage extends React.Component {
                 'Content-Type': 'application/json'
             },
             success: function (data) {
-                this.setState({results: data});
+                this.setState({
+                    results: data
+                });
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err.toString());
