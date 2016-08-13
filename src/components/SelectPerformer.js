@@ -5,7 +5,7 @@ import update from "react-addons-update";
 import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton";
 import LinearProgress from "material-ui/LinearProgress";
-import Snackbar from 'material-ui/Snackbar';
+import Snackbar from "material-ui/Snackbar";
 
 const urlPostPerformer = 'http://localhost:8081/api/performers';
 
@@ -50,7 +50,7 @@ export default class SelectPerformer extends React.Component {
 
     updatePerformer(performer) {
         this.setState(update(this.state, {
-            performerName: {$set: performer.name},
+            performerName: {$set: performer.performerName},
             id: {$set: performer.id}
         }));
     }
