@@ -3,8 +3,7 @@ import {IndexLink} from "react-router";
 import colors from "../colors"
 import PerformerList from "./PerformerList"
 import * as $ from "jquery";
-
-const urlGetIndex = 'http://localhost:8081/api/index';
+import api from "../api";
 
 const styles = {
     active: {
@@ -34,7 +33,7 @@ export default class SymbolNavigator extends React.Component {
 
     loadIndex() {
         $.ajax({
-            url: urlGetIndex,
+            url: api.index,
             dataType: 'json',
             type: 'GET',
             headers: {

@@ -7,8 +7,7 @@ import update from "react-addons-update";
 import * as $ from "jquery";
 import SelectPerformer from "../components/SelectPerformer";
 import Snackbar from 'material-ui/Snackbar';
-
-const urlPostSong = 'http://localhost:8081/api/songs';
+import api from "../api";
 
 const styles = {
     stepper: {
@@ -125,7 +124,7 @@ export default class SongAddStepper extends React.Component {
         };
 
         $.ajax({
-            url: urlPostSong,
+            url: api.songs,
             dataType: 'json',
             type: 'POST',
             headers: {

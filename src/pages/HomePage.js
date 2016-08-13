@@ -2,8 +2,7 @@ import React from "react";
 import * as $ from "jquery";
 import SymbolNavigator from "../components/SymbolNavigator";
 import BasePageTemplate from "./BasePageTemplate";
-
-const urlGetPerformers = 'http://localhost:8081/api/performers';
+import api from "../api";
 
 export default class HomePage extends React.Component {
 
@@ -19,7 +18,7 @@ export default class HomePage extends React.Component {
 
     loadAll() {
         $.ajax({
-            url: urlGetPerformers,
+            url: api.performers,
             dataType: 'json',
             type: 'GET',
             headers: {

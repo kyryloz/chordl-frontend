@@ -1,8 +1,7 @@
 import React from "react";
 import * as $ from "jquery";
 import SearchResultList from "../components/SearchResultList";
-
-const urlSearch = 'http://localhost:8081/api/search/';
+import api from "../api";
 
 const styles = {
     page: {
@@ -39,7 +38,7 @@ export default class SearchPage extends React.Component {
 
     search(query) {
         $.ajax({
-            url: urlSearch + query,
+            url: api.search + query,
             dataType: 'json',
             type: 'GET',
             headers: {

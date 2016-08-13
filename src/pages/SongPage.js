@@ -7,8 +7,7 @@ import MenuItem from "material-ui/MenuItem";
 import IconButton from "material-ui/IconButton/IconButton";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 import BasePageTemplate from "./BasePageTemplate";
-
-const urlSong = 'http://localhost:8081/api/songs/';
+import api from "../api";
 
 const styles = {
     link: {
@@ -21,7 +20,7 @@ export default class SongPage extends React.Component {
     constructor(props) {
         super(props);
 
-        this.urlGetSong = urlSong + this.props.params.id;
+        this.urlGetSong = api.songs + this.props.params.id;
 
         this.state = {
             song: {

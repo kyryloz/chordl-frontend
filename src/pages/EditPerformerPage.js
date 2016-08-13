@@ -2,9 +2,8 @@ import React from "react";
 import * as $ from "jquery";
 import FlatButton from "material-ui/FlatButton";
 import update from "react-addons-update";
-import TextField from "material-ui/TextField"
-
-const urlPerformer = 'http://localhost:8081/api/performers/';
+import TextField from "material-ui/TextField";
+import api from "../api";
 
 const styles = {
     page: {
@@ -30,7 +29,7 @@ export default class EditPerformerPage extends React.Component {
 
     loadPerformer() {
         $.ajax({
-            url: urlPerformer + this.props.params.id,
+            url: api.performers + this.props.params.id,
             dataType: 'json',
             type: 'GET',
             headers: {
@@ -48,7 +47,7 @@ export default class EditPerformerPage extends React.Component {
 
     updatePerformer() {
         $.ajax({
-            url: urlPerformer + this.state.performer.id,
+            url: api.performers + this.state.performer.id,
             dataType: 'json',
             type: 'PUT',
             headers: {

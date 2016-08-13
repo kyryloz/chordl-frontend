@@ -1,8 +1,7 @@
 import React from "react";
 import * as $ from "jquery";
 import SongAddStepper from "../components/SongAddStepper";
-
-const urlGetPerformers = 'http://localhost:8081/api/performers';
+import api from "../api";
 
 const styles = {
     page: {
@@ -26,7 +25,7 @@ export default class AddNewSong extends React.Component {
 
     loadAllPerformers() {
         $.ajax({
-            url: urlGetPerformers,
+            url: api.performers,
             dataType: 'json',
             type: 'GET',
             headers: {

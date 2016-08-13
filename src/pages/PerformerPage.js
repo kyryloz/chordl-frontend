@@ -8,8 +8,7 @@ import MenuItem from "material-ui/MenuItem";
 import IconButton from "material-ui/IconButton/IconButton";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 import BasePageTemplate from "./BasePageTemplate";
-
-const urlGetPerformer = 'http://localhost:8081/api/performers/';
+import api from "../api";
 
 const styles = {
     link: {
@@ -37,7 +36,7 @@ export default class PerformerPage extends React.Component {
 
     loadPerformer() {
         $.ajax({
-            url: urlGetPerformer + this.props.params.id,
+            url: api.performers + this.props.params.id,
             dataType: 'json',
             type: 'GET',
             headers: {
@@ -55,7 +54,7 @@ export default class PerformerPage extends React.Component {
 
     deletePerformer() {
         $.ajax({
-            url: urlGetPerformer + this.props.params.id,
+            url: api.performers + this.props.params.id,
             type: 'DELETE',
             headers: {
                 'Accept': 'application/json',

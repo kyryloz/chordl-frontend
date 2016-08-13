@@ -6,8 +6,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton";
 import LinearProgress from "material-ui/LinearProgress";
 import Snackbar from "material-ui/Snackbar";
-
-const urlPostPerformer = 'http://localhost:8081/api/performers';
+import api from "../api";
 
 export default class SelectPerformer extends React.Component {
 
@@ -75,7 +74,7 @@ export default class SelectPerformer extends React.Component {
         }));
 
         $.ajax({
-            url: urlPostPerformer,
+            url: api.performers,
             dataType: 'json',
             type: 'POST',
             headers: {
