@@ -29,7 +29,10 @@ export default class SelectPerformer extends React.Component {
                 id: -1
             }
         } else {
-            performer = input;
+            performer = {
+                performerName: input.name,
+                id: input.id
+            };
         }
 
         this.updatePerformer(performer);
