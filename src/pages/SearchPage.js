@@ -38,8 +38,6 @@ export default class SearchPage extends React.Component {
     }
 
     search(term) {
-        console.log("SEARCH === " , term);
-
         $.ajax({
             url: api.search + "?query=" + term,
             dataType: 'json',
@@ -63,8 +61,6 @@ export default class SearchPage extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         const query = nextProps.location.query.query;
-        console.log("componentWillReceiveProps a", query);
-        console.log("componentWillReceiveProps b", this.state.query);
 
         if (query !== this.state.query) {
             this.setState({
@@ -75,8 +71,6 @@ export default class SearchPage extends React.Component {
     }
 
     render() {
-        console.log("render", this.props.location.query.query);
-
         return (
             <div style={styles.page}>
                 <div style={styles.pageTitle}>
