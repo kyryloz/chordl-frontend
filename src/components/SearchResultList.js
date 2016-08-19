@@ -6,10 +6,33 @@ import Highlight from "../components/Highlight";
 const styles = {
     link: {
         color: colors.defaultPrimaryColor
+    },
+    node: {
+        padding: 16
+    },
+    snippet: {
+        marginLeft: 16,
+        marginTop: 16,
+        paddingLeft: 16,
+        paddingRight: 16,
+        border: "thin dotted black",
+        background: colors.lightPrimaryColor
     }
 };
 
 export default class SearchResultList extends React.Component {
+
+    renderSnippet(snippet) {
+        return (
+            <div style={styles.snippet}>
+                        <pre>
+                        <Highlight
+                            text={snippet}
+                        />
+                    </pre>
+            </div>
+        )
+    }
 
     renderListItem(searchNode) {
         const song = {
@@ -19,7 +42,7 @@ export default class SearchResultList extends React.Component {
             id: searchNode.songId
         };
         return (
-            <div>
+            <div style={styles.node}>
                 <SongTitle
                     style={styles.link}
                     song={song}
@@ -27,11 +50,7 @@ export default class SearchResultList extends React.Component {
                     linkifyPerformer={true}
                     hlEnabled={true}
                 />
-                <pre>
-                    <Highlight
-                        text={searchNode.snippet}
-                    />
-                </pre>
+                {searchNode.snippet && this.renderSnippet(searchNode.snippet)}
             </div>
         )
     }

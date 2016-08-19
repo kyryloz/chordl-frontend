@@ -20,7 +20,7 @@ export default class Highlight extends React.Component {
             text = DOMPurify.sanitize(text);
             return <div dangerouslySetInnerHTML={{__html: text}}/>
         } else {
-            return text;
+            return <div>{text}</div>;
         }
     }
 
