@@ -2,6 +2,9 @@ import React from "react";
 import * as $ from "jquery";
 import SearchResultList from "../components/SearchResultList";
 import api from "../api";
+import ReactPaginate from 'react-paginate';
+
+const defaultPageLimit = 2;
 
 const styles = {
     page: {
@@ -30,16 +33,20 @@ export default class SearchPage extends React.Component {
         this.state = {
             query: query,
             result: {
-                content: []
+                content: [],
+                page: 0,
+                pageTotal: 1
             }
         };
-
-        this.search(query);
     }
 
-    search(term) {
+    componentDidMount() {
+        this.search(this.state.query, this.state.page);
+    }
+
+    search(term, page, size) {
         $.ajax({
-            url: api.search + "?query=" + term,
+            url: api.search + "?query=" + term + "&page=" + page + "&size=" + defaultPageLimit,
             dataType: 'json',
             type: 'GET',
             headers: {
@@ -49,7 +56,9 @@ export default class SearchPage extends React.Component {
             success: function (data) {
                 this.setState({
                     result: {
-                        content: data.content
+                        content: data.content,
+                        page: data.number,
+                        pageTotal: data.totalPages
                     }
                 });
             }.bind(this),
@@ -66,9 +75,17 @@ export default class SearchPage extends React.Component {
             this.setState({
                 query: query
             });
-            this.search(query);
+            this.search(query, this.state.content.page, this.state.content.size);
         }
     }
+
+    handlePageClick = (data) => {
+        const selected = data.selected;
+
+        this.setState({page: selected}, () => {
+            this.search(this.state.query, this.state.page)
+        });
+    };
 
     render() {
         return (
@@ -80,6 +97,18 @@ export default class SearchPage extends React.Component {
                 </div>
 
                 <SearchResultList result={this.state.result.content}/>
+
+                <ReactPaginate previousLabel={"previous"}
+                               nextLabel={"next"}
+                               breakLabel={<a href="">...</a>}
+                               breakClassName={"break-me"}
+                               pageNum={this.state.pageTotal}
+                               marginPagesDisplayed={2}
+                               pageRangeDisplayed={5}
+                               clickCallback={this.handlePageClick}
+                               containerClassName={"pagination"}
+                               subContainerClassName={"pages pagination"}
+                               activeClassName={"active"} />
             </div>
         )
     }
