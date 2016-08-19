@@ -1,0 +1,30 @@
+import * as React from "react";
+import DOMPurify from "dompurify";
+
+const defaultRegex = /<\[\[(\w+)\]\]>/g;
+
+export default class Highlight extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            enabled: props.enabled ? props.enabled : true,
+            regex: props.regex ? props.regex : defaultRegex
+        }
+    }
+
+    highlightText(text) {
+        if (this.state.enabled) {
+            text = text.replace(this.state.regex, "<mark>$1</mark>");
+            text = DOMPurify.sanitize(text);
+            return <div dangerouslySetInnerHTML={{__html: text}}/>
+        } else {
+            return text;
+        }
+    }
+
+    render() {
+        return this.highlightText(this.props.text);
+    }
+}

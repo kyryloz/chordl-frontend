@@ -1,5 +1,6 @@
 import * as React from "react";
 import {Link} from "react-router";
+import Highlight from "./Highlight"
 
 export default class SongTitle extends React.Component {
 
@@ -8,10 +9,14 @@ export default class SongTitle extends React.Component {
             <Link
                 style={this.props.style}
                 to={"performer/" + this.props.song.performerId}>
-                {this.props.song.performerName}
+                <Highlight
+                    enabled={this.props.hlEnabled}
+                    text={this.props.song.performerName}/>
             </Link>
             :
-            this.props.song.performerName;
+            <Highlight
+                enabled={this.props.hlEnabled}
+                text={this.props.song.performerName}/>
     }
 
     renderSongTitle() {
@@ -19,15 +24,19 @@ export default class SongTitle extends React.Component {
             <Link
                 style={this.props.style}
                 to={"song/" + this.props.song.id}>
-                {this.props.song.title}
+                <Highlight
+                    enabled={this.props.hlEnabled}
+                    text={this.props.song.title}/>
             </Link>
             :
-            this.props.song.title;
+            <Highlight
+                enabled={this.props.hlEnabled}
+                text={this.props.song.title}/>
     }
 
     render() {
         return (
-            <div>
+            <div style={{display: 'flex', flexDirection: 'row'}}>
                 {this.renderPerformerTitle()}
                 &nbsp;–&nbsp;
                 {this.renderSongTitle()}

@@ -1,7 +1,7 @@
 import * as React from "react";
 import colors from "../colors";
 import SongTitle from "../components/SongTitle";
-import Highlight from 'react-highlighter';
+import Highlight from "../components/Highlight";
 
 const styles = {
     link: {
@@ -25,7 +25,13 @@ export default class SearchResultList extends React.Component {
                     song={song}
                     linkifySong={true}
                     linkifyPerformer={true}
+                    hlEnabled={true}
                 />
+                <pre>
+                    <Highlight
+                        text={searchNode.snippet}
+                    />
+                </pre>
             </div>
         )
     }
