@@ -26,10 +26,6 @@ export default class SearchBar extends React.Component {
 
     handleSearch = () => {
         this.context.router.push("search/?query=" + this.state.query);
-
-        this.setState({
-            query: ""
-        })
     };
 
     render() {

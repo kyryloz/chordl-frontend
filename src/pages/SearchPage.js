@@ -26,19 +26,22 @@ export default class SearchPage extends React.Component {
     constructor(props) {
         super(props);
 
+        const query = props.location.query.query;
         this.state = {
-            query: props.location.query.query,
+            query: query,
             result: {
                 content: []
             }
         };
 
-        this.search(this.state.query);
+        this.search(query);
     }
 
-    search(query) {
+    search(term) {
+        console.log("SEARCH === " , term);
+
         $.ajax({
-            url: api.search + "?query=" + query,
+            url: api.search + "?query=" + term,
             dataType: 'json',
             type: 'GET',
             headers: {
@@ -46,7 +49,6 @@ export default class SearchPage extends React.Component {
                 'Content-Type': 'application/json'
             },
             success: function (data) {
-                console.log(data);
                 this.setState({
                     result: {
                         content: data.content
@@ -59,7 +61,22 @@ export default class SearchPage extends React.Component {
         });
     }
 
+    componentWillReceiveProps(nextProps) {
+        const query = nextProps.location.query.query;
+        console.log("componentWillReceiveProps a", query);
+        console.log("componentWillReceiveProps b", this.state.query);
+
+        if (query !== this.state.query) {
+            this.setState({
+                query: query
+            });
+            this.search(query);
+        }
+    }
+
     render() {
+        console.log("render", this.props.location.query.query);
+
         return (
             <div style={styles.page}>
                 <div style={styles.pageTitle}>
