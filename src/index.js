@@ -15,6 +15,7 @@ import HomePage from "./pages/HomePage";
 import EditPerformerPage from "./pages/EditPerformerPage";
 import EditSongPage from "./pages/EditSongPage";
 import SearchPage from "./pages/SearchPage";
+import { StickyContainer, Sticky } from 'react-sticky';
 
 injectTapEventPlugin();
 
@@ -45,7 +46,6 @@ const styles = {
 
     paper: {
         margin: '0 auto',
-        display: 'inline-block',
         paddingBottom: 32,
         width: 800,
         flexGrow: 1
@@ -56,13 +56,19 @@ const NotFound = () => ( <div style={{textAlign: "center", marginTop: 32}}><h3>4
 
 const Container = (props) => (
     <div style={styles.main}>
-        <div style={styles.header}><Header/></div>
-        <Paper style={styles.paper} zDepth={1}>
-            <div>
-                {props.children}
-                {!props.history.isActive('add') && (<FabAdd/>) }
-            </div>
-        </Paper>
+        <StickyContainer>
+            <Sticky>
+                <header>
+                    <div style={styles.header}><Header/></div>
+                </header>
+            </Sticky>
+            <Paper style={styles.paper} zDepth={1}>
+                <div>
+                    {props.children}
+                    {!props.history.isActive('add') && (<FabAdd/>) }
+                </div>
+            </Paper>
+        </StickyContainer>
     </div>
 );
 

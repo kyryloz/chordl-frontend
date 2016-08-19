@@ -7,7 +7,8 @@ import IconButton from 'material-ui/IconButton';
 
 const styles = {
     appBar: {
-        backgroundColor: '#607D8B'
+        backgroundColor: '#607D8B',
+        height: 62
     },
     toolbarTitle: {
         fontFamily: 'sans-serif',
