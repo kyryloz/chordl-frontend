@@ -27,18 +27,18 @@ export default class SearchPage extends React.Component {
         super(props);
 
         this.state = {
-            results: []
-        }
-    }
+            query: props.location.query.query,
+            result: {
+                content: []
+            }
+        };
 
-    componentWillReceiveProps(nextProps) {
-        var query = nextProps.params.query;
-        this.search(query);
+        this.search(this.state.query);
     }
 
     search(query) {
         $.ajax({
-            url: api.search + query,
+            url: api.search + "?query=" + query,
             dataType: 'json',
             type: 'GET',
             headers: {
@@ -46,8 +46,11 @@ export default class SearchPage extends React.Component {
                 'Content-Type': 'application/json'
             },
             success: function (data) {
+                console.log(data);
                 this.setState({
-                    results: data
+                    result: {
+                        content: data.content
+                    }
                 });
             }.bind(this),
             error: function (xhr, status, err) {
@@ -65,7 +68,7 @@ export default class SearchPage extends React.Component {
                     </div>
                 </div>
 
-                <SearchResultList results={this.state.results}/>
+                <SearchResultList result={this.state.result.content}/>
             </div>
         )
     }

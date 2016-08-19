@@ -7,6 +7,7 @@ import MenuItem from "material-ui/MenuItem";
 import IconButton from "material-ui/IconButton/IconButton";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 import BasePageTemplate from "./BasePageTemplate";
+import SongTitle from "../components/SongTitle";
 import api from "../api";
 
 const styles = {
@@ -81,20 +82,18 @@ export default class SongPage extends React.Component {
     };
 
     renderHeader = () => {
-        return <h3>
+        return <h3 style={{display: 'flex', flexDirection: 'row'}}>
             <Link
                 style={styles.link}
                 to={'/'}>
                 #
             </Link>
             &nbsp;&nbsp;|&nbsp;&nbsp;
-            <Link
+            <SongTitle
                 style={styles.link}
-                to={'performer/' + this.state.song.performerId}>
-                {this.state.song.performerName}
-            </Link>
-            &nbsp;–&nbsp;
-            {this.state.song.title}
+                song={this.state.song}
+                linkifyPerformer={true}
+            />
         </h3>
     };
 
