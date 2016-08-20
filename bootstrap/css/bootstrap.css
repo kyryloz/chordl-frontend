@@ -487,32 +487,32 @@ mark,
 /*.text-warning {*/
   /*color: #8a6d3b;*/
 /*}*/
-/*a.text-warning:hover,*/
-/*a.text-warning:focus {*/
-  /*color: #66512c;*/
-/*}*/
-/*.text-danger {*/
-  /*color: #a94442;*/
-/*}*/
-/*a.text-danger:hover,*/
-/*a.text-danger:focus {*/
-  /*color: #843534;*/
-/*}*/
+a.text-warning:hover,
+a.text-warning:focus {
+  color: #66512c;
+}
+.text-danger {
+  color: #a94442;
+}
+a.text-danger:hover,
+a.text-danger:focus {
+  color: #843534;
+}
 /*.bg-primary {*/
   /*color: #fff;*/
   /*background-color: #337ab7;*/
 /*}*/
-/*a.bg-primary:hover,*/
-/*a.bg-primary:focus {*/
-  /*background-color: #286090;*/
-/*}*/
-/*.bg-success {*/
-  /*background-color: #dff0d8;*/
-/*}*/
-/*a.bg-success:hover,*/
-/*a.bg-success:focus {*/
-  /*background-color: #c1e2b3;*/
-/*}*/
+a.bg-primary:hover,
+a.bg-primary:focus {
+  background-color: #286090;
+}
+.bg-success {
+  background-color: #dff0d8;
+}
+a.bg-success:hover,
+a.bg-success:focus {
+  background-color: #c1e2b3;
+}
 /*.bg-info {*/
   /*background-color: #d9edf7;*/
 /*}*/

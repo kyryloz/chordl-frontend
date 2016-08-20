@@ -21,6 +21,11 @@ const styles = {
 
     title: {
         flexGrow: 1
+    },
+
+    pagination: {
+        display: "block",
+        margin: "auto"
     }
 };
 
@@ -44,7 +49,7 @@ export default class SearchPage extends React.Component {
         this.search(this.state.query, this.state.page);
     }
 
-    search(term, page, size) {
+    search(term, page) {
         $.ajax({
             url: api.search + "?query=" + term + "&page=" + page + "&size=" + defaultPageLimit,
             dataType: 'json',
@@ -75,7 +80,7 @@ export default class SearchPage extends React.Component {
             this.setState({
                 query: query
             });
-            this.search(query, this.state.content.page, this.state.content.size);
+            this.search(query, this.state.result.page);
         }
     }
 
@@ -98,17 +103,19 @@ export default class SearchPage extends React.Component {
 
                 <SearchResultList result={this.state.result.content}/>
 
-                <ReactPaginate previousLabel={"previous"}
-                               nextLabel={"next"}
-                               breakLabel={<a href="">...</a>}
-                               breakClassName={"break-me"}
-                               pageNum={this.state.pageTotal}
-                               marginPagesDisplayed={2}
-                               pageRangeDisplayed={5}
-                               clickCallback={this.handlePageClick}
-                               containerClassName={"pagination"}
-                               subContainerClassName={"pages pagination"}
-                               activeClassName={"active"} />
+                <div style={styles.pagination}>
+                    <ReactPaginate previousLabel={"<"}
+                                   nextLabel={">"}
+                                   breakLabel={<a href="">...</a>}
+                                   breakClassName={"break-me"}
+                                   pageNum={this.state.result.pageTotal}
+                                   marginPagesDisplayed={1}
+                                   pageRangeDisplayed={3}
+                                   clickCallback={this.handlePageClick}
+                                   containerClassName={"pagination"}
+                                   subContainerClassName={"pages pagination"}
+                                   activeClassName={"active"} />
+                </div>
             </div>
         )
     }
