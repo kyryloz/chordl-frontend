@@ -4,7 +4,7 @@ import SearchResultList from "../components/SearchResultList";
 import api from "../api";
 import ReactPaginate from 'react-paginate';
 
-const defaultPageLimit = 2;
+const defaultPageLimit = 10;
 
 const styles = {
     page: {
