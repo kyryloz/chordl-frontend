@@ -15,7 +15,8 @@ const styles = {
     },
 
     title: {
-        flexGrow: 1
+        flexGrow: 1,
+        marginBottom: 10
     },
 
     content: {
@@ -33,7 +34,7 @@ export default class BasePageTemplate extends React.Component {
                     <div style={styles.title}>
                         {this.props.header}
                     </div>
-                    <div style={{marginTop: 6}}>
+                    <div style={{marginTop: 8}}>
                         {this.props.overflowMenu}
                     </div>
                 </div>

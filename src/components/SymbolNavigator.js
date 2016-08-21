@@ -57,7 +57,7 @@ export default class SymbolNavigator extends React.Component {
                     activeStyle={styles.active}
                     key={item.symbol}
                     to={'index/' + item.symbol}>
-                    {item.symbol}
+                    <h4 style={{display: "inline"}}>{item.symbol}</h4>
                 </IndexLink>
             )
         });

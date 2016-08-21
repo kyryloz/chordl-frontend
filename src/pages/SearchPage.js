@@ -4,7 +4,7 @@ import SearchResultList from "../components/SearchResultList";
 import api from "../api";
 import ReactPaginate from 'react-paginate';
 
-const defaultPageLimit = 10;
+const DEFAULT_PAGE_LIMIT = 10;
 
 const styles = {
     page: {
@@ -36,7 +36,7 @@ export default class SearchPage extends React.Component {
         this.state = {
             query: props.location.query.query || "",
             page: props.location.query.page || 0,
-            size: defaultPageLimit,
+            size: DEFAULT_PAGE_LIMIT,
             content: [],
             pageTotal: 0
         };
@@ -72,7 +72,7 @@ export default class SearchPage extends React.Component {
         console.log("componentWillReceiveProps", nextProps.location);
         const query = nextProps.location.query.query;
         const page = nextProps.location.query.page || 0;
-        const size = nextProps.location.query.size || defaultPageLimit;
+        const size = nextProps.location.query.size || DEFAULT_PAGE_LIMIT;
 
         this.setState({
             query: query,
@@ -86,7 +86,7 @@ export default class SearchPage extends React.Component {
 
     handlePageClick = (page) => {
         this.context.router
-            .push("search/?query=" + this.state.query + "&page=" + page.selected);
+            .push(`search/?query=${this.state.query}&page=${page.selected}`);
     };
 
     render() {
