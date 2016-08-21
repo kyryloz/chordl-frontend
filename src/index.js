@@ -55,8 +55,8 @@ const styles = {
 const NotFound = () => ( <div style={{textAlign: "center", marginTop: 32}}><h3>404. Not found :,(</h3></div>);
 
 const Container = (props) => (
-    <div style={styles.main}>
-        <StickyContainer>
+    <div>
+        <StickyContainer style={styles.main}>
             <Sticky>
                 <header>
                     <div style={styles.header}><Header/></div>
