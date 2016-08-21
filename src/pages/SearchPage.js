@@ -23,9 +23,8 @@ const styles = {
         flexGrow: 1
     },
 
-    pagination: {
-        display: "block",
-        margin: "auto"
+    paginationContainer: {
+        textAlign: "center"
     }
 };
 
@@ -34,24 +33,22 @@ export default class SearchPage extends React.Component {
     constructor(props) {
         super(props);
 
-        const query = props.location.query.query;
         this.state = {
-            query: query,
-            result: {
-                content: [],
-                page: 0,
-                pageTotal: 1
-            }
+            query: props.location.query.query || "",
+            page: props.location.query.page || 0,
+            size: defaultPageLimit,
+            content: [],
+            pageTotal: 0
         };
     }
 
     componentDidMount() {
-        this.search(this.state.query, this.state.page);
+        this.search(this.state.query, this.state.page, this.state.size);
     }
 
-    search(term, page) {
+    search(term, page, size) {
         $.ajax({
-            url: api.search + "?query=" + term + "&page=" + page + "&size=" + defaultPageLimit,
+            url: api.search + "?query=" + term + "&page=" + page + "&size=" + size,
             dataType: 'json',
             type: 'GET',
             headers: {
@@ -60,11 +57,9 @@ export default class SearchPage extends React.Component {
             },
             success: function (data) {
                 this.setState({
-                    result: {
-                        content: data.content,
-                        page: data.number,
-                        pageTotal: data.totalPages
-                    }
+                    content: data.content,
+                    page: data.number,
+                    pageTotal: data.totalPages
                 });
             }.bind(this),
             error: function (xhr, status, err) {
@@ -74,22 +69,24 @@ export default class SearchPage extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log("componentWillReceiveProps", nextProps.location);
         const query = nextProps.location.query.query;
+        const page = nextProps.location.query.page || 0;
+        const size = nextProps.location.query.size || defaultPageLimit;
 
-        if (query !== this.state.query) {
-            this.setState({
-                query: query
-            });
-            this.search(query, this.state.result.page);
-        }
+        this.setState({
+            query: query,
+            result: {
+                content: [],
+                page: page,
+            }
+        });
+        this.search(query, page, size);
     }
 
-    handlePageClick = (data) => {
-        const selected = data.selected;
-
-        this.setState({page: selected}, () => {
-            this.search(this.state.query, this.state.page)
-        });
+    handlePageClick = (page) => {
+        this.context.router
+            .push("search/?query=" + this.state.query + "&page=" + page.selected);
     };
 
     render() {
@@ -101,22 +98,36 @@ export default class SearchPage extends React.Component {
                     </div>
                 </div>
 
-                <SearchResultList result={this.state.result.content}/>
+                {this.state.content.length !== 0 &&
+                <div>
+                    <SearchResultList result={this.state.content}/>
 
-                <div style={styles.pagination}>
-                    <ReactPaginate previousLabel={"<"}
-                                   nextLabel={">"}
-                                   breakLabel={<a href="">...</a>}
-                                   breakClassName={"break-me"}
-                                   pageNum={this.state.result.pageTotal}
-                                   marginPagesDisplayed={1}
-                                   pageRangeDisplayed={3}
-                                   clickCallback={this.handlePageClick}
-                                   containerClassName={"pagination"}
-                                   subContainerClassName={"pages pagination"}
-                                   activeClassName={"active"} />
+                    <div style={styles.paginationContainer}>
+                        <ReactPaginate
+                            previousLabel={"<"}
+                            nextLabel={">"}
+                            breakLabel={<a href="">...</a>}
+                            breakClassName={"break-me"}
+                            pageNum={this.state.pageTotal}
+                            forceSelected={parseInt(this.state.page)}
+                            marginPagesDisplayed={1}
+                            pageRangeDisplayed={3}
+                            clickCallback={this.handlePageClick}
+                            containerClassName={"pagination"}
+                            subContainerClassName={"pages pagination"}
+                            activeClassName={"active"}/>
+                    </div>
                 </div>
+                }
+
+                {this.state.content.length === 0 &&
+                <div style={{textAlign: "center"}}><p>Nothing found</p></div>
+                }
             </div>
         )
     }
 }
+
+SearchPage.contextTypes = {
+    router: React.PropTypes.object
+};

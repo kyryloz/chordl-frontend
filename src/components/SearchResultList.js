@@ -56,7 +56,7 @@ export default class SearchResultList extends React.Component {
     }
 
     render() {
-        var resultNodes = this.props.result.map((searchNode) => {
+        const resultNodes = this.props.result.map((searchNode) => {
             return <li key={searchNode.songId}>{this.renderListItem(searchNode)}</li>;
         });
 
@@ -66,10 +66,6 @@ export default class SearchResultList extends React.Component {
                 <ul style={{listStyle: "none", margin: 0, padding: 0}}>
                     {resultNodes}
                 </ul>
-            );
-        } else {
-            result = (
-                <div style={{textAlign: "center"}}><p>Nothing found</p></div>
             );
         }
 
