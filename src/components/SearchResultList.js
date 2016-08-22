@@ -62,7 +62,7 @@ export default class SearchResultList extends React.Component {
             return <li key={searchNode.songId}>{this.renderListItem(searchNode)}</li>;
         });
 
-        var result;
+        var result = null;
         if (resultNodes.length) {
             result = (
                 <ul style={{listStyle: "none", margin: 0, padding: 0}}>

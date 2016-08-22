@@ -2,30 +2,7 @@ import React from "react";
 import * as $ from "jquery";
 import SearchResultList from "../components/SearchResultList";
 import BasePageTemplate from "./BasePageTemplate";
-import PerformerList from "../components/PerformerList"
-import Divider from 'material-ui/Divider';
 import api from "../api";
-
-const mockPopularList = [
-    {
-        title: "Title1",
-        songId: 1,
-        performerId: 1,
-        performer: "Metallica"
-    },
-    {
-        title: "Title12",
-        songId: 2,
-        performerId: 2,
-        performer: "Metallica2"
-    },
-    {
-        title: "Title123",
-        songId: 3,
-        performerId: 3,
-        performer: "Metallica3"
-    }
-];
 
 const styles = {
     paginationContainer: {
@@ -39,9 +16,7 @@ export default class HomePage extends React.Component {
         super(props);
 
         this.state = {
-            featured: {
-                songs: []
-            }
+            songs: []
         };
     }
 
@@ -51,7 +26,7 @@ export default class HomePage extends React.Component {
 
     loadFeatured() {
         $.ajax({
-            url: `${api.songs}/featured`,
+            url: api.featured,
             dataType: 'json',
             type: 'GET',
             headers: {
@@ -60,7 +35,7 @@ export default class HomePage extends React.Component {
             },
             success: function (data) {
                 this.setState({
-                    featured: data
+                    songs: data.songs
                 });
             }.bind(this),
             error: function (xhr, status, err) {
@@ -80,9 +55,17 @@ export default class HomePage extends React.Component {
     };
 
     renderContent = () => {
+        const nodes = this.state.songs.map(song => {
+            return {
+                title: song.title,
+                songId: song.id,
+                performerId: song.performerId,
+                performer: song.performerName
+            }
+        });
         return (
             <div>
-                <SearchResultList result={mockPopularList} />
+                <SearchResultList result={nodes} />
             </div>
         )
     };
