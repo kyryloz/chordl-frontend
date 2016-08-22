@@ -1,7 +1,6 @@
 import * as React from "react";
 import {IndexLink} from "react-router";
 import colors from "../colors"
-import PerformerList from "./PerformerList"
 import * as $ from "jquery";
 import api from "../api";
 
@@ -67,7 +66,6 @@ export default class SymbolNavigator extends React.Component {
         return (
             <div style={{marginTop: 16}}>
                 {this.renderIndex()}
-                <PerformerList performers={this.props.performers} filterSymbol={this.props.symbol}/>
             </div>
         )
     }

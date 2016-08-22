@@ -21,8 +21,6 @@ export default class SongPage extends React.Component {
     constructor(props) {
         super(props);
 
-        this.urlGetSong = api.songs + this.props.params.id;
-
         this.state = {
             song: {
                 id: -1,
@@ -41,7 +39,7 @@ export default class SongPage extends React.Component {
 
     loadSong() {
         $.ajax({
-            url: this.urlGetSong,
+            url: `${api.songs}/${this.props.params.id}`,
             dataType: 'json',
             type: 'GET',
             headers: {

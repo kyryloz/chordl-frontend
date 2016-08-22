@@ -8,7 +8,9 @@ const styles = {
         color: colors.defaultPrimaryColor
     },
     node: {
-        padding: 16
+        paddingTop: 16,
+        paddingBottom: 16,
+        paddingRight: 16
     },
     snippet: {
         marginLeft: 16,

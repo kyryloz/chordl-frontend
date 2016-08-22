@@ -3,6 +3,7 @@ import * as $ from "jquery";
 import SearchResultList from "../components/SearchResultList";
 import api from "../api";
 import ReactPaginate from 'react-paginate';
+import BasePageTemplate from "./BasePageTemplate"
 
 const DEFAULT_PAGE_LIMIT = 10;
 
@@ -89,15 +90,23 @@ export default class SearchPage extends React.Component {
             .push(`search/?query=${this.state.query}&page=${page.selected}`);
     };
 
-    render() {
+    renderHeader = () => {
         return (
-            <div style={styles.page}>
-                <div style={styles.pageTitle}>
-                    <div style={styles.title}>
-                        <h3>Search results:</h3>
-                    </div>
+            <div style={styles.pageTitle}>
+                <div style={styles.title}>
+                    <h3>Search results:</h3>
                 </div>
+            </div>
+        )
+    };
 
+    renderOverflowMenu = () => {
+        return null;
+    };
+
+    renderContent = () => {
+        return (
+            <div>
                 {this.state.content.length !== 0 &&
                 <div>
                     <SearchResultList result={this.state.content}/>
@@ -124,6 +133,16 @@ export default class SearchPage extends React.Component {
                 <div style={{textAlign: "center"}}><p>Nothing found</p></div>
                 }
             </div>
+        )
+    };
+
+    render() {
+        return (
+            <BasePageTemplate
+                header={this.renderHeader()}
+                overflowMenu={this.renderOverflowMenu()}
+                content={this.renderContent()}
+            />
         )
     }
 }

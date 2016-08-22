@@ -16,7 +16,8 @@ const styles = {
 
     title: {
         flexGrow: 1,
-        marginBottom: 10
+        marginBottom: 10,
+        fontSize: 7
     },
 
     content: {
