@@ -22,10 +22,8 @@ export default class PerformerPage extends React.Component {
         super(props);
 
         this.state = {
-            performer: {
-                name: "",
-                songs: []
-            }
+            performer: {},
+            songs: []
         };
     }
 
@@ -44,7 +42,31 @@ export default class PerformerPage extends React.Component {
                 'Content-Type': 'application/json'
             },
             success: function (data) {
-                this.setState({performer: data});
+                this.setState({
+                    performer: data
+                });
+
+                this.loadSongs(data);
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(status, err.toString());
+            }
+        });
+    }
+
+    loadSongs(performer) {
+        $.ajax({
+            url: `${api.performers}${performer.id}/songs`,
+            dataType: 'json',
+            type: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            success: function (data) {
+                this.setState({
+                    songs: data
+                });
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err.toString());
@@ -100,7 +122,7 @@ export default class PerformerPage extends React.Component {
     };
 
     renderContent = () => {
-        return <SongsList songs={this.state.performer.songs}/>
+        return <SongsList songs={this.state.songs}/>
     };
 
     render() {
