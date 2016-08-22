@@ -662,6 +662,8 @@ a.bg-success:focus {
 }
 .pagination > li {
   display: inline;
+  cursor: pointer;
+  cursor: hand;
 }
 .pagination > li > a,
 .pagination > li > span {

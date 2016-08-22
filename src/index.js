@@ -15,7 +15,7 @@ import HomePage from "./pages/HomePage";
 import EditPerformerPage from "./pages/EditPerformerPage";
 import EditSongPage from "./pages/EditSongPage";
 import SearchPage from "./pages/SearchPage";
-import { StickyContainer, Sticky } from 'react-sticky';
+import {StickyContainer, Sticky} from 'react-sticky';
 
 injectTapEventPlugin();
 
@@ -57,7 +57,7 @@ const NotFound = () => ( <div style={{textAlign: "center", marginTop: 32}}><h3>4
 const Container = (props) => (
     <div>
         <StickyContainer style={styles.main}>
-            <Sticky>
+            <Sticky isActive={false}>
                 <header>
                     <div style={styles.header}><Header/></div>
                 </header>
@@ -74,7 +74,7 @@ const Container = (props) => (
 
 const App = () => (
     <MuiThemeProvider muiTheme={muiTheme}>
-        <Router history={hashHistory}>
+        <Router history={hashHistory} onUpdate={handleUpdate}>
             <Route path='/' component={Container}>
                 <IndexRoute component={HomePage}/>
                 <Route path='/add' component={AddNewSongPage}/>
@@ -89,6 +89,15 @@ const App = () => (
         </Router>
     </MuiThemeProvider>
 );
+
+
+function handleUpdate() {
+    const {action} = this.state.location;
+
+    if (action === "PUSH") {
+        window.scrollTo(0, 0);
+    }
+}
 
 ReactDOM.render(
     <App />,
