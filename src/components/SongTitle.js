@@ -37,8 +37,12 @@ export default class SongTitle extends React.Component {
     render() {
         return (
             <div style={{display: 'flex', flexDirection: 'row'}}>
-                {this.renderPerformerTitle()}
-                &nbsp;–&nbsp;
+                {this.props.hidePerformer ||
+                    <div style={{display: 'flex', flexDirection: 'row'}}>
+                        {this.renderPerformerTitle()}
+                        &nbsp;–&nbsp;
+                    </div>
+                }
                 {this.renderSongTitle()}
             </div>
         )
