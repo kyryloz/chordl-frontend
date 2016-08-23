@@ -46,7 +46,7 @@ export default class HomePage extends React.Component {
 
     renderHeader = () => {
         return <div>
-            <h3>Featured</h3>
+            <h3>Updates</h3>
         </div>
     };
 

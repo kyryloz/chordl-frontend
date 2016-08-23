@@ -3,14 +3,8 @@ import * as $ from "jquery";
 import FlatButton from "material-ui/FlatButton";
 import update from "react-addons-update";
 import TextField from "material-ui/TextField";
+import BasePageTemplate from "./BasePageTemplate";
 import api from "../api";
-
-const styles = {
-    page: {
-        marginLeft: '70px',
-        marginRight: '70px'
-    },
-};
 
 export default class EditPerformerPage extends React.Component {
 
@@ -82,18 +76,24 @@ export default class EditPerformerPage extends React.Component {
         this.context.router.replace("/performer/" + this.state.performer.id)
     };
 
-    render() {
+    renderHeader = () => {
         return (
-            <div style={styles.page}>
-                <div style={{float: 'left', minWidth: 460, marginTop: 70}}>
-                    <TextField
-                        id="text-field-controlled"
-                        value={this.state.performer.name}
-                        onChange={this.handleNameChange}
-                        floatingLabelText="Name"
-                        floatingLabelFixed={true}
-                    />
-                </div>
+            <TextField
+                value={this.state.performer.name}
+                onChange={this.handleNameChange}
+                floatingLabelText="Name"
+                floatingLabelFixed={true}
+            />
+        )
+    };
+
+    renderOverflowMenu = () => {
+        return null;
+    };
+
+    renderContent = () => {
+        return (
+            <div>
                 <div style={{float: 'right', marginTop: 10}}>
                     <FlatButton
                         label="Save"
@@ -108,6 +108,16 @@ export default class EditPerformerPage extends React.Component {
                     />
                 </div>
             </div>
+        )
+    };
+
+    render() {
+        return (
+            <BasePageTemplate
+                header={this.renderHeader()}
+                overflowMenu={this.renderOverflowMenu()}
+                content={this.renderContent()}
+            />
         )
     }
 }

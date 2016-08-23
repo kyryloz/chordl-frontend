@@ -3,22 +3,13 @@ import * as $ from "jquery";
 import FlatButton from "material-ui/FlatButton";
 import update from "react-addons-update";
 import TextField from "material-ui/TextField";
-
-const urlSong = 'http://localhost:8081/api/songs/';
-
-const styles = {
-    page: {
-        marginLeft: '70px',
-        marginRight: '70px'
-    },
-};
+import BasePageTemplate from "./BasePageTemplate";
+import api from "../api";
 
 export default class EditSongPage extends React.Component {
 
     constructor(props) {
         super(props);
-
-        this.urlGetSong = urlSong + this.props.params.id;
 
         this.state = {song: {
             title: "",
@@ -32,7 +23,7 @@ export default class EditSongPage extends React.Component {
 
     loadSong() {
         $.ajax({
-            url: this.urlGetSong,
+            url: `${api.songs}/${this.props.params.id}`,
             dataType: 'json',
             type: 'GET',
             headers: {
@@ -50,7 +41,7 @@ export default class EditSongPage extends React.Component {
 
     updateSong() {
         $.ajax({
-            url: this.urlGetSong,
+            url: `${api.songs}/${this.props.params.id}`,
             type: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -92,28 +83,34 @@ export default class EditSongPage extends React.Component {
         this.setState(newState);
     };
 
-    render() {
+    renderHeader = () => {
         return (
-            <div style={styles.page}>
-                <div style={{float: 'left', minWidth: 460, marginTop: 70}}>
-                    <TextField
-                        floatingLabelText="Title"
-                        floatingLabelFixed={true}
-                        fullWidth={true}
-                        value={this.state.song.title}
-                        onChange={this.handleTitleChange}
-                    /><br/>
-                    <br/>
-                    <TextField
-                        floatingLabelText="Lyrics"
-                        floatingLabelFixed={true}
-                        fullWidth={true}
-                        multiLine={true}
-                        rows={10}
-                        value={this.state.song.lyrics}
-                        onChange={this.handleLyricsChange}
-                    />
-                </div>
+            <TextField
+                floatingLabelText="Title"
+                floatingLabelFixed={true}
+                fullWidth={true}
+                value={this.state.song.title}
+                onChange={this.handleTitleChange}
+            />
+        )
+    };
+
+    renderOverflowMenu = () => {
+        return null;
+    };
+
+    renderContent = () => {
+        return (
+            <div>
+                <TextField
+                    floatingLabelText="Lyrics"
+                    floatingLabelFixed={true}
+                    fullWidth={true}
+                    multiLine={true}
+                    rows={10}
+                    value={this.state.song.lyrics}
+                    onChange={this.handleLyricsChange}
+                />
                 <div style={{float: 'right', marginTop: 10}}>
                     <FlatButton
                         label="Save"
@@ -128,6 +125,16 @@ export default class EditSongPage extends React.Component {
                     />
                 </div>
             </div>
+        )
+    };
+
+    render() {
+        return (
+            <BasePageTemplate
+                header={this.renderHeader()}
+                overflowMenu={this.renderOverflowMenu()}
+                content={this.renderContent()}
+            />
         )
     }
 }
