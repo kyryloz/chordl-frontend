@@ -16,7 +16,7 @@ const styles = {
     }
 };
 
-export default class PerformerPage extends React.Component {
+export default class PerformerPage extends BasePageTemplate {
 
     constructor(props) {
         super(props);
@@ -100,15 +100,15 @@ export default class PerformerPage extends React.Component {
         this.router.push("performer/" + this.state.performer.id + "/edit");
     };
 
-    renderHeader = () => {
+    renderHeader() {
         return <h3>
             <Link to={'/'} style={styles.link}>#</Link>
             &nbsp;&nbsp;|&nbsp;&nbsp;
             {this.state.performer.name}
         </h3>
-    };
+    }
 
-    renderOverflowMenu = () => {
+    renderMenu() {
         return <IconMenu
             iconButtonElement={<IconButton>
                 <MoreVertIcon color={colors.defaultPrimaryColor}/>
@@ -119,20 +119,10 @@ export default class PerformerPage extends React.Component {
             <MenuItem primaryText="Edit" onTouchTap={this.handleEdit}/>
             <MenuItem style={{color: "red"}} primaryText="Delete" onTouchTap={this.handleDelete}/>
         </IconMenu>
-    };
+    }
 
-    renderContent = () => {
+    renderContent() {
         return <SongsList songs={this.state.songs}/>
-    };
-
-    render() {
-        return (
-            <BasePageTemplate
-                header={this.renderHeader()}
-                overflowMenu={this.renderOverflowMenu()}
-                content={this.renderContent()}
-            />
-        )
     }
 }
 

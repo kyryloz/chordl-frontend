@@ -29,20 +29,32 @@ const styles = {
 
 export default class BasePageTemplate extends React.Component {
 
+    renderHeader() {
+        return null;
+    }
+
+    renderContent() {
+        return null;
+    }
+
+    renderMenu() {
+        return null;
+    }
+
     render() {
         return (
             <div style={styles.page}>
                 <div style={styles.pageTitle}>
                     <div style={styles.title}>
-                        {this.props.header}
+                        {this.renderHeader()}
                     </div>
                     <div style={{marginTop: 8}}>
-                        {this.props.overflowMenu}
+                        {this.renderMenu()}
                     </div>
                 </div>
                 <Divider />
                 <div style={styles.content}>
-                    {this.props.content}
+                    {this.renderContent()}
                 </div>
             </div>
         )

@@ -1,16 +1,10 @@
 import React from "react";
 import * as $ from "jquery";
 import SongAddStepper from "../components/SongAddStepper";
+import BasePageTemplate from "./BasePageTemplate"
 import api from "../api";
 
-const styles = {
-    page: {
-        marginLeft: '70px',
-        marginRight: '70px'
-    }
-};
-
-export default class AddNewSong extends React.Component {
+export default class AddNewSong extends BasePageTemplate {
 
     constructor() {
         super();
@@ -41,12 +35,15 @@ export default class AddNewSong extends React.Component {
         });
     }
 
-    render() {
+    renderHeader() {
         return (
-            <div style={styles.page}>
-                <h3>Add new song</h3>
-                <SongAddStepper performers={this.state.performers}/>
-            </div>
+            <h3>Add new song</h3>
+        )
+    }
+
+    renderContent() {
+        return (
+            <SongAddStepper performers={this.state.performers}/>
         )
     }
 }

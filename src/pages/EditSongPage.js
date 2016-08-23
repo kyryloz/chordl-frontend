@@ -6,7 +6,7 @@ import TextField from "material-ui/TextField";
 import BasePageTemplate from "./BasePageTemplate";
 import api from "../api";
 
-export default class EditSongPage extends React.Component {
+export default class EditSongPage extends BasePageTemplate {
 
     constructor(props) {
         super(props);
@@ -83,7 +83,7 @@ export default class EditSongPage extends React.Component {
         this.setState(newState);
     };
 
-    renderHeader = () => {
+    renderHeader() {
         return (
             <TextField
                 floatingLabelText="Title"
@@ -93,13 +93,9 @@ export default class EditSongPage extends React.Component {
                 onChange={this.handleTitleChange}
             />
         )
-    };
+    }
 
-    renderOverflowMenu = () => {
-        return null;
-    };
-
-    renderContent = () => {
+    renderContent() {
         return (
             <div>
                 <TextField
@@ -125,16 +121,6 @@ export default class EditSongPage extends React.Component {
                     />
                 </div>
             </div>
-        )
-    };
-
-    render() {
-        return (
-            <BasePageTemplate
-                header={this.renderHeader()}
-                overflowMenu={this.renderOverflowMenu()}
-                content={this.renderContent()}
-            />
         )
     }
 }

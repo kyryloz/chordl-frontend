@@ -6,7 +6,7 @@ import TextField from "material-ui/TextField";
 import BasePageTemplate from "./BasePageTemplate";
 import api from "../api";
 
-export default class EditPerformerPage extends React.Component {
+export default class EditPerformerPage extends BasePageTemplate {
 
     constructor(props) {
         super(props);
@@ -76,7 +76,7 @@ export default class EditPerformerPage extends React.Component {
         this.context.router.replace("/performer/" + this.state.performer.id)
     };
 
-    renderHeader = () => {
+    renderHeader() {
         return (
             <TextField
                 value={this.state.performer.name}
@@ -85,13 +85,9 @@ export default class EditPerformerPage extends React.Component {
                 floatingLabelFixed={true}
             />
         )
-    };
+    }
 
-    renderOverflowMenu = () => {
-        return null;
-    };
-
-    renderContent = () => {
+    renderContent() {
         return (
             <div>
                 <div style={{float: 'right', marginTop: 10}}>
@@ -108,16 +104,6 @@ export default class EditPerformerPage extends React.Component {
                     />
                 </div>
             </div>
-        )
-    };
-
-    render() {
-        return (
-            <BasePageTemplate
-                header={this.renderHeader()}
-                overflowMenu={this.renderOverflowMenu()}
-                content={this.renderContent()}
-            />
         )
     }
 }

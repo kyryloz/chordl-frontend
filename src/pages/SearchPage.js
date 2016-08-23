@@ -29,7 +29,7 @@ const styles = {
     }
 };
 
-export default class SearchPage extends React.Component {
+export default class SearchPage extends BasePageTemplate {
 
     constructor(props) {
         super(props);
@@ -90,7 +90,7 @@ export default class SearchPage extends React.Component {
             .push(`search/?query=${this.state.query}&page=${page.selected}`);
     };
 
-    renderHeader = () => {
+    renderHeader() {
         return (
             <div style={styles.pageTitle}>
                 <div style={styles.title}>
@@ -98,13 +98,9 @@ export default class SearchPage extends React.Component {
                 </div>
             </div>
         )
-    };
+    }
 
-    renderOverflowMenu = () => {
-        return null;
-    };
-
-    renderContent = () => {
+    renderContent() {
         return (
             <div>
                 {this.state.content.length !== 0 &&
@@ -133,16 +129,6 @@ export default class SearchPage extends React.Component {
                 <div style={{textAlign: "center"}}><p>Nothing found</p></div>
                 }
             </div>
-        )
-    };
-
-    render() {
-        return (
-            <BasePageTemplate
-                header={this.renderHeader()}
-                overflowMenu={this.renderOverflowMenu()}
-                content={this.renderContent()}
-            />
         )
     }
 }

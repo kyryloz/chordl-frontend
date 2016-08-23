@@ -4,13 +4,7 @@ import SearchResultList from "../components/SearchResultList";
 import BasePageTemplate from "./BasePageTemplate";
 import api from "../api";
 
-const styles = {
-    paginationContainer: {
-        textAlign: "center"
-    }
-};
-
-export default class HomePage extends React.Component {
+export default class HomePage extends BasePageTemplate {
 
     constructor(props) {
         super(props);
@@ -44,17 +38,13 @@ export default class HomePage extends React.Component {
         });
     }
 
-    renderHeader = () => {
+    renderHeader() {
         return <div>
             <h3>Updates</h3>
         </div>
-    };
+    }
 
-    renderOverflowMenu = () => {
-        return <div></div>
-    };
-
-    renderContent = () => {
+    renderContent() {
         const nodes = this.state.songs.map(song => {
             return {
                 title: song.title,
@@ -67,16 +57,6 @@ export default class HomePage extends React.Component {
             <div>
                 <SearchResultList result={nodes} />
             </div>
-        )
-    };
-
-    render() {
-        return (
-            <BasePageTemplate
-                header={this.renderHeader()}
-                overflowMenu={this.renderOverflowMenu()}
-                content={this.renderContent()}
-            />
         )
     }
 }

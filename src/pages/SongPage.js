@@ -16,7 +16,7 @@ const styles = {
     }
 };
 
-export default class SongPage extends React.Component {
+export default class SongPage extends BasePageTemplate {
 
     constructor(props) {
         super(props);
@@ -79,7 +79,7 @@ export default class SongPage extends React.Component {
         this.context.router.push("song/" + this.state.song.id + "/edit");
     };
 
-    renderHeader = () => {
+    renderHeader() {
         return <h3 style={{display: 'flex', flexDirection: 'row'}}>
             <Link
                 style={styles.link}
@@ -93,9 +93,9 @@ export default class SongPage extends React.Component {
                 linkifyPerformer={true}
             />
         </h3>
-    };
+    }
 
-    renderOverflowMenu = () => {
+    renderMenu() {
         return <IconMenu
             iconButtonElement={<IconButton>
                 <MoreVertIcon color={colors.defaultPrimaryColor}/>
@@ -106,20 +106,10 @@ export default class SongPage extends React.Component {
             <MenuItem primaryText="Edit" onTouchTap={this.handleEdit}/>
             <MenuItem style={{color: "red"}} primaryText="Delete" onTouchTap={this.handleDelete}/>
         </IconMenu>
-    };
+    }
 
-    renderContent = () => {
+    renderContent() {
         return <pre>{this.state.song.lyrics}</pre>
-    };
-
-    render() {
-        return (
-            <BasePageTemplate
-                header={this.renderHeader()}
-                overflowMenu={this.renderOverflowMenu()}
-                content={this.renderContent()}
-            />
-        )
     }
 }
 
