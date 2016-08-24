@@ -4,6 +4,9 @@ import AppBar from "material-ui/AppBar";
 import {hashHistory} from "react-router";
 import SvgIcon from 'material-ui/SvgIcon';
 import IconButton from 'material-ui/IconButton';
+import RaisedButton from "material-ui/RaisedButton";
+import * as $ from "jquery";
+import api from "../api"
 
 const styles = {
     appBar: {
@@ -31,10 +34,31 @@ const HomeIcon = () => (
 
 export default class Header extends React.Component {
 
+    handleLogin = () => {
+        $.ajax({
+            url: api.login,
+            dataType: 'json',
+            type: 'GET',
+            data: {scope: "user_posts"},
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            success: function (data) {
+                console.log("Login success", data);
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.log("Login error");
+                console.error(status, err.toString());
+            }.bind(this)
+        });
+    };
+
     renderChildren() {
         return (
             <div>
                 <SearchBar style={styles.toolbarSearchBar}/>
+                <RaisedButton label="Login" primary={false} onTouchTap={this.handleLogin}/>
             </div>
         )
     }

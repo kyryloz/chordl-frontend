@@ -5,5 +5,6 @@ module.exports = {
     songs: `${backend}/songs`,
     search: `${backend}/search/`,
     index: `${backend}/index`,
-    featured: `${backend}/featured`
+    featured: `${backend}/featured`,
+    login: `${backend}/login`
 };
