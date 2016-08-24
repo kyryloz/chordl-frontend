@@ -12,8 +12,6 @@ export default class SelectPerformer extends React.Component {
     constructor(props) {
         super(props);
 
-        console.log("ttt", this.props.performer);
-
         this.state = {
             performerName: this.props.performer || "",
             performerSubmitting: false,
@@ -43,9 +41,9 @@ export default class SelectPerformer extends React.Component {
             name: this.state.performerName
         };
 
-        this.setState(update(this.state, {
-            performerSubmitting: {$set: true}
-        }));
+        this.setState({
+            performerSubmitting: true
+        });
 
         $.ajax({
             url: api.performers,
