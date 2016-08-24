@@ -33,16 +33,14 @@ export default class SongAddStepper extends React.Component {
         }
     }
 
-
     handleNext = () => {
         const {stepIndex} = this.state;
 
         const finished = stepIndex >= 2;
-        const newState = update(this.state, {
-            stepIndex: {$set: stepIndex + 1},
-            finished: {$set: finished}
+        this.setState({
+            stepIndex: stepIndex + 1,
+            finished: finished
         });
-        this.setState(newState);
 
         if (finished) {
             this.handleSongSubmit();
@@ -52,10 +50,9 @@ export default class SongAddStepper extends React.Component {
     handlePrev = () => {
         const {stepIndex} = this.state;
         if (stepIndex > 0) {
-            var newState = update(this.state, {
+            this.setState({
                 stepIndex: {$set: stepIndex - 1}
             });
-            this.setState(newState);
         }
     };
 
@@ -107,15 +104,14 @@ export default class SongAddStepper extends React.Component {
     };
 
     handleSnackbarRequestClose = () => {
-        const newState = update(this.state, {
-            snackbarOpen: {$set: false}
+        this.setState({
+            snackbarOpen: false
         });
-        this.setState(newState);
     };
 
     handleSongSubmit = () => {
         var data = {
-            performerId: this.state.song.performer.id,
+            performerId: this.state.song.performer,
             title: this.state.song.title.trim(),
             lyrics: this.state.song.lyrics.trim(),
         };
@@ -144,10 +140,7 @@ export default class SongAddStepper extends React.Component {
         if (data) {
             this.setState({
                 song: {
-                    performer: {
-                        name: "",
-                        id: -1
-                    },
+                    performer: "",
                     title: "",
                     lyrics: ""
                 },
@@ -172,7 +165,6 @@ export default class SongAddStepper extends React.Component {
 
     render() {
         const {stepIndex} = this.state;
-
         return (
             <div style={styles.stepper}>
                 <Stepper activeStep={stepIndex} orientation="vertical">
