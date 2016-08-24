@@ -23,7 +23,7 @@ export default class EditPerformerPage extends BasePageTemplate {
 
     loadPerformer() {
         $.ajax({
-            url: api.performers + this.props.params.id,
+            url: `${api.performers}/${this.props.params.id}`,
             dataType: 'json',
             type: 'GET',
             headers: {
@@ -41,7 +41,7 @@ export default class EditPerformerPage extends BasePageTemplate {
 
     updatePerformer() {
         $.ajax({
-            url: api.performers + this.state.performer.id,
+            url: `${api.performers}/${this.state.performer.id}`,
             dataType: 'json',
             type: 'PUT',
             headers: {

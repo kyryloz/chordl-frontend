@@ -9,7 +9,7 @@ export default class AddNewSong extends BasePageTemplate {
     constructor() {
         super();
         this.state = {
-            performers: []
+            performerNames: []
         };
     }
 
@@ -19,7 +19,7 @@ export default class AddNewSong extends BasePageTemplate {
 
     loadAllPerformers() {
         $.ajax({
-            url: api.performers,
+            url: `${api.performers}/all`,
             dataType: 'json',
             type: 'GET',
             headers: {
@@ -27,7 +27,7 @@ export default class AddNewSong extends BasePageTemplate {
                 'Content-Type': 'application/json'
             },
             success: function (data) {
-                this.setState({performers: data});
+                this.setState({performerNames: data});
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err.toString());
@@ -43,7 +43,7 @@ export default class AddNewSong extends BasePageTemplate {
 
     renderContent() {
         return (
-            <SongAddStepper performers={this.state.performers}/>
+            <SongAddStepper performers={this.state.performerNames}/>
         )
     }
 }

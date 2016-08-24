@@ -1,7 +1,6 @@
 import React from "react";
 import AutoComplete from "material-ui/AutoComplete";
 import * as $ from "jquery";
-import update from "react-addons-update";
 import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton";
 import LinearProgress from "material-ui/LinearProgress";
@@ -13,52 +12,24 @@ export default class SelectPerformer extends React.Component {
     constructor(props) {
         super(props);
 
+        console.log("ttt", this.props.performer);
+
         this.state = {
-            performerName: this.props.performer.name,
-            id: this.props.performer.id,
+            performerName: this.props.performer || "",
             performerSubmitting: false,
             snackbarOpen: false
         }
     }
 
-    handlePerformerChange = (input, dataSourceIndex) => {
-        var performer;
-        if (dataSourceIndex === -1) {
-            performer = {
-                performerName: input,
-                id: -1
-            }
-        } else {
-            performer = {
-                performerName: input.name,
-                id: input.id
-            };
-        }
-
-        this.updatePerformer(performer);
-    };
-
-    handlePerformerChangeUpdate = (input) => {
-        var result = $.grep(this.props.performers, function (e) {
-            return e.performerName === input;
-        });
-
-        const performer = {
+    handlePerformerInputChange = (input) => {
+        this.setState({
             performerName: input,
-            id: result.length ? result[0].id : -1
-        };
-        this.updatePerformer(performer);
+        });
     };
-
-    updatePerformer(performer) {
-        this.setState(update(this.state, {
-            performerName: {$set: performer.performerName},
-            id: {$set: performer.id}
-        }));
-    }
 
     isPerformerExists = () => {
-        return this.state.id !== -1;
+        return this.props.performers
+            .some(e => this.state.performerName.toLowerCase() === e.toLowerCase());
     };
 
     isPerformerSubmittingInProgress = () => {
@@ -98,32 +69,30 @@ export default class SelectPerformer extends React.Component {
 
     onPerformerSubmitted(data) {
         if (data) {
-            this.props.performers.push(data);
+            this.props.performers.push(data.name);
 
             this.setState({
                 performerName: data.name,
-                id: data.id,
                 performerSubmitting: false,
                 snackbarOpen: true
             });
         } else {
-            // TODO handle error
+            this.setState({
+                performerSubmitting: false,
+                snackbarOpen: false
+            });
         }
     };
 
     handleNextButton = () => {
-        const performer = {
-            performerName: this.state.name,
-            id: this.state.id
-        };
-        this.props.performerDoneCallback(performer)
+        const {performerName} = this.state;
+        this.props.performerDoneCallback(performerName)
     };
 
     handleSnackbarRequestClose = () => {
-        const newState = update(this.state, {
-            snackbarOpen: {$set: false}
+        this.setState({
+            snackbarOpen: false
         });
-        this.setState(newState);
     };
 
     renderNextButton() {
@@ -163,12 +132,12 @@ export default class SelectPerformer extends React.Component {
                     hintText="Start typing the name of performer"
                     filter={AutoComplete.fuzzyFilter}
                     dataSource={this.props.performers}
-                    dataSourceConfig={{text: 'name', value: 'id'}}
+                    dataSourceConfig={{text: 'name'}}
                     maxSearchResults={5}
                     fullWidth={true}
                     searchText={this.state.performerName}
-                    onNewRequest={this.handlePerformerChange}
-                    onUpdateInput={this.handlePerformerChangeUpdate}
+                    onNewRequest={this.handlePerformerInputChange}
+                    onUpdateInput={this.handlePerformerInputChange}
                 /><br/>
                 {this.isPerformerExists() ? this.renderNextButton() : this.renderCreatePerformerButton()}
                 <Snackbar

@@ -34,7 +34,7 @@ export default class PerformerPage extends BasePageTemplate {
 
     loadPerformer() {
         $.ajax({
-            url: api.performers + this.props.params.id,
+            url: `${api.performers}/${this.props.params.id}`,
             dataType: 'json',
             type: 'GET',
             headers: {
@@ -56,7 +56,7 @@ export default class PerformerPage extends BasePageTemplate {
 
     loadSongs(performer) {
         $.ajax({
-            url: `${api.performers}${performer.id}/songs`,
+            url: `${api.performers}/${performer.id}/songs`,
             dataType: 'json',
             type: 'GET',
             headers: {
@@ -76,7 +76,7 @@ export default class PerformerPage extends BasePageTemplate {
 
     deletePerformer() {
         $.ajax({
-            url: api.performers + this.props.params.id,
+            url: `${api.performers}/${this.props.params.id}`,
             type: 'DELETE',
             headers: {
                 'Accept': 'application/json',

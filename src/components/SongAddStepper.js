@@ -27,7 +27,6 @@ export default class SongAddStepper extends React.Component {
             song: {
                 performer: {
                     name: "",
-                    id: -1
                 },
                 title: "",
                 lyrics: ""
@@ -163,10 +162,10 @@ export default class SongAddStepper extends React.Component {
         }
     }
 
-    performerDoneCallback = (data) => {
+    performerDoneCallback = (performerName) => {
         const newState = update(this.state, {
             song: {
-                performer: {$set: data}
+                performer: {$set: performerName}
             },
             stepIndex: {$set: 1}
         });
