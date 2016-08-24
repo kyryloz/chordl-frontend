@@ -43,7 +43,11 @@ export default class SongAddStepper extends React.Component {
         });
 
         if (finished) {
-            this.handleSongSubmit();
+            this.getPerformerId(this.state.song.performer, (err, result) => {
+                if (!err) {
+                    this.handleSongSubmit(result);
+                }
+            });
         }
     };
 
@@ -109,9 +113,9 @@ export default class SongAddStepper extends React.Component {
         });
     };
 
-    handleSongSubmit = () => {
+    handleSongSubmit = (performerId) => {
         var data = {
-            performerId: this.state.song.performer,
+            performerId: performerId,
             title: this.state.song.title.trim(),
             lyrics: this.state.song.lyrics.trim(),
         };
@@ -135,6 +139,24 @@ export default class SongAddStepper extends React.Component {
             }.bind(this)
         });
     };
+
+    getPerformerId(performerName, callback) {
+        $.ajax({
+            url: `${api.performers}/search/${performerName}`,
+            type: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            success: function (data) {
+                callback(null, data.id);
+            },
+            error: function (xhr, status, err) {
+                console.error(status, err.toString());
+                callback(err);
+            }
+        });
+    }
 
     onSongSubmitted(data) {
         if (data) {
