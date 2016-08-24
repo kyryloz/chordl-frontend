@@ -13,7 +13,7 @@ export default class SelectPerformer extends React.Component {
         super(props);
 
         this.state = {
-            performerName: this.props.performer || "",
+            performerName: this.props.performer,
             performerSubmitting: false,
             snackbarOpen: false
         }

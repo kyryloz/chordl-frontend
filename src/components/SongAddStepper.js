@@ -25,9 +25,7 @@ export default class SongAddStepper extends React.Component {
             finished: false,
             stepIndex: 0,
             song: {
-                performer: {
-                    name: "",
-                },
+                performer: "",
                 title: "",
                 lyrics: ""
             },
