@@ -70,7 +70,6 @@ export default class SearchPage extends BasePageTemplate {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("componentWillReceiveProps", nextProps.location);
         const query = nextProps.location.query.query;
         const page = nextProps.location.query.page || 0;
         const size = nextProps.location.query.size || DEFAULT_PAGE_LIMIT;
@@ -126,7 +125,7 @@ export default class SearchPage extends BasePageTemplate {
                 }
 
                 {this.state.content.length === 0 &&
-                <div style={{textAlign: "center"}}><p>Nothing found</p></div>
+                <div style={{textAlign: "center", marginTop: 32}}><p>{`Nothing found for '${this.state.query}'`}</p></div>
                 }
             </div>
         )
