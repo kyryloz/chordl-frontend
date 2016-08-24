@@ -6,6 +6,12 @@ import TextField from "material-ui/TextField";
 import BasePageTemplate from "./BasePageTemplate";
 import api from "../api";
 
+const styles = {
+    monospaced: {
+        fontFamily: "monospace"
+    }
+};
+
 export default class EditSongPage extends BasePageTemplate {
 
     constructor(props) {
@@ -106,6 +112,7 @@ export default class EditSongPage extends BasePageTemplate {
                     rows={10}
                     value={this.state.song.lyrics}
                     onChange={this.handleLyricsChange}
+                    style={styles.monospaced}
                 />
                 <div style={{float: 'right', marginTop: 10}}>
                     <FlatButton
