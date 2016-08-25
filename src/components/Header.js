@@ -34,24 +34,60 @@ const HomeIcon = () => (
 
 export default class Header extends React.Component {
 
-    handleLogin = () => {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            user: {
+                name: ""
+            }
+        }
+    }
+
+    componentDidMount() {
         $.ajax({
-            url: api.login,
+            url: `${api.user}/details`,
             dataType: 'json',
             type: 'GET',
-            data: {scope: "user_posts"},
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
             success: function (data) {
-                console.log("Login success", data);
+                console.log("User success", data);
+                this.setState({
+                    user: {
+                        name: data
+                    }
+                })
             }.bind(this),
             error: function (xhr, status, err) {
-                console.log("Login error");
-                console.error(status, err.toString());
+                this.state = {
+                    user: {
+                        name: "Not logged in"
+                    }
+                }
             }.bind(this)
         });
+    }
+
+    handleLogin = () => {
+        this.context.router.push("/login/facebook");
+        // $.ajax({
+        //     url: `${api.login}/facebook`,
+        //     type: 'GET',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json',
+        //     },
+        //     success: function (data) {
+        //         console.log("Login success", data);
+        //     }.bind(this),
+        //     error: function (xhr, status, err) {
+        //         console.log("Login error");
+        //         console.error(status, err.toString());
+        //     }.bind(this)
+        // });
     };
 
     renderChildren() {
@@ -59,6 +95,7 @@ export default class Header extends React.Component {
             <div>
                 <SearchBar style={styles.toolbarSearchBar}/>
                 <RaisedButton label="Login" primary={false} onTouchTap={this.handleLogin}/>
+                USER: {this.state.user.name}
             </div>
         )
     }
@@ -105,3 +142,7 @@ export default class Header extends React.Component {
         )
     }
 }
+
+Header.contextTypes = {
+    router: React.PropTypes.object
+};

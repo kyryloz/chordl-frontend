@@ -6,5 +6,6 @@ module.exports = {
     search: `${backend}/search/`,
     index: `${backend}/index`,
     featured: `${backend}/featured`,
-    login: `${backend}/login`
+    login: `${backend}/login`,
+    user: `${backend}/user`
 };
