@@ -72,7 +72,7 @@ export default class Header extends React.Component {
     }
 
     handleLogin = () => {
-        this.context.router.push("/login/facebook");
+        // this.context.router.transitionTo("http://localhost:8081/login/facebook");
         // $.ajax({
         //     url: `${api.login}/facebook`,
         //     type: 'GET',
@@ -94,7 +94,7 @@ export default class Header extends React.Component {
         return (
             <div>
                 <SearchBar style={styles.toolbarSearchBar}/>
-                <RaisedButton label="Login" primary={false} onTouchTap={this.handleLogin}/>
+                <RaisedButton label="Login" primary={false} href="http://localhost:8081/api/login"/>
                 USER: {this.state.user.name}
             </div>
         )
