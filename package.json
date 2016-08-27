@@ -17,7 +17,8 @@
     "react-sticky": "^5.0.4",
     "react-tap-event-plugin": "^1.0.0",
     "remarkable": "^1.6.2",
-    "react-paginate": "latest"
+    "react-paginate": "latest",
+    "react-facebook-login": "latest"
   },
   "scripts": {
     "start": "react-scripts start",

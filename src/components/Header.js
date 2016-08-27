@@ -6,7 +6,8 @@ import SvgIcon from 'material-ui/SvgIcon';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from "material-ui/RaisedButton";
 import * as $ from "jquery";
-import api from "../api"
+import api from "../api";
+import FacebookLogin from 'react-facebook-login';
 
 const styles = {
     appBar: {
@@ -71,30 +72,43 @@ export default class Header extends React.Component {
         });
     }
 
-    handleLogin = () => {
-        // this.context.router.transitionTo("http://localhost:8081/login/facebook");
-        // $.ajax({
-        //     url: `${api.login}/facebook`,
-        //     type: 'GET',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //     },
-        //     success: function (data) {
-        //         console.log("Login success", data);
-        //     }.bind(this),
-        //     error: function (xhr, status, err) {
-        //         console.log("Login error");
-        //         console.error(status, err.toString());
-        //     }.bind(this)
-        // });
+    responseFacebook = (response) => {
+        console.log(response);
+        $.ajax({
+            url: `${api.login}`,
+            dataType: 'json',
+            type: 'POST',
+            data: JSON.stringify(response),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            success: function (data) {
+                console.log("User success", data);
+                this.setState({
+                    user: {
+                        name: data
+                    }
+                })
+            }.bind(this),
+            error: function (xhr, status, err) {
+                this.state = {
+                    user: {
+                        name: "Not logged in"
+                    }
+                }
+            }.bind(this)
+        });
     };
 
     renderChildren() {
         return (
             <div>
                 <SearchBar style={styles.toolbarSearchBar}/>
-                <RaisedButton label="Login" primary={false} href="http://localhost:8081/api/login"/>
+                <FacebookLogin
+                    appId="1086354088118124"
+                    autoLoad={true}
+                    callback={this.responseFacebook} />
                 USER: {this.state.user.name}
             </div>
         )
