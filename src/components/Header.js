@@ -1,13 +1,9 @@
 import React from "react";
 import SearchBar from "./SearchBar";
 import AppBar from "material-ui/AppBar";
-import {hashHistory} from "react-router";
-import SvgIcon from 'material-ui/SvgIcon';
-import IconButton from 'material-ui/IconButton';
-import RaisedButton from "material-ui/RaisedButton";
-import * as $ from "jquery";
-import api from "../api";
-import FacebookLogin from 'react-facebook-login';
+import {hashHistory, Link} from "react-router";
+import SvgIcon from "material-ui/SvgIcon";
+import IconButton from "material-ui/IconButton";
 
 const styles = {
     appBar: {
@@ -45,71 +41,14 @@ export default class Header extends React.Component {
         }
     }
 
-    componentDidMount() {
-        $.ajax({
-            url: `${api.user}/details`,
-            dataType: 'json',
-            type: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            success: function (data) {
-                console.log("User success", data);
-                this.setState({
-                    user: {
-                        name: data
-                    }
-                })
-            }.bind(this),
-            error: function (xhr, status, err) {
-                this.state = {
-                    user: {
-                        name: "Not logged in"
-                    }
-                }
-            }.bind(this)
-        });
-    }
-
-    responseFacebook = (response) => {
-        console.log(response);
-        $.ajax({
-            url: `${api.login}`,
-            dataType: 'json',
-            type: 'POST',
-            data: JSON.stringify(response),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            success: function (data) {
-                console.log("User success", data);
-                this.setState({
-                    user: {
-                        name: data
-                    }
-                })
-            }.bind(this),
-            error: function (xhr, status, err) {
-                this.state = {
-                    user: {
-                        name: "Not logged in"
-                    }
-                }
-            }.bind(this)
-        });
-    };
-
     renderChildren() {
         return (
             <div>
                 <SearchBar style={styles.toolbarSearchBar}/>
-                <FacebookLogin
-                    appId="1086354088118124"
-                    autoLoad={true}
-                    callback={this.responseFacebook} />
-                USER: {this.state.user.name}
+                <Link
+                    to={"/register"}>
+                    Register
+                </Link>
             </div>
         )
     }

@@ -15,6 +15,7 @@ import HomePage from "./pages/HomePage";
 import EditPerformerPage from "./pages/EditPerformerPage";
 import EditSongPage from "./pages/EditSongPage";
 import SearchPage from "./pages/SearchPage";
+import SignUpPage from "./pages/SignUpPage";
 import {StickyContainer, Sticky} from 'react-sticky';
 
 injectTapEventPlugin();
@@ -84,6 +85,7 @@ const App = () => (
                 <Route path='/song/:id' component={SongPage}/>
                 <Route path='/song/:id/edit' component={EditSongPage}/>
                 <Route path='/search' component={SearchPage}/>
+                <Route path='/register' component={SignUpPage}/>
                 <Route path='*' component={NotFound}/>
             </Route>
         </Router>

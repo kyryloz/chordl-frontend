@@ -13,12 +13,14 @@
     "react-addons-update": "^15.3.0",
     "react-bootstrap": "^0.30.2",
     "react-dom": "^15.3.0",
+    "react-facebook-login": "latest",
+    "react-form": "0.0.2",
+    "react-form-inputs": "0.0.1",
+    "react-paginate": "latest",
     "react-router": "^2.6.1",
     "react-sticky": "^5.0.4",
     "react-tap-event-plugin": "^1.0.0",
-    "remarkable": "^1.6.2",
-    "react-paginate": "latest",
-    "react-facebook-login": "latest"
+    "remarkable": "^1.6.2"
   },
   "scripts": {
     "start": "react-scripts start",
