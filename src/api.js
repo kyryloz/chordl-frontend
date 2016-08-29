@@ -1,4 +1,4 @@
-const backend = 'api';
+const backend = '/api';
 
 module.exports = {
     performers: `${backend}/performers`,

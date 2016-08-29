@@ -1,7 +1,7 @@
 import React from "react";
 import SearchBar from "./SearchBar";
 import AppBar from "material-ui/AppBar";
-import {hashHistory, Link} from "react-router";
+import {browserHistory, Link} from "react-router";
 import SvgIcon from "material-ui/SvgIcon";
 import IconButton from "material-ui/IconButton";
 
@@ -55,7 +55,7 @@ export default class Header extends React.Component {
 
     handleHomeIconPress =(e) => {
         e.preventDefault();
-        hashHistory.replace("/");
+        browserHistory.replace("/");
     };
 
     renderTitle() {

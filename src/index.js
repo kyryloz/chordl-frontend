@@ -6,7 +6,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import Paper from "material-ui/Paper";
 import FabAdd from "./components/FabAdd";
-import {Router, Route, IndexRoute, hashHistory} from "react-router";
+import {Router, Route, IndexRoute, browserHistory} from "react-router";
 import Header from "./components/Header";
 import AddNewSongPage from "./pages/AddNewSongPage";
 import PerformerPage from "./pages/PerformerPage";
@@ -75,7 +75,7 @@ const Container = (props) => (
 
 const App = () => (
     <MuiThemeProvider muiTheme={muiTheme}>
-        <Router history={hashHistory} onUpdate={handleUpdate}>
+        <Router history={browserHistory} onUpdate={handleUpdate}>
             <Route path='/' component={Container}>
                 <IndexRoute component={HomePage}/>
                 <Route path='/add' component={AddNewSongPage}/>
