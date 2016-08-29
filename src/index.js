@@ -18,8 +18,20 @@ import SearchPage from "./pages/SearchPage";
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import {StickyContainer, Sticky} from 'react-sticky';
+import * as $ from "jquery";
+import Store from "./store/store";
+
+const store = new Store;
 
 injectTapEventPlugin();
+
+$.ajaxSetup({
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization' : store.createAuthorizationTokenHeader()
+    },
+});
 
 const muiTheme = getMuiTheme({
     palette: {

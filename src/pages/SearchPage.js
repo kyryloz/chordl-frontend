@@ -50,12 +50,7 @@ export default class SearchPage extends BasePageTemplate {
     search(term, page, size) {
         $.ajax({
             url: api.search + "?query=" + term + "&page=" + page + "&size=" + size,
-            dataType: 'json',
             type: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             success: function (data) {
                 this.setState({
                     content: data.content,

@@ -37,10 +37,6 @@ export default class PerformerPage extends BasePageTemplate {
             url: `${api.performers}/${this.props.params.id}`,
             dataType: 'json',
             type: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             success: function (data) {
                 this.setState({
                     performer: data
@@ -59,10 +55,6 @@ export default class PerformerPage extends BasePageTemplate {
             url: `${api.performers}/${performer.id}/songs`,
             dataType: 'json',
             type: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             success: function (data) {
                 this.setState({
                     songs: data
@@ -78,10 +70,6 @@ export default class PerformerPage extends BasePageTemplate {
         $.ajax({
             url: `${api.performers}/${this.props.params.id}`,
             type: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             success: function (data) {
                 this.router.replace('/');
             }.bind(this),

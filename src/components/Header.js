@@ -75,11 +75,6 @@ export default class Header extends React.Component {
         $.ajax({
             url: `${api.auth}/user`,
             type: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : store.createAuthorizationTokenHeader()
-            },
             success: function (data) {
                 console.log("current user", data);
                 this.setState({

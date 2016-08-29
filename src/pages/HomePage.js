@@ -26,11 +26,6 @@ export default class HomePage extends BasePageTemplate {
             url: api.featured,
             dataType: 'json',
             type: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : store.createAuthorizationTokenHeader()
-            },
             success: function (data) {
                 this.setState({
                     songs: data.songs

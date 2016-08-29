@@ -22,10 +22,6 @@ export default class AddNewSong extends BasePageTemplate {
             url: `${api.performers}/all`,
             dataType: 'json',
             type: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             success: function (data) {
                 this.setState({performerNames: data});
             }.bind(this),

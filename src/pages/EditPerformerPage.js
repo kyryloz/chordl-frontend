@@ -26,10 +26,6 @@ export default class EditPerformerPage extends BasePageTemplate {
             url: `${api.performers}/${this.props.params.id}`,
             dataType: 'json',
             type: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             success: function (data) {
                 this.setState({performer: data});
             }.bind(this),
@@ -44,10 +40,6 @@ export default class EditPerformerPage extends BasePageTemplate {
             url: `${api.performers}/${this.state.performer.id}`,
             dataType: 'json',
             type: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             data: JSON.stringify(this.state.performer),
             success: function (data) {
                 this.setState({performer: data});

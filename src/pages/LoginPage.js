@@ -37,8 +37,6 @@ export default class LoginPage extends BasePageTemplate {
             url: `${api.auth}/auth`,
             type: "POST",
             data: JSON.stringify(loginData),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
             success: function (data, textStatus, jqXHR) {
                 store.setJwtToken(data.jwtToken);
                 console.log("Login success", data);

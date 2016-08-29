@@ -122,12 +122,7 @@ export default class SongAddStepper extends React.Component {
 
         $.ajax({
             url: api.songs,
-            dataType: 'json',
             type: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             data: JSON.stringify(data),
             success: function (data) {
                 console.log("Submit success", data);
@@ -144,10 +139,6 @@ export default class SongAddStepper extends React.Component {
         $.ajax({
             url: `${api.performers}/search/${performerName}`,
             type: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             success: function (data) {
                 callback(null, data.id);
             },

@@ -47,12 +47,7 @@ export default class SelectPerformer extends React.Component {
 
         $.ajax({
             url: api.performers,
-            dataType: 'json',
             type: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             data: JSON.stringify(data),
             success: function (data) {
                 console.log("Submit success", data);

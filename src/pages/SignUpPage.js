@@ -32,13 +32,8 @@ export default class SignUpPage extends BasePageTemplate {
         };
         $.ajax({
             url: `${api.auth}/register`,
-            dataType: 'json',
             type: 'POST',
             data: JSON.stringify(user),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             success: function (data) {
                 this.setState({
                     username: "",

@@ -40,12 +40,7 @@ export default class SongPage extends BasePageTemplate {
     loadSong() {
         $.ajax({
             url: `${api.songs}/${this.props.params.id}`,
-            dataType: 'json',
             type: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             success: function (data) {
                 this.setState({song: data});
             }.bind(this),
@@ -61,10 +56,6 @@ export default class SongPage extends BasePageTemplate {
         $.ajax({
             url: this.urlGetSong,
             type: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             success: function (data) {
                 this.context.router.replace('performer/' + this.state.song.performerId);
             }.bind(this),
