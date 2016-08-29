@@ -25,24 +25,24 @@ export default class LoginPage extends BasePageTemplate {
     }
 
     login = () => {
-        const user = {
-            username: this.state.username,
-            password: this.state.password,
-        };
+        const loginForm = `username=${this.state.username}&password=${this.state.password}`;
         $.ajax({
             url: `${api.auth}/login`,
             dataType: 'json',
             type: 'POST',
-            data: JSON.stringify(user),
+            data: loginForm,
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
             success: function (data) {
-                this.setState(data);
+                console.log("Login success", data);
+                this.context.router.push("/");
+                // TODO
+                window.location.reload();
             }.bind(this),
             error: function (xhr, status, err) {
-                console.error(status, err.toString());
+                console.error(status, xhr);
             }
         });
     };
