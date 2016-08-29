@@ -15,6 +15,11 @@ export default class HomePage extends BasePageTemplate {
     }
 
     componentDidMount() {
+        $.ajaxSetup({
+            xhrFields: {
+                withCredentials: true
+            }
+        });
         this.loadFeatured();
     }
 
@@ -26,6 +31,9 @@ export default class HomePage extends BasePageTemplate {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
+            },
+            xhrFields: {
+                withCredentials: true
             },
             success: function (data) {
                 this.setState({

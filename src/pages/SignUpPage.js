@@ -32,13 +32,16 @@ export default class SignUpPage extends BasePageTemplate {
         };
         console.log("post", user);
         $.ajax({
-            url: `${api.register}`,
+            url: `${api.auth}/register`,
             dataType: 'json',
             type: 'POST',
             data: JSON.stringify(user),
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
+            },
+            xhrFields: {
+                withCredentials: true
             },
             success: function (data) {
                 this.setState(data);
@@ -51,7 +54,7 @@ export default class SignUpPage extends BasePageTemplate {
 
     logout = () => {
         $.ajax({
-            url: `${api.login}`,
+            url: `${api.auth}/logout`,
             type: 'DELETE',
             headers: {
                 'Accept': 'application/json',

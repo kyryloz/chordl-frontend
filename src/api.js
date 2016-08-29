@@ -1,4 +1,4 @@
-const backend = 'http://0.0.0.0:8081/api';
+const backend = 'api';
 
 module.exports = {
     performers: `${backend}/performers`,
@@ -6,7 +6,5 @@ module.exports = {
     search: `${backend}/search/`,
     index: `${backend}/index`,
     featured: `${backend}/featured`,
-    user: `${backend}/user`,
-    login: `${backend}/login`,
-    register: `${backend}/register`
+    auth: `${backend}/auth`,
 };

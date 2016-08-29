@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "react-scripts": "0.1.0"
+    "react-scripts": "0.2.3"
   },
   "dependencies": {
     "dompurify": "^0.8.3",
@@ -26,5 +26,6 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject"
-  }
+  },
+  "proxy": "http://127.0.0.1:8081"
 }
