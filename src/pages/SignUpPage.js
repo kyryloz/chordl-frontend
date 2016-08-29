@@ -40,9 +40,6 @@ export default class SignUpPage extends BasePageTemplate {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            xhrFields: {
-                withCredentials: true
-            },
             success: function (data) {
                 this.setState(data);
             }.bind(this),
