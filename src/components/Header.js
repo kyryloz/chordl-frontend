@@ -8,6 +8,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import * as $ from "jquery";
 import * as api from "../api";
 import * as colors from "../colors";
+import Popout from "react-popout";
 
 const styles = {
     appBar: {
@@ -56,7 +57,8 @@ export default class Header extends React.Component {
 
         this.state = {
             username: "Anon",
-            authenticated: false
+            authenticated: false,
+            popup: false
         }
     }
 
@@ -66,8 +68,8 @@ export default class Header extends React.Component {
 
     handleLogout = () => {
         $.ajax({
-            url: `${api.auth}/login`,
-            type: 'DELETE',
+            url: `${api.logoutFb}`,
+            type: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -104,7 +106,7 @@ export default class Header extends React.Component {
                     username: "",
                     authenticated: false
                 })
-            }
+            }.bind(this)
         });
     };
 
@@ -160,6 +162,20 @@ export default class Header extends React.Component {
         )
     }
 
+    handlePopupClosed = () => {
+        console.log("closed popup");
+        this.setState({
+            popup: false
+        })
+    };
+
+
+    onClick = () => {
+        this.setState({
+            popup: true
+        });
+    };
+
     renderLoginBlock() {
         if (this.state.authenticated) {
             return (
@@ -174,6 +190,11 @@ export default class Header extends React.Component {
                     <Link style={styles.link} to="/login">Login</Link>
                     &nbsp;or&nbsp;
                     <Link style={styles.link} to="/register">register</Link>
+                    &nbsp;or&nbsp;
+                    <a onClick={this.onClick}>Login through Facebook</a>
+                    {this.state.popup && (
+                        <Popout url='http://localhost:8081/api/login' title='Facebook login' onClosing={this.handlePopupClosed}/>
+                    )}
                 </div>
             )
         }

@@ -7,4 +7,6 @@ module.exports = {
     index: `${backend}/index`,
     featured: `${backend}/featured`,
     auth: `${backend}/auth`,
+    loginFb: `${backend}/login`,
+    logoutFb: `${backend}/logout`,
 };
