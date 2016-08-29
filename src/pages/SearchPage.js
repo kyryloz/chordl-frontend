@@ -85,8 +85,7 @@ export default class SearchPage extends BasePageTemplate {
     }
 
     handlePageClick = (page) => {
-        this.context.router
-            .push(`search/?query=${this.state.query}&page=${page.selected}`);
+        this.context.router.push(`/search/?query=${this.state.query}&page=${page.selected}`);
     };
 
     renderHeader() {

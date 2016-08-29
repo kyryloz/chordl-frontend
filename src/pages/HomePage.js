@@ -60,7 +60,3 @@ export default class HomePage extends BasePageTemplate {
         )
     }
 }
-
-HomePage.contextTypes = {
-    router: React.PropTypes.object
-};

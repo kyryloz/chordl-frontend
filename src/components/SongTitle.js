@@ -8,7 +8,7 @@ export default class SongTitle extends React.Component {
         return this.props.linkifyPerformer ?
             <Link
                 style={this.props.style}
-                to={"performer/" + this.props.song.performerId}>
+                to={"/performer/" + this.props.song.performerId}>
                 <Highlight
                     enabled={this.props.hlEnabled}
                     text={this.props.song.performerName}/>
@@ -23,7 +23,7 @@ export default class SongTitle extends React.Component {
         return this.props.linkifySong ?
             <Link
                 style={this.props.style}
-                to={"song/" + this.props.song.id}>
+                to={"/song/" + this.props.song.id}>
                 <Highlight
                     enabled={this.props.hlEnabled}
                     text={this.props.song.title}/>

@@ -76,7 +76,7 @@ export default class SongPage extends BasePageTemplate {
 
     handleEdit = (e) => {
         e.preventDefault();
-        this.context.router.push("song/" + this.state.song.id + "/edit");
+        this.context.router.push("/song/" + this.state.song.id + "/edit");
     };
 
     renderHeader() {

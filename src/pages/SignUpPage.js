@@ -30,7 +30,6 @@ export default class SignUpPage extends BasePageTemplate {
             password: this.state.password,
             passwordConfirm: this.state.passwordConfirm
         };
-        console.log("post", user);
         $.ajax({
             url: `${api.auth}/register`,
             dataType: 'json',

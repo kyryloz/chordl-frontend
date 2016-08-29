@@ -97,7 +97,7 @@ export default class PerformerPage extends BasePageTemplate {
 
     handleEdit = (e) => {
         e.preventDefault();
-        this.router.push("performer/" + this.state.performer.id + "/edit");
+        this.router.push("/performer/" + this.state.performer.id + "/edit");
     };
 
     renderHeader() {
