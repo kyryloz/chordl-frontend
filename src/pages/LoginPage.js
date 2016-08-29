@@ -12,7 +12,7 @@ const styles = {
     }
 };
 
-export default class SignUpPage extends BasePageTemplate {
+export default class LoginPage extends BasePageTemplate {
 
     constructor(props) {
         super(props);
@@ -24,14 +24,13 @@ export default class SignUpPage extends BasePageTemplate {
         }
     }
 
-    register = () => {
+    login = () => {
         const user = {
             username: this.state.username,
             password: this.state.password,
-            passwordConfirm: this.state.passwordConfirm
         };
         $.ajax({
-            url: `${api.auth}/register`,
+            url: `${api.auth}/login`,
             dataType: 'json',
             type: 'POST',
             data: JSON.stringify(user),
@@ -40,25 +39,11 @@ export default class SignUpPage extends BasePageTemplate {
                 'Content-Type': 'application/json'
             },
             success: function (data) {
-                this.setState({
-                    username: "",
-                    password: "",
-                    passwordConfirm: ""
-                });
-                this.context.router.push("/");
-                // TODO don't use reload
-                window.location.reload();
+                this.setState(data);
             }.bind(this),
             error: function (xhr, status, err) {
-                console.error("Error registration", xhr.responseText);
-                console.error("Error registration status", status);
-                console.error("Error registration err", err);
-                this.setState({
-                    username: "",
-                    password: "",
-                    passwordConfirm: ""
-                });
-            }.bind(this)
+                console.error(status, err.toString());
+            }
         });
     };
 
@@ -74,14 +59,8 @@ export default class SignUpPage extends BasePageTemplate {
         });
     };
 
-    handleEditPasswordConfirm = (event) => {
-        this.setState({
-            passwordConfirm: event.target.value
-        });
-    };
-
     renderHeader() {
-        return <h3>Register new user</h3>
+        return <h3>Login</h3>
     }
 
     renderMenu() {
@@ -103,23 +82,16 @@ export default class SignUpPage extends BasePageTemplate {
                     type="password"
                     value={this.state.password}
                     onChange={this.handleEditPassword}
-                /><br />
-                <TextField
-                    hintText="Confirm password"
-                    floatingLabelText="Confirm password"
-                    type="password"
-                    value={this.state.passwordConfirm}
-                    onChange={this.handleEditPasswordConfirm}
                 /><br /><br />
                 <RaisedButton
-                    label="Register"
+                    label="Login"
                     primary={true}
-                    onTouchTap={this.register}/>
+                    onTouchTap={this.login}/>
             </div>
         )
     }
 }
 
-SignUpPage.contextTypes = {
+LoginPage.contextTypes = {
     router: React.PropTypes.object
 };

@@ -1,6 +1,5 @@
 import React from "react";
 import TextField from "material-ui/TextField";
-import RaisedButton from "material-ui/RaisedButton";
 
 export default class SearchBar extends React.Component {
 
@@ -45,7 +44,6 @@ export default class SearchBar extends React.Component {
                     onChange={this.handleQueryChange}
                     value={this.state.query}
                 />
-                <RaisedButton label="Search" primary={false} onTouchTap={this.handleSearch}/>
             </div>
     )
     }
