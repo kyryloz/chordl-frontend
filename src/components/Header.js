@@ -8,6 +8,9 @@ import RaisedButton from "material-ui/RaisedButton";
 import * as $ from "jquery";
 import * as api from "../api";
 import * as colors from "../colors";
+import Store from "../store/store";
+
+const store = new Store;
 
 const styles = {
     appBar: {
@@ -65,22 +68,7 @@ export default class Header extends React.Component {
     }
 
     handleLogout = () => {
-        $.ajax({
-            url: `${api.auth}/login`,
-            type: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            success: function (data) {
-                console.log("Logout success", data);
-                // TODO don't use reload
-                window.location.reload();
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(status, err);
-            }
-        });
+        store.removeJwtToken();
     };
 
     getCurrentUser = () => {
@@ -89,7 +77,8 @@ export default class Header extends React.Component {
             type: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization' : store.createAuthorizationTokenHeader()
             },
             success: function (data) {
                 console.log("current user", data);
@@ -104,7 +93,7 @@ export default class Header extends React.Component {
                     username: "",
                     authenticated: false
                 })
-            }
+            }.bind(this)
         });
     };
 

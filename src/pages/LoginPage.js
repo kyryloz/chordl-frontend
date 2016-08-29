@@ -5,12 +5,15 @@ import BasePageTemplate from "./BasePageTemplate";
 import api from "../api";
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import Store from "../store/store";
 
 const styles = {
     link: {
         color: colors.defaultPrimaryColor
     }
 };
+
+const store = new Store;
 
 export default class LoginPage extends BasePageTemplate {
 
@@ -24,29 +27,30 @@ export default class LoginPage extends BasePageTemplate {
         }
     }
 
-    login = () => {
-        const loginForm = `username=${this.state.username}&password=${this.state.password}`;
+    loginJwt = () => {
+        const loginData = {
+            username: this.state.username,
+            password: this.state.password
+        };
+
         $.ajax({
-            url: `${api.auth}/signup`,
-            dataType: 'json',
-            type: 'POST',
-            data: JSON.stringify({
-                username: this.state.username,
-                password: this.state.password
-            }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            success: function (data) {
+            url: `${api.auth}/auth`,
+            type: "POST",
+            data: JSON.stringify(loginData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data, textStatus, jqXHR) {
+                store.setJwtToken(data.jwtToken);
                 console.log("Login success", data);
                 this.context.router.push("/");
-                // TODO
-                window.location.reload();
             }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(status, xhr);
-            }
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 401) {
+                    alert("Error!");
+                } else {
+                    throw new Error("an unexpected error occured: " + errorThrown);
+                }
+            }.bind(this)
         });
     };
 
@@ -89,7 +93,7 @@ export default class LoginPage extends BasePageTemplate {
                 <RaisedButton
                     label="Login"
                     primary={true}
-                    onTouchTap={this.login}/>
+                    onTouchTap={this.loginJwt}/>
             </div>
         )
     }
