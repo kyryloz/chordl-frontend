@@ -58,22 +58,53 @@ export default class Header extends React.Component {
         super(props);
 
         this.state = {
-            username: "Anon",
+            username: "",
             authenticated: false
         }
     }
 
     componentDidMount() {
+        // FB.getLoginStatus((response) => {
+        //     console.log("Facebook login status:", response.status);
+        // });
         this.getCurrentUser();
     }
+
+    handleLogin = () => {
+        FB.login((response) => {
+            this.authenticateToBackend(response);
+        });
+    };
 
     handleLogout = () => {
         store.removeJwtToken();
     };
 
+    authenticateToBackend(response) {
+        console.log("Auth to backend", response);
+
+        const authData = {
+            userId: response.authResponse.userID,
+            socialToken: response.authResponse.accessToken
+        };
+
+        $.ajax({
+            url: `${api.auth}/signin`,
+            type: "POST",
+            data: JSON.stringify(authData),
+            success: function (data, textStatus, jqXHR) {
+                store.setJwtToken(data.jwtToken);
+                console.log("Login success", data);
+            }.bind(this),
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR, textStatus, errorThrown);
+            }.bind(this)
+        });
+    }
+
     getCurrentUser = () => {
         $.ajax({
-            url: `${api.auth}/user`,
+            url: `${api.auth}/me`,
             type: 'GET',
             success: function (data) {
                 console.log("current user", data);
@@ -155,9 +186,7 @@ export default class Header extends React.Component {
         } else {
             return (
                 <div style={styles.loginBlock}>
-                    <Link style={styles.link} to="/login">Login</Link>
-                    &nbsp;or&nbsp;
-                    <Link style={styles.link} to="/register">register</Link>
+                    <RaisedButton style={styles.button} label="Login with Facebook" onTouchTap={this.handleLogin}/>
                 </div>
             )
         }
