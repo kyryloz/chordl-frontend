@@ -3,18 +3,18 @@ const TOKEN_KEY = "jwtToken";
 export default class Store {
 
     getJwtToken() {
-        var token = sessionStorage.getItem(TOKEN_KEY);
+        var token = localStorage.getItem(TOKEN_KEY);
         console.log("GET GET TOKEN", token);
         return token;
     }
 
     setJwtToken(token) {
         console.log("SET TOKEN", token);
-        sessionStorage.setItem(TOKEN_KEY, token);
+        localStorage.setItem(TOKEN_KEY, token);
     }
 
     removeJwtToken() {
-        sessionStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(TOKEN_KEY);
     }
 
     createAuthorizationTokenHeader() {
