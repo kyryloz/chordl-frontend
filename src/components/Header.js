@@ -52,7 +52,7 @@ const HomeIcon = () => (
 export default class Header extends React.Component {
 
     componentDidMount() {
-        this.getCurrentUser();
+        this.props.authGetUserAsync();
     }
 
     handleLogin = () => {
@@ -73,40 +73,8 @@ export default class Header extends React.Component {
             socialToken: response.authResponse.accessToken
         };
 
-        $.ajax({
-            url: `${api.auth}/signin`,
-            type: "POST",
-            data: JSON.stringify(authData),
-            success: function (data, textStatus, jqXHR) {
-                this.props.authLoginUser({
-                    username: "Im in!"
-                }, data.jwtToken);
-            }.bind(this),
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.error(jqXHR, textStatus, errorThrown);
-            }.bind(this)
-        });
+        this.props.authUser(authData);
     }
-
-    getCurrentUser = () => {
-        $.ajax({
-            url: `${api.auth}/me`,
-            type: 'GET',
-            success: function (data) {
-                this.setState({
-                    username: data.name,
-                    authenticated: true
-                })
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(xhr, err);
-                this.setState({
-                    username: "",
-                    authenticated: false
-                })
-            }.bind(this)
-        });
-    };
 
     renderChildren() {
         return (
@@ -161,7 +129,6 @@ export default class Header extends React.Component {
     }
 
     renderLoginBlock() {
-        console.log("render login" , this.props);
         if (this.props.user) {
             return (
                 <div style={styles.loginBlock}>

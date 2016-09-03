@@ -4,7 +4,6 @@ import * as actionCreators from "../actions/actionCreators";
 import MainContainer from "./MainContainer";
 
 function mapStateToProps(state) {
-    console.log("map state to props:", state);
     return {
         user: state.authReducer.user
     }

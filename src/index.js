@@ -18,8 +18,6 @@ import App from "./components/App";
 import facebookInitializer from "./config/FacebookInitializer";
 import ajaxInitializer from "./config/AjaxInitializer";
 import store, {history} from "./store/store";
-import {UserAuthWrapper} from "redux-auth-wrapper";
-import {routerActions} from "react-router-redux";
 
 injectTapEventPlugin();
 facebookInitializer();
@@ -32,12 +30,12 @@ const muiTheme = getMuiTheme({
     }
 });
 
-const UserIsAuthenticated = UserAuthWrapper({
-    authSelector: state => state.user,
-    redirectAction: routerActions.replace,
-    wrapperDisplayName: 'UserIsAuthenticated',
-    failureRedirectPath: "/"
-});
+// const UserIsAuthenticated = UserAuthWrapper({
+//     authSelector: state => state.user,
+//     redirectAction: routerActions.replace,
+//     wrapperDisplayName: 'UserIsAuthenticated',
+//     failureRedirectPath: "/"
+// });
 
 const Routes = () => (
     <Provider store={store}>
@@ -45,7 +43,7 @@ const Routes = () => (
             <Router history={history} onUpdate={handleUpdate}>
                 <Route path='/' component={App}>
                     <IndexRoute component={HomePage}/>
-                    <Route path='/add' component={UserIsAuthenticated(AddNewSongPage)}/>
+                    <Route path='/add' component={AddNewSongPage}/>
                     <Route path='/performer/:id' component={PerformerPage}/>
                     <Route path='/performer/:id/edit' component={EditPerformerPage}/>
                     <Route path='/song/:id' component={SongPage}/>
