@@ -20,16 +20,6 @@ export function authLoginUser(user) {
     };
 }
 
-export function authLoginError() {
-    return {
-        type: Action.AUTH_LOGIN_USER,
-        user: {
-            username: "ERROR LOGIN"
-        },
-        token: "token"
-    };
-}
-
 export function authUser(authData) {
     const props = {
         dataType: "json",
@@ -42,6 +32,7 @@ export function authUser(authData) {
     };
     return function (dispatch) {
         return fetch(`${api.auth}/signin`, props)
+            .then(checkStatus)
             .then(res => res.json())
             .then(result => {
                 authStore.setJwtToken(result.jwtToken);
@@ -50,7 +41,7 @@ export function authUser(authData) {
             })
             .catch(error => {
                 console.error(error);
-                dispatch(authLoginError());
+                dispatch(authLogoutUser());
             })
     };
 }
@@ -68,6 +59,7 @@ export function authGetUserAsync() {
     };
     return function (dispatch) {
         return fetch(`${api.auth}/me`, props)
+            .then(checkStatus)
             .then(res => res.json())
             .then(result => {
                 dispatch(authLoginUser({
@@ -76,8 +68,18 @@ export function authGetUserAsync() {
             })
             .catch(error => {
                     console.error(error);
-                    return dispatch(authLoginError());
+                    dispatch(authLogoutUser());
                 }
             )
     };
+}
+
+function checkStatus(response) {
+    if (response.status >= 200 && response.status < 300) {
+        return response
+    } else {
+        var error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+    }
 }
