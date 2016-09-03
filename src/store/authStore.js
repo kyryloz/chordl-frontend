@@ -3,7 +3,8 @@ const TOKEN_KEY = "jwtToken";
 export default class AuthStore {
 
     getJwtToken() {
-        return localStorage.getItem(TOKEN_KEY);
+        var token = localStorage.getItem(TOKEN_KEY);
+        return token;
     }
 
     setJwtToken(token) {

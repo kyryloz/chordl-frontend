@@ -1,11 +1,13 @@
 import Action from "../global/actions";
 import * as api from "../api";
 import AuthStore from "../store/authStore";
+import ajaxInitializer from "../config/AjaxInitializer";
 
 const authStore = new AuthStore;
 
 export function authLogoutUser() {
     authStore.removeJwtToken();
+    ajaxInitializer();
     return {
         type: Action.AUTH_LOGOUT_USER
     };
@@ -43,6 +45,7 @@ export function authUser(authData) {
             .then(res => res.json())
             .then(result => {
                 authStore.setJwtToken(result.jwtToken);
+                ajaxInitializer();
                 dispatch(authGetUserAsync())
             })
             .catch(error => {
