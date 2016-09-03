@@ -4,7 +4,6 @@ import ReactDOM from "react-dom";
 import injectTapEventPlugin from "react-tap-event-plugin";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
-
 import {Router, Route, IndexRoute, browserHistory} from "react-router";
 import AddNewSongPage from "./pages/AddNewSongPage";
 import PerformerPage from "./pages/PerformerPage";
@@ -13,54 +12,23 @@ import HomePage from "./pages/HomePage";
 import EditPerformerPage from "./pages/EditPerformerPage";
 import EditSongPage from "./pages/EditSongPage";
 import SearchPage from "./pages/SearchPage";
-import SignUpPage from "./pages/SignUpPage";
-import LoginPage from "./pages/LoginPage";
-import * as $ from "jquery";
-import Store from "./store/store";
+import NotFoundPage from "./pages/NotFoundPage";
 import {Provider} from "react-redux";
-import store, {history} from "./store";
 import App from "./components/App";
-
-const auth = new Store;
+import facebookInitializer from "./config/FacebookInitializer";
+import ajaxInitializer from "./config/AjaxInitializer";
+import store from "./store/store";
 
 injectTapEventPlugin();
+facebookInitializer();
+ajaxInitializer();
 
-$.ajaxSetup({
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${auth.createAuthorizationTokenHeader()}`
-    },
-});
-
-window.fbAsyncInit = function () {
-    FB.init({
-        appId: '1086354088118124',
-        xfbml: true,
-        version: 'v2.7'
-    });
-};
-
-(function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) {
-        return;
-    }
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
 
 const muiTheme = getMuiTheme({
     palette: {
         // TODO theme
     }
 });
-
-
-const NotFound = () => ( <div style={{textAlign: "center", marginTop: 32}}><h3>404. Not found :,(</h3></div>);
-
 
 const Routes = () => (
     <Provider store={store}>
@@ -74,7 +42,7 @@ const Routes = () => (
                     <Route path='/song/:id' component={SongPage}/>
                     <Route path='/song/:id/edit' component={EditSongPage}/>
                     <Route path='/search' component={SearchPage}/>
-                    <Route path='*' component={NotFound}/>
+                    <Route path='*' component={NotFoundPage}/>
                 </Route>
             </Router>
         </MuiThemeProvider>

@@ -3,9 +3,6 @@ import * as $ from "jquery";
 import SearchResultList from "../components/SearchResultList";
 import BasePageTemplate from "./BasePageTemplate";
 import api from "../api";
-import Store from "../store/store";
-
-const store = new Store;
 
 export default class HomePage extends BasePageTemplate {
 

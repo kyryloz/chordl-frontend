@@ -1,28 +1,15 @@
-const TOKEN_KEY = "jwtToken";
+import {createStore, compse} from "redux";
+import {syncHistoryWithStore} from "react-router-redux";
+import {browserHistory} from "react-router";
+import rootReducer from "../reducers/index";
 
-export default class Store {
+const defaultState = {
+    posts: [],
+    comments: []
+};
 
-    getJwtToken() {
-        var token = localStorage.getItem(TOKEN_KEY);
-        console.log("GET GET TOKEN", token);
-        return token;
-    }
+const store = createStore(rootReducer, defaultState,
+    window.devToolsExtension && window.devToolsExtension());
 
-    setJwtToken(token) {
-        console.log("SET TOKEN", token);
-        localStorage.setItem(TOKEN_KEY, token);
-    }
-
-    removeJwtToken() {
-        localStorage.removeItem(TOKEN_KEY);
-    }
-
-    createAuthorizationTokenHeader() {
-        var token = this.getJwtToken();
-        if (token) {
-            return token;
-        } else {
-            return "";
-        }
-    }
-}
+export const history = syncHistoryWithStore(browserHistory, store);
+export default store;

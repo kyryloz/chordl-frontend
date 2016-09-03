@@ -8,9 +8,9 @@ import RaisedButton from "material-ui/RaisedButton";
 import * as $ from "jquery";
 import * as api from "../api";
 import * as colors from "../colors";
-import Store from "../store/store";
+import AuthStore from "../store/authStore";
 
-const store = new Store;
+const auth = new AuthStore;
 
 const styles = {
     appBar: {
@@ -64,9 +64,6 @@ export default class Header extends React.Component {
     }
 
     componentDidMount() {
-        // FB.getLoginStatus((response) => {
-        //     console.log("Facebook login status:", response.status);
-        // });
         this.getCurrentUser();
     }
 
@@ -93,11 +90,10 @@ export default class Header extends React.Component {
             type: "POST",
             data: JSON.stringify(authData),
             success: function (data, textStatus, jqXHR) {
-                store.setJwtToken(data.jwtToken);
-                console.log("Login success", data);
+                auth.setJwtToken(data.jwtToken);
             }.bind(this),
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR, textStatus, errorThrown);
+                console.error(jqXHR, textStatus, errorThrown);
             }.bind(this)
         });
     }
@@ -107,7 +103,6 @@ export default class Header extends React.Component {
             url: `${api.auth}/me`,
             type: 'GET',
             success: function (data) {
-                console.log("current user", data);
                 this.setState({
                     username: data.name,
                     authenticated: true
