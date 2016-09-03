@@ -33,8 +33,12 @@ const styles = {
 export default class MainContainer extends React.Component {
 
     renderAddButton = () => {
-        if (this.props.history.isActive('add') && this.props.user) {
-            return <FabAdd/>;
+        if (!this.props.history.isActive('add')) {
+            if (this.props.user) {
+                return <FabAdd/>;
+            } else {
+                return <div></div>;
+            }
         } else {
             return <div></div>
         }
