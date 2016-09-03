@@ -2,7 +2,6 @@ import * as React from "react";
 import Paper from "material-ui/Paper";
 import FabAdd from "./FabAdd";
 import Header from "./Header";
-import {StickyContainer, Sticky} from 'react-sticky';
 
 const styles = {
     header: {
@@ -33,22 +32,24 @@ const styles = {
 
 export default class MainContainer extends React.Component {
 
+    renderAddButton = () => {
+        if (this.props.history.isActive('add') && this.props.user) {
+            return <FabAdd/>;
+        } else {
+            return <div></div>
+        }
+    };
+
     render() {
         return (
-            <div>
-                <StickyContainer style={styles.main}>
-                    <Sticky isActive={false}>
-                        <header>
-                            <div style={styles.header}><Header/></div>
-                        </header>
-                    </Sticky>
-                    <Paper style={styles.paper} zDepth={1}>
-                        <div>
-                            {React.cloneElement(this.props.children, this.props)}
-                            {!this.props.history.isActive('add') && (<FabAdd/>) }
-                        </div>
-                    </Paper>
-                </StickyContainer>
+            <div style={styles.main}>
+                <div style={styles.header}><Header {...this.props}/></div>
+                <Paper style={styles.paper} zDepth={1}>
+                    <div>
+                        {React.cloneElement(this.props.children, this.props)}
+                        {this.renderAddButton()}
+                    </div>
+                </Paper>
             </div>
         )
     }

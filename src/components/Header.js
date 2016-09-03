@@ -1,16 +1,13 @@
 import React from "react";
 import SearchBar from "./SearchBar";
 import AppBar from "material-ui/AppBar";
-import {browserHistory, Link} from "react-router";
+import {browserHistory} from "react-router";
 import SvgIcon from "material-ui/SvgIcon";
 import IconButton from "material-ui/IconButton";
 import RaisedButton from "material-ui/RaisedButton";
 import * as $ from "jquery";
 import * as api from "../api";
 import * as colors from "../colors";
-import AuthStore from "../store/authStore";
-
-const auth = new AuthStore;
 
 const styles = {
     appBar: {
@@ -54,15 +51,6 @@ const HomeIcon = () => (
 
 export default class Header extends React.Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            username: "",
-            authenticated: false
-        }
-    }
-
     componentDidMount() {
         this.getCurrentUser();
     }
@@ -74,7 +62,7 @@ export default class Header extends React.Component {
     };
 
     handleLogout = () => {
-        store.removeJwtToken();
+        this.props.authLogoutUser();
     };
 
     authenticateToBackend(response) {
@@ -90,7 +78,9 @@ export default class Header extends React.Component {
             type: "POST",
             data: JSON.stringify(authData),
             success: function (data, textStatus, jqXHR) {
-                auth.setJwtToken(data.jwtToken);
+                this.props.authLoginUser({
+                    username: "Im in!"
+                }, data.jwtToken);
             }.bind(this),
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error(jqXHR, textStatus, errorThrown);
@@ -171,10 +161,11 @@ export default class Header extends React.Component {
     }
 
     renderLoginBlock() {
-        if (this.state.authenticated) {
+        console.log("render login" , this.props);
+        if (this.props.user) {
             return (
                 <div style={styles.loginBlock}>
-                    Hello, {this.state.username}
+                    Hello, {this.props.user.username}
                     <RaisedButton style={styles.button} label="Logout" onTouchTap={this.handleLogout}/>
                 </div>
             )

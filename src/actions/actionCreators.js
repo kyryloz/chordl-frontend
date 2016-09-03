@@ -1,23 +1,15 @@
-export function increment(index) {
+import Action from "../global/actions";
+
+export function authLogoutUser() {
     return {
-        type: "INCREMENT_LIKES",
-        index
-    }
+        type: Action.AUTH_LOGOUT_USER
+    };
 }
 
-export function addComment(postId, author, comment) {
+export function authLoginUser(user, token) {
     return {
-        type: "ADD_COMMENT",
-        postId,
-        author,
-        comment
-    }
-}
-
-export function removeComment(postId, i) {
-    return {
-        type: "REMOVE_COMMENT",
-        postId,
-        i
-    }
+        type: Action.AUTH_LOGIN_USER,
+        user,
+        token
+    };
 }

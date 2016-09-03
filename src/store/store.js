@@ -1,19 +1,22 @@
-import {createStore, compse} from "redux";
-import {syncHistoryWithStore} from "react-router-redux";
+import {createStore, applyMiddleware, compose} from "redux";
+import {syncHistoryWithStore, routerMiddleware} from "react-router-redux";
 import {browserHistory} from "react-router";
 import rootReducer from "../reducers/rootReducer";
-import AuthStore from "./authStore";
-
-const authStore = new AuthStore;
 
 const defaultState = {
     authReducer: {
-        isAuthenticated: false
+        user: {
+            username: "anon"
+        }
     }
 };
 
-const store = createStore(rootReducer, defaultState,
-    window.devToolsExtension && window.devToolsExtension());
+const routingMiddleware = routerMiddleware(browserHistory);
+
+const store = createStore(rootReducer, defaultState, compose(
+    applyMiddleware(routingMiddleware),
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+));
 
 export const history = syncHistoryWithStore(browserHistory, store);
 export default store;

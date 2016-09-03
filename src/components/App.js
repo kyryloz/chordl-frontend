@@ -4,9 +4,9 @@ import * as actionCreators from "../actions/actionCreators";
 import MainContainer from "./MainContainer";
 
 function mapStateToProps(state) {
+    console.log("map state to props:", state);
     return {
-        posts: state.posts,
-        comments: state.comments
+        user: state.authReducer.user
     }
 }
 
