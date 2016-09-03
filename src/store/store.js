@@ -1,11 +1,15 @@
 import {createStore, compse} from "redux";
 import {syncHistoryWithStore} from "react-router-redux";
 import {browserHistory} from "react-router";
-import rootReducer from "../reducers/index";
+import rootReducer from "../reducers/rootReducer";
+import AuthStore from "./authStore";
+
+const authStore = new AuthStore;
 
 const defaultState = {
-    posts: [],
-    comments: []
+    authReducer: {
+        isAuthenticated: false
+    }
 };
 
 const store = createStore(rootReducer, defaultState,
