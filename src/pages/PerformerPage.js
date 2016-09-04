@@ -88,6 +88,10 @@ export default class PerformerPage extends BasePageTemplate {
         this.router.push("/performer/" + this.state.performer.id + "/edit");
     };
 
+    isUserAdmin = () => {
+        return this.props.user ? this.props.user.authorities.indexOf("ROLE_ADMIN") >= 0 : false;
+    };
+
     renderHeader() {
         return <h3>
             <Link to={'/'} style={styles.link}>#</Link>
@@ -97,16 +101,20 @@ export default class PerformerPage extends BasePageTemplate {
     }
 
     renderMenu() {
-        return <IconMenu
-            iconButtonElement={<IconButton>
-                <MoreVertIcon color={colors.defaultPrimaryColor}/>
-            </IconButton>}
-            anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-            targetOrigin={{horizontal: 'left', vertical: 'top'}}
-        >
-            <MenuItem primaryText="Edit" onTouchTap={this.handleEdit}/>
-            <MenuItem style={{color: "red"}} primaryText="Delete" onTouchTap={this.handleDelete}/>
-        </IconMenu>
+        if (this.isUserAdmin()) {
+            return <IconMenu
+                iconButtonElement={<IconButton>
+                    <MoreVertIcon color={colors.defaultPrimaryColor}/>
+                </IconButton>}
+                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            >
+                <MenuItem primaryText="Edit" onTouchTap={this.handleEdit}/>
+                <MenuItem style={{color: "red"}} primaryText="Delete" onTouchTap={this.handleDelete}/>
+            </IconMenu>
+        } else {
+            return null;
+        }
     }
 
     renderContent() {
