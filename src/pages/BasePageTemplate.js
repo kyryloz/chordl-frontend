@@ -1,5 +1,4 @@
 import React from "react";
-import Divider from "material-ui/Divider";
 
 const styles = {
     page: {
@@ -8,23 +7,13 @@ const styles = {
     },
 
     pageTitle: {
-        marginLeft: 70,
-        marginRight: 16,
         display: 'flex',
         flexDirection: 'row'
     },
 
     title: {
-        flexGrow: 1,
-        marginBottom: 10,
-        fontSize: 7,
-        marginRight: 70
-    },
-
-    content: {
-        marginLeft: 70,
-        marginRight: 70
-    },
+        flexGrow: 1
+    }
 };
 
 export default class BasePageTemplate extends React.Component {
@@ -43,7 +32,7 @@ export default class BasePageTemplate extends React.Component {
 
     render() {
         return (
-            <div style={styles.page}>
+            <div>
                 <div style={styles.pageTitle}>
                     <div style={styles.title}>
                         {this.renderHeader()}
@@ -52,7 +41,6 @@ export default class BasePageTemplate extends React.Component {
                         {this.renderMenu()}
                     </div>
                 </div>
-                <Divider />
                 <div style={styles.content}>
                     {this.renderContent()}
                 </div>
