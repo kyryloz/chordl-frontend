@@ -1,11 +1,9 @@
 import React from "react";
-import AutoComplete from "material-ui/AutoComplete";
 import * as $ from "jquery";
-import RaisedButton from "material-ui/RaisedButton";
-import FlatButton from "material-ui/FlatButton";
-import LinearProgress from "material-ui/LinearProgress";
-import Snackbar from "material-ui/Snackbar";
 import api from "../global/api";
+import Typeahead from "react-bootstrap-typeahead";
+import {Button} from "react-bootstrap/lib";
+
 
 export default class SelectPerformer extends React.Component {
 
@@ -13,21 +11,26 @@ export default class SelectPerformer extends React.Component {
         super(props);
 
         this.state = {
-            performerName: this.props.performer,
+            performerName: "",
             performerSubmitting: false,
-            snackbarOpen: false
         }
     }
 
-    handlePerformerInputChange = (input) => {
+    handlePerformerInputChange = (name) => {
         this.setState({
-            performerName: input,
+            performerName: typeof name === "string" ? name : name[0],
+        }, () => {
+            this.props.callback(name, this.isPerformerExists());
         });
     };
 
     isPerformerExists = () => {
-        return this.props.performers
+        return this.props.performerNames
             .some(e => this.state.performerName.toLowerCase() === e.toLowerCase());
+    };
+
+    shouldRenderCreateButton = () => {
+        return this.state.performerName.length > 1 && !this.isPerformerExists();
     };
 
     isPerformerSubmittingInProgress = () => {
@@ -62,57 +65,29 @@ export default class SelectPerformer extends React.Component {
 
     onPerformerSubmitted(data) {
         if (data) {
-            this.props.performers.push(data.name);
+            this.props.performerNames.push(data.name);
 
             this.setState({
                 performerName: data.name,
                 performerSubmitting: false,
-                snackbarOpen: true
             });
+            this.props.callback(data.name, true);
         } else {
             this.setState({
                 performerSubmitting: false,
-                snackbarOpen: false
             });
         }
     };
 
-    handleNextButton = () => {
-        const {performerName} = this.state;
-        this.props.performerDoneCallback(performerName)
-    };
-
-    handleSnackbarRequestClose = () => {
-        this.setState({
-            snackbarOpen: false
-        });
-    };
-
-    renderNextButton() {
-        return (
-            <div style={{margin: '12px 0'}}>
-                <RaisedButton
-                    label={'Next'}
-                    disableTouchRipple={true}
-                    disableFocusRipple={true}
-                    primary={true}
-                    onTouchTap={this.handleNextButton}
-                    style={{marginRight: 12}}
-                />
-            </div>
-        );
-    }
-
     renderCreatePerformerButton = () => {
         return (
             <div style={{margin: '12px 0'}}>
-                <FlatButton
-                    label='Create performer'
+                <Button
                     disabled={this.isPerformerSubmittingInProgress() || !this.state.performerName}
-                    primary={true}
-                    onTouchTap={this.handlePerformerSubmit}
-                />
-                {this.isPerformerSubmittingInProgress() ? <LinearProgress/> : <div></div>}
+                    bsStyle="link"
+                    onClick={this.handlePerformerSubmit}>
+                    {this.isPerformerSubmittingInProgress() ? 'Creating...' : 'CREATE NEW'}
+                </Button>
             </div>
         );
     };
@@ -120,25 +95,16 @@ export default class SelectPerformer extends React.Component {
     render() {
         return (
             <div>
-                <AutoComplete
-                    floatingLabelText="Performer"
-                    hintText="Start typing the name of performer"
-                    filter={AutoComplete.fuzzyFilter}
-                    dataSource={this.props.performers}
-                    dataSourceConfig={{text: 'name'}}
-                    maxSearchResults={5}
-                    fullWidth={true}
-                    searchText={this.state.performerName}
-                    onNewRequest={this.handlePerformerInputChange}
-                    onUpdateInput={this.handlePerformerInputChange}
-                /><br/>
-                {this.isPerformerExists() ? this.renderNextButton() : this.renderCreatePerformerButton()}
-                <Snackbar
-                    open={this.state.snackbarOpen}
-                    message="Performer added successfully"
-                    autoHideDuration={3000}
-                    onRequestClose={this.handleSnackbarRequestClose}
+                <Typeahead
+                    placeholder="Start typing the name of performer"
+                    style={{fontFamily: "monospace"}}
+                    onInputChange={this.handlePerformerInputChange}
+                    value={this.state.performerName}
+                    options={this.props.performerNames}
                 />
+                <div style={{textAlign: "right"}}>
+                    {this.shouldRenderCreateButton() && this.renderCreatePerformerButton()}
+                </div>
             </div>
         )
     }

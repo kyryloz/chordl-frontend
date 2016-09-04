@@ -88,8 +88,10 @@ export default class EditSongPage extends BasePageTemplate {
         this.setState(newState);
     };
 
-    getValidationState(text) {
-        if (text.length === 0) return 'error';
+    validateEmptyInput(text) {
+        const length = text.length;
+        if (length > 1) return 'success';
+        else if (length > 0) return 'error';
     }
 
     renderHeader() {
@@ -107,7 +109,7 @@ export default class EditSongPage extends BasePageTemplate {
             <form onSubmit={this.handleSave}>
                 <FormGroup
                     controlId="formBasicText"
-                    validationState={this.getValidationState(this.state.song.title)}
+                    validationState={this.validateEmptyInput(this.state.song.title)}
                 >
                     <ControlLabel>Title</ControlLabel>
                     <FormControl
@@ -122,7 +124,7 @@ export default class EditSongPage extends BasePageTemplate {
 
                 <FormGroup
                     controlId="formBasicText"
-                    validationState={this.getValidationState(this.state.song.lyrics)}
+                    validationState={this.validateEmptyInput(this.state.song.lyrics)}
                 >
                     <ControlLabel>Lyrics</ControlLabel>
                     <FormControl
@@ -137,7 +139,7 @@ export default class EditSongPage extends BasePageTemplate {
                 </FormGroup>
                 <FormGroup>
                     <Button
-                        disabled={this.state.song.title.length === 0 || this.state.song.lyrics.length === 0}
+                        disabled={this.state.song.title.length < 2 || this.state.song.lyrics.length < 2}
                         type="submit"
                         bsStyle="success"
                         style={{width: 120}}>
