@@ -24,7 +24,7 @@ export default class SearchResultList extends React.Component {
         )
     }
 
-    renderListItem(searchNode) {
+    renderListItem(searchNode, index) {
         const song = {
             title: searchNode.title,
             performerId: searchNode.performerId,
@@ -46,8 +46,8 @@ export default class SearchResultList extends React.Component {
     }
 
     render() {
-        const resultNodes = this.props.result.map((searchNode) => {
-            return <li key={searchNode.songId}>{this.renderListItem(searchNode)}</li>;
+        const resultNodes = this.props.result.map((searchNode, index) => {
+            return <li key={searchNode.songId}>{this.renderListItem(searchNode, index)}</li>;
         });
 
         var result = null;

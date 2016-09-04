@@ -2,8 +2,8 @@ import React from "react";
 import * as $ from "jquery";
 import SearchResultList from "../components/SearchResultList";
 import api from "../global/api";
-import ReactPaginate from 'react-paginate';
 import BasePageTemplate from "./BasePageTemplate"
+import {Pagination} from "react-bootstrap/lib";
 
 const DEFAULT_PAGE_LIMIT = 10;
 
@@ -36,7 +36,7 @@ export default class SearchPage extends BasePageTemplate {
 
         this.state = {
             query: props.location.query.query || "",
-            page: props.location.query.page || 0,
+            page: props.location.query.page || 1,
             size: DEFAULT_PAGE_LIMIT,
             content: [],
             pageTotal: 0
@@ -49,12 +49,12 @@ export default class SearchPage extends BasePageTemplate {
 
     search(term, page, size) {
         $.ajax({
-            url: api.search + "?query=" + term + "&page=" + page + "&size=" + size,
+            url: api.search + "?query=" + term + "&page=" + (page - 1) + "&size=" + size,
             type: 'GET',
             success: function (data) {
                 this.setState({
                     content: data.content,
-                    page: data.number,
+                    page: data.number + 1,
                     pageTotal: data.totalPages
                 });
             }.bind(this),
@@ -66,7 +66,7 @@ export default class SearchPage extends BasePageTemplate {
 
     componentWillReceiveProps(nextProps) {
         const query = nextProps.location.query.query;
-        const page = nextProps.location.query.page || 0;
+        const page = nextProps.location.query.page || 1;
         const size = nextProps.location.query.size || DEFAULT_PAGE_LIMIT;
 
         this.setState({
@@ -80,7 +80,8 @@ export default class SearchPage extends BasePageTemplate {
     }
 
     handlePageClick = (page) => {
-        this.context.router.push(`/search/?query=${this.state.query}&page=${page.selected}`);
+        console.log(page);
+        this.context.router.push(`/search/?query=${this.state.query}&page=${page}`);
     };
 
     renderHeader() {
@@ -101,19 +102,15 @@ export default class SearchPage extends BasePageTemplate {
                     <SearchResultList result={this.state.content}/>
 
                     <div style={styles.paginationContainer}>
-                        <ReactPaginate
-                            previousLabel={"<"}
-                            nextLabel={">"}
-                            breakLabel={<a href="">...</a>}
-                            breakClassName={"break-me"}
-                            pageNum={this.state.pageTotal}
-                            forceSelected={parseInt(this.state.page)}
-                            marginPagesDisplayed={1}
-                            pageRangeDisplayed={3}
-                            clickCallback={this.handlePageClick}
-                            containerClassName={"pagination"}
-                            subContainerClassName={"pages pagination"}
-                            activeClassName={"active"}/>
+                        <Pagination
+                            first
+                            last
+                            ellipsis
+                            boundaryLinks
+                            items={this.state.pageTotal}
+                            maxButtons={3}
+                            activePage={parseInt(this.state.page)}
+                            onSelect={this.handlePageClick} />
                     </div>
                 </div>
                 }
