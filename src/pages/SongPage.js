@@ -9,6 +9,7 @@ import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 import BasePageTemplate from "./BasePageTemplate";
 import SongTitle from "../components/SongTitle";
 import api from "../global/api";
+import {Button} from "react-bootstrap/lib";
 
 const styles = {
     link: {
@@ -88,23 +89,14 @@ export default class SongPage extends BasePageTemplate {
 
     renderMenu() {
         if (this.props.user) {
-            return <IconMenu
-                iconButtonElement={<IconButton>
-                    <MoreVertIcon color={colors.defaultPrimaryColor}/>
-                </IconButton>}
-                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                targetOrigin={{horizontal: 'left', vertical: 'top'}}
-            >
-                <MenuItem primaryText="Edit" onTouchTap={this.handleEdit}/>
-                <MenuItem style={{color: "red"}} primaryText="Delete" onTouchTap={this.handleDelete}/>
-            </IconMenu>
+            return <Button bsStyle="link" onClick={this.handleEdit}>EDIT</Button>
         } else {
             return null;
         }
     }
 
     renderContent() {
-        return <pre>{this.state.song.lyrics}</pre>
+        return <pre style={{marginTop: 16}}>{this.state.song.lyrics}</pre>
     }
 }
 

@@ -37,7 +37,7 @@ export default class SongsList extends React.Component {
         var result = null;
         if (resultNodes.length) {
             result = (
-                <ul style={{listStyle: "none", marginTop: 16, padding: 0}}>
+                <ul style={{listStyle: "none", padding: 0}}>
                     {resultNodes}
                 </ul>
             );

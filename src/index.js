@@ -14,7 +14,7 @@ import EditSongPage from "./pages/EditSongPage";
 import SearchPage from "./pages/SearchPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import {Provider} from "react-redux";
-import App from "./components/App";
+import App from "./config/App";
 import facebookInitializer from "./config/FacebookInitializer";
 import ajaxInitializer from "./config/AjaxInitializer";
 import store, {history} from "./store/store";
