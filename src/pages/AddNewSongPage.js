@@ -136,7 +136,7 @@ export default class AddNewSongPage extends BasePageTemplate {
 
     renderContent() {
         return (
-            <form onSubmit={this.handleSongSubmit}>
+            <form onSubmit={this.handleSongSubmit} style={{marginTop: 16}}>
                 <FormGroup
                     controlId="formBasicText"
                     validationState={this.validatePerformer()}
