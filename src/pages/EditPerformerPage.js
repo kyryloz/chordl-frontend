@@ -1,10 +1,9 @@
 import React from "react";
 import * as $ from "jquery";
-import FlatButton from "material-ui/FlatButton";
 import update from "react-addons-update";
-import TextField from "material-ui/TextField";
 import BasePageTemplate from "./BasePageTemplate";
 import api from "../global/api";
+import {Button, FormGroup, ControlLabel, FormControl} from "react-bootstrap/lib";
 
 export default class EditPerformerPage extends BasePageTemplate {
 
@@ -60,7 +59,8 @@ export default class EditPerformerPage extends BasePageTemplate {
         this.setState(newState);
     };
 
-    handleSave = () => {
+    handleSave = (e) => {
+        e.preventDefault();
         this.updatePerformer();
     };
 
@@ -68,34 +68,48 @@ export default class EditPerformerPage extends BasePageTemplate {
         this.context.router.replace("/performer/" + this.state.performer.id)
     };
 
+    getValidationState(text) {
+        if (text.length === 0) return 'error';
+    }
+
     renderHeader() {
         return (
-            <TextField
-                value={this.state.performer.name}
-                onChange={this.handleNameChange}
-                floatingLabelText="Name"
-                floatingLabelFixed={true}
-            />
+            <h3>
+                {this.state.performer.name}
+            </h3>
         )
     }
 
     renderContent() {
         return (
-            <div>
-                <div style={{float: 'right', marginTop: 10}}>
-                    <FlatButton
-                        label="Save"
-                        primary={true}
-                        disabled={!this.state.performer.name}
-                        onTouchTap={this.handleSave}
+            <form onSubmit={this.handleSave}>
+                <FormGroup
+                    controlId="formBasicText"
+                    validationState={this.getValidationState(this.state.performer.name)}
+                >
+                    <ControlLabel>Name</ControlLabel>
+                    <FormControl
+                        style={{fontFamily: "monospace"}}
+                        type="text"
+                        placeholder="Name"
+                        value={this.state.performer.name}
+                        onChange={this.handleNameChange}
                     />
-                    <FlatButton
-                        label="Cancel"
-                        labelStyle={{color: 'red'}}
-                        onTouchTap={this.handleCancel}
-                    />
-                </div>
-            </div>
+                    <FormControl.Feedback />
+                </FormGroup>
+                <FormGroup>
+                    <Button
+                        disabled={this.state.performer.name.length === 0}
+                        type="submit"
+                        bsStyle="success"
+                        style={{width: 120}}>
+                        Save
+                    </Button>
+                    <Button style={{marginLeft: 16, width: 120}} onClick={this.handleCancel}>
+                        Cancel
+                    </Button>
+                </FormGroup>
+            </form>
         )
     }
 }

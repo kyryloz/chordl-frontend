@@ -3,11 +3,8 @@ import * as $ from "jquery";
 import SongsList from "../components/SongsList";
 import {Link} from "react-router";
 import colors from "../global/colors";
-import IconMenu from "material-ui/IconMenu";
-import MenuItem from "material-ui/MenuItem";
-import IconButton from "material-ui/IconButton/IconButton";
-import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 import BasePageTemplate from "./BasePageTemplate";
+import {Button} from "react-bootstrap/lib";
 import api from "../global/api";
 
 const styles = {
@@ -102,16 +99,7 @@ export default class PerformerPage extends BasePageTemplate {
 
     renderMenu() {
         if (this.isUserAdmin()) {
-            return <IconMenu
-                iconButtonElement={<IconButton>
-                    <MoreVertIcon color={colors.defaultPrimaryColor}/>
-                </IconButton>}
-                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                targetOrigin={{horizontal: 'left', vertical: 'top'}}
-            >
-                <MenuItem primaryText="Edit" onTouchTap={this.handleEdit}/>
-                <MenuItem style={{color: "red"}} primaryText="Delete" onTouchTap={this.handleDelete}/>
-            </IconMenu>
+            return <Button bsStyle="link" onClick={this.handleEdit}>EDIT</Button>
         } else {
             return null;
         }

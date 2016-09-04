@@ -96,7 +96,6 @@ export default class EditSongPage extends BasePageTemplate {
         return (
             <h3>
                 <SongTitle
-                    style={styles.link}
                     song={this.state.song}
                 />
             </h3>
@@ -136,8 +135,12 @@ export default class EditSongPage extends BasePageTemplate {
                     />
                     <FormControl.Feedback />
                 </FormGroup>
-                <FormGroup style={{align: "right"}}>
-                    <Button align="right" type="submit" bsStyle="success" style={{width: 120}}>
+                <FormGroup>
+                    <Button
+                        disabled={this.state.song.title.length === 0 || this.state.song.lyrics.length === 0}
+                        type="submit"
+                        bsStyle="success"
+                        style={{width: 120}}>
                         Save
                     </Button>
                     <Button style={{marginLeft: 16, width: 120}} onClick={this.handleCancel}>
