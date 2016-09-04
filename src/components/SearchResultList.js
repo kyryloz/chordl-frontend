@@ -11,14 +11,6 @@ const styles = {
         paddingTop: 16,
         paddingBottom: 16,
         paddingRight: 16
-    },
-    snippet: {
-        marginLeft: 16,
-        marginTop: 16,
-        paddingLeft: 16,
-        paddingRight: 16,
-        border: "thin dotted black",
-        background: colors.lightPrimaryColor
     }
 };
 
@@ -26,13 +18,9 @@ export default class SearchResultList extends React.Component {
 
     renderSnippet(snippet) {
         return (
-            <div style={styles.snippet}>
-                        <pre>
-                        <Highlight
-                            text={snippet}
-                        />
-                    </pre>
-            </div>
+            <pre style={{marginTop: 16, marginLeft: 16}}>
+                <Highlight text={snippet}/>
+            </pre>
         )
     }
 

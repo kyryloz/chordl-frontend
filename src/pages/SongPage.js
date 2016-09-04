@@ -87,16 +87,20 @@ export default class SongPage extends BasePageTemplate {
     }
 
     renderMenu() {
-        return <IconMenu
-            iconButtonElement={<IconButton>
-                <MoreVertIcon color={colors.defaultPrimaryColor}/>
-            </IconButton>}
-            anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-            targetOrigin={{horizontal: 'left', vertical: 'top'}}
-        >
-            <MenuItem primaryText="Edit" onTouchTap={this.handleEdit}/>
-            <MenuItem style={{color: "red"}} primaryText="Delete" onTouchTap={this.handleDelete}/>
-        </IconMenu>
+        if (this.props.user) {
+            return <IconMenu
+                iconButtonElement={<IconButton>
+                    <MoreVertIcon color={colors.defaultPrimaryColor}/>
+                </IconButton>}
+                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            >
+                <MenuItem primaryText="Edit" onTouchTap={this.handleEdit}/>
+                <MenuItem style={{color: "red"}} primaryText="Delete" onTouchTap={this.handleDelete}/>
+            </IconMenu>
+        } else {
+            return null;
+        }
     }
 
     renderContent() {
