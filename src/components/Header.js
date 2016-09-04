@@ -40,6 +40,23 @@ export default class Header extends React.Component {
         });
     };
 
+    handleAddPress = (e) => {
+        e.preventDefault();
+        this.context.router.push("/add")
+    };
+
+    renderAddButton = () => {
+        if (!this.props.history.isActive("add")) {
+            if (this.props.user) {
+                return <NavItem onClick={this.handleAddPress}>Add new song</NavItem>;
+            } else {
+                return <div></div>;
+            }
+        } else {
+            return <div></div>
+        }
+    };
+
     renderLoginBlock() {
         if (this.props.user) {
             return (
@@ -78,6 +95,9 @@ export default class Header extends React.Component {
                             </FormGroup>
                         </Navbar.Form>
                     </form>
+                    <Nav pullRight>
+                        {this.renderAddButton()}
+                    </Nav>
                 </Navbar.Collapse>
             </Navbar>
         )
