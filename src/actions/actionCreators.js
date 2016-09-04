@@ -2,6 +2,7 @@ import Action from "../global/actions";
 import * as api from "../api";
 import AuthStore from "../store/authStore";
 import ajaxInitializer from "../config/AjaxInitializer";
+import "whatwg-fetch";
 
 const authStore = new AuthStore;
 
@@ -63,7 +64,10 @@ export function authGetUserAsync() {
             .then(res => res.json())
             .then(result => {
                 dispatch(authLoginUser({
-                    username: result.name
+                    username: result.name,
+                    authorities: result.authorities,
+                    facebookLink: result.facebookLink,
+                    facebookUserId: result.facebookUserId
                 }))
             })
             .catch(error => {

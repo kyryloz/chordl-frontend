@@ -5,7 +5,7 @@ import MainContainer from "./MainContainer";
 
 function mapStateToProps(state) {
     return {
-        user: state.authReducer.user
+        user: state.auth.user
     }
 }
 

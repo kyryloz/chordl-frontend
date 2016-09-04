@@ -23,7 +23,8 @@
     "redux-auth-wrapper": "^0.7.0",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
-    "remarkable": "^1.6.2"
+    "remarkable": "^1.6.2",
+    "whatwg-fetch": "^1.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
