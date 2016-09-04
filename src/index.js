@@ -31,6 +31,21 @@ const muiTheme = getMuiTheme({
     }
 });
 
+const onlyAuthenticated = UserAuthWrapper({
+    authSelector: state => state.auth.user,
+    wrapperDisplayName: "OnlyAuthenticated",
+    failureRedirectPath: "/",
+    allowRedirectBack: false
+});
+
+const onlyAdmin = UserAuthWrapper({
+    authSelector: state => state.auth.user,
+    wrapperDisplayName: 'OnlyAdmin',
+    failureRedirectPath: "/",
+    allowRedirectBack: false,
+    predicate: user => user ? user.authorities.indexOf("ROLE_ADMIN") >= 0 : false
+});
+
 const Routes = () => (
     <Provider store={store}>
         <MuiThemeProvider muiTheme={muiTheme}>
@@ -49,21 +64,6 @@ const Routes = () => (
         </MuiThemeProvider>
     </Provider>
 );
-
-const onlyAuthenticated = UserAuthWrapper({
-    authSelector: state => state.auth.user,
-    wrapperDisplayName: "OnlyAuthenticated",
-    failureRedirectPath: "/",
-    allowRedirectBack: false
-});
-
-const onlyAdmin = UserAuthWrapper({
-    authSelector: state => state.auth.user,
-    wrapperDisplayName: 'OnlyAdmin',
-    failureRedirectPath: "/",
-    allowRedirectBack: false,
-    predicate: user => user ? user.authorities.indexOf("ROLE_ADMIN") >= 0 : false
-});
 
 function handleUpdate() {
     const {action} = this.state.location;
