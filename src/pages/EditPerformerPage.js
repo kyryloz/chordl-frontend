@@ -4,7 +4,7 @@ import FlatButton from "material-ui/FlatButton";
 import update from "react-addons-update";
 import TextField from "material-ui/TextField";
 import BasePageTemplate from "./BasePageTemplate";
-import api from "../api";
+import api from "../global/api";
 
 export default class EditPerformerPage extends BasePageTemplate {
 

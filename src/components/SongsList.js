@@ -1,5 +1,5 @@
 import * as React from "react";
-import colors from "../colors";
+import colors from "../global/colors";
 import SongTitle from "../components/SongTitle";
 
 const styles = {

@@ -2,7 +2,7 @@ import React from "react";
 import * as $ from "jquery";
 import SongAddStepper from "../components/SongAddStepper";
 import BasePageTemplate from "./BasePageTemplate"
-import api from "../api";
+import api from "../global/api";
 
 export default class AddNewSong extends BasePageTemplate {
 

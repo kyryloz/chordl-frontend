@@ -1,7 +1,7 @@
 import React from "react";
 import * as $ from "jquery";
 import SearchResultList from "../components/SearchResultList";
-import api from "../api";
+import api from "../global/api";
 import ReactPaginate from 'react-paginate';
 import BasePageTemplate from "./BasePageTemplate"
 

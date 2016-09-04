@@ -2,13 +2,13 @@ import React from "react";
 import * as $ from "jquery";
 import SongsList from "../components/SongsList";
 import {Link} from "react-router";
-import colors from "../colors";
+import colors from "../global/colors";
 import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
 import IconButton from "material-ui/IconButton/IconButton";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 import BasePageTemplate from "./BasePageTemplate";
-import api from "../api";
+import api from "../global/api";
 
 const styles = {
     link: {

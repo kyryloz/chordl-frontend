@@ -5,7 +5,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton";
 import LinearProgress from "material-ui/LinearProgress";
 import Snackbar from "material-ui/Snackbar";
-import api from "../api";
+import api from "../global/api";
 
 export default class SelectPerformer extends React.Component {
 

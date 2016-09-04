@@ -2,7 +2,7 @@ import React from "react";
 import * as $ from "jquery";
 import SearchResultList from "../components/SearchResultList";
 import BasePageTemplate from "./BasePageTemplate";
-import api from "../api";
+import api from "../global/api";
 
 export default class HomePage extends BasePageTemplate {
 

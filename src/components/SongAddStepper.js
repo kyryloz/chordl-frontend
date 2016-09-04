@@ -7,7 +7,7 @@ import update from "react-addons-update";
 import * as $ from "jquery";
 import SelectPerformer from "../components/SelectPerformer";
 import Snackbar from 'material-ui/Snackbar';
-import api from "../api";
+import api from "../global/api";
 
 const styles = {
     stepper: {

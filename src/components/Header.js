@@ -5,9 +5,7 @@ import {browserHistory} from "react-router";
 import SvgIcon from "material-ui/SvgIcon";
 import IconButton from "material-ui/IconButton";
 import RaisedButton from "material-ui/RaisedButton";
-import * as $ from "jquery";
-import * as api from "../api";
-import * as colors from "../colors";
+import * as colors from "../global/colors";
 
 const styles = {
     appBar: {
