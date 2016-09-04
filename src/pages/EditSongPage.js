@@ -106,7 +106,7 @@ export default class EditSongPage extends BasePageTemplate {
 
     renderContent() {
         return (
-            <form onSubmit={this.handleSave}>
+            <form onSubmit={this.handleSave} style={{marginTop: 16}}>
                 <FormGroup
                     controlId="formBasicText"
                     validationState={this.validateEmptyInput(this.state.song.title)}

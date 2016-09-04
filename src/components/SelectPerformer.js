@@ -97,7 +97,6 @@ export default class SelectPerformer extends React.Component {
             <div>
                 <Typeahead
                     placeholder="Start typing the name of performer"
-                    style={{fontFamily: "monospace"}}
                     onInputChange={this.handlePerformerInputChange}
                     value={this.state.performerName}
                     options={this.props.performerNames}

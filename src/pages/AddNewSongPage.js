@@ -154,7 +154,6 @@ export default class AddNewSongPage extends BasePageTemplate {
                 >
                     <ControlLabel>Title</ControlLabel>
                     <FormControl
-                        style={{fontFamily: "monospace"}}
                         type="text"
                         placeholder="Title"
                         value={this.state.song.title}
@@ -169,7 +168,7 @@ export default class AddNewSongPage extends BasePageTemplate {
                 >
                     <ControlLabel>Lyrics</ControlLabel>
                     <FormControl
-                        style={{fontFamily: "monospace", resize: "vertical", minHeight: 400}}
+                        style={{fontFamily: "monospace", resize: "vertical", minHeight: 340}}
                         componentClass="textarea"
                         type="text"
                         placeholder="Lyrics"

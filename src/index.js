@@ -1,9 +1,6 @@
 import "./index.css";
 import React from "react";
 import ReactDOM from "react-dom";
-import injectTapEventPlugin from "react-tap-event-plugin";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
 import {Router, Route, IndexRoute} from "react-router";
 import AddNewSongPage from "./pages/AddNewSongPage";
 import PerformerPage from "./pages/PerformerPage";
@@ -20,16 +17,8 @@ import ajaxInitializer from "./config/AjaxInitializer";
 import store, {history} from "./store/store";
 import {UserAuthWrapper} from "redux-auth-wrapper";
 
-injectTapEventPlugin();
 facebookInitializer();
 ajaxInitializer();
-
-
-const muiTheme = getMuiTheme({
-    palette: {
-        // TODO theme
-    }
-});
 
 const onlyAuthenticated = UserAuthWrapper({
     authSelector: state => state.auth.user,
@@ -48,20 +37,18 @@ const onlyAdmin = UserAuthWrapper({
 
 const Routes = () => (
     <Provider store={store}>
-        <MuiThemeProvider muiTheme={muiTheme}>
-            <Router history={history} onUpdate={handleUpdate}>
-                <Route path='/' component={App}>
-                    <IndexRoute component={HomePage}/>
-                    <Route path='/add' component={onlyAuthenticated(AddNewSongPage)}/>
-                    <Route path='/performer/:id' component={PerformerPage}/>
-                    <Route path='/performer/:id/edit' component={onlyAdmin(EditPerformerPage)}/>
-                    <Route path='/song/:id' component={SongPage}/>
-                    <Route path='/song/:id/edit' component={EditSongPage}/>
-                    <Route path='/search' component={SearchPage}/>
-                    <Route path='*' component={NotFoundPage}/>
-                </Route>
-            </Router>
-        </MuiThemeProvider>
+        <Router history={history} onUpdate={handleUpdate}>
+            <Route path='/' component={App}>
+                <IndexRoute component={HomePage}/>
+                <Route path='/add' component={onlyAuthenticated(AddNewSongPage)}/>
+                <Route path='/performer/:id' component={PerformerPage}/>
+                <Route path='/performer/:id/edit' component={onlyAdmin(EditPerformerPage)}/>
+                <Route path='/song/:id' component={SongPage}/>
+                <Route path='/song/:id/edit' component={EditSongPage}/>
+                <Route path='/search' component={SearchPage}/>
+                <Route path='*' component={NotFoundPage}/>
+            </Route>
+        </Router>
     </Provider>
 );
 
