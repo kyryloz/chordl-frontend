@@ -1,26 +1,23 @@
 import React from "react";
 import * as $ from "jquery";
-import FlatButton from "material-ui/FlatButton";
 import update from "react-addons-update";
-import TextField from "material-ui/TextField";
 import BasePageTemplate from "./BasePageTemplate";
 import api from "../global/api";
-
-const styles = {
-    monospaced: {
-        fontFamily: "monospace"
-    }
-};
+import SongTitle from "../components/SongTitle";
+import {Button, FormGroup, ControlLabel, FormControl} from "react-bootstrap/lib";
 
 export default class EditSongPage extends BasePageTemplate {
 
     constructor(props) {
         super(props);
 
-        this.state = {song: {
-            title: "",
-            lyrics: ""
-        }}
+        this.state = {
+            song: {
+                title: "",
+                lyrics: "",
+                performerName: ""
+            }
+        }
     }
 
     componentDidMount() {
@@ -55,7 +52,7 @@ export default class EditSongPage extends BasePageTemplate {
             },
             data: JSON.stringify(this.state.song),
             success: function (data) {
-                this.handleCancel();
+                this.context.router.replace("/song/" + this.state.song.id)
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err);
@@ -63,11 +60,13 @@ export default class EditSongPage extends BasePageTemplate {
         });
     }
 
-    handleSave = () => {
+    handleSave = (e) => {
+        e.preventDefault();
         this.updateSong();
     };
 
-    handleCancel = () => {
+    handleCancel = (e) => {
+        e.preventDefault();
         this.context.router.replace("/song/" + this.state.song.id)
     };
 
@@ -89,45 +88,63 @@ export default class EditSongPage extends BasePageTemplate {
         this.setState(newState);
     };
 
+    getValidationState(text) {
+        if (text.length === 0) return 'error';
+    }
+
     renderHeader() {
         return (
-            <TextField
-                floatingLabelText="Title"
-                floatingLabelFixed={true}
-                fullWidth={true}
-                value={this.state.song.title}
-                onChange={this.handleTitleChange}
-            />
+            <h3>
+                <SongTitle
+                    style={styles.link}
+                    song={this.state.song}
+                />
+            </h3>
         )
     }
 
     renderContent() {
         return (
-            <div>
-                <TextField
-                    floatingLabelText="Lyrics"
-                    floatingLabelFixed={true}
-                    fullWidth={true}
-                    multiLine={true}
-                    rows={10}
-                    value={this.state.song.lyrics}
-                    onChange={this.handleLyricsChange}
-                    style={styles.monospaced}
-                />
-                <div style={{float: 'right', marginTop: 10}}>
-                    <FlatButton
-                        label="Save"
-                        primary={true}
-                        disabled={!this.state.song.title && !this.state.song.lyrics}
-                        onTouchTap={this.handleSave}
+            <form onSubmit={this.handleSave}>
+                <FormGroup
+                    controlId="formBasicText"
+                    validationState={this.getValidationState(this.state.song.title)}
+                >
+                    <ControlLabel>Title</ControlLabel>
+                    <FormControl
+                        style={{fontFamily: "monospace"}}
+                        type="text"
+                        placeholder="Title"
+                        value={this.state.song.title}
+                        onChange={this.handleTitleChange}
                     />
-                    <FlatButton
-                        label="Cancel"
-                        labelStyle={{color: 'red'}}
-                        onTouchTap={this.handleCancel}
+                    <FormControl.Feedback />
+                </FormGroup>
+
+                <FormGroup
+                    controlId="formBasicText"
+                    validationState={this.getValidationState(this.state.song.lyrics)}
+                >
+                    <ControlLabel>Lyrics</ControlLabel>
+                    <FormControl
+                        style={{fontFamily: "monospace", resize: "vertical", minHeight: 400}}
+                        componentClass="textarea"
+                        type="text"
+                        placeholder="Lyrics"
+                        value={this.state.song.lyrics}
+                        onChange={this.handleLyricsChange}
                     />
-                </div>
-            </div>
+                    <FormControl.Feedback />
+                </FormGroup>
+                <FormGroup style={{align: "right"}}>
+                    <Button align="right" type="submit" bsStyle="success" style={{width: 120}}>
+                        Save
+                    </Button>
+                    <Button style={{marginLeft: 16, width: 120}} onClick={this.handleCancel}>
+                        Cancel
+                    </Button>
+                </FormGroup>
+            </form>
         )
     }
 }
