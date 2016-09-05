@@ -102,17 +102,12 @@ export default class Header extends React.Component {
     }
 
     renderLoginPopover = () => {
-        if (this.props.user) {
-            return <div></div>
-        } else {
-            return (
-                <Popover title="Authenticate">
-                    <p>To add song you should login with your Facebook account.</p>
-                    <p>We do not post anything on your page.</p>
-                </Popover>
-            );
-        }
-
+        return (
+            <Popover title="Authenticate">
+                <p>To add song you should login with your Facebook account.</p>
+                <p>We do not post anything on your page.</p>
+            </Popover>
+        );
     };
 
     render() {
