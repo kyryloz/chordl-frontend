@@ -8,22 +8,6 @@ import {Pagination} from "react-bootstrap/lib";
 const DEFAULT_PAGE_LIMIT = 10;
 
 const styles = {
-    page: {
-        marginLeft: '70px',
-        marginRight: '70px',
-        display: 'flex',
-        flexDirection: 'column'
-    },
-
-    pageTitle: {
-        display: 'flex',
-        flexDirection: 'row'
-    },
-
-    title: {
-        flexGrow: 1
-    },
-
     paginationContainer: {
         textAlign: "center"
     }
@@ -39,7 +23,9 @@ export default class SearchPage extends BasePageTemplate {
             page: props.location.query.page || 1,
             size: DEFAULT_PAGE_LIMIT,
             content: [],
-            pageTotal: 0
+            pageTotal: 0,
+            loading: false,
+            error: ""
         };
     }
 
@@ -48,6 +34,10 @@ export default class SearchPage extends BasePageTemplate {
     }
 
     search(term, page, size) {
+        this.setState({
+            loading: true
+        });
+
         $.ajax({
             url: api.search + "?query=" + term + "&page=" + (page - 1) + "&size=" + size,
             type: 'GET',
@@ -55,11 +45,16 @@ export default class SearchPage extends BasePageTemplate {
                 this.setState({
                     content: data.content,
                     page: data.number + 1,
-                    pageTotal: data.totalPages
+                    pageTotal: data.totalPages,
+                    loading: false,
+                    error: ""
                 });
             }.bind(this),
             error: function (xhr, status, err) {
-                console.error(status, err.toString());
+                this.setState({
+                    loading: false,
+                    error: "Error has occurred, please try again later"
+                });
             }
         });
     }
@@ -71,10 +66,10 @@ export default class SearchPage extends BasePageTemplate {
 
         this.setState({
             query: query,
-            result: {
-                content: [],
-                page: page,
-            }
+            content: [],
+            page: page,
+            loading: false,
+            error: ""
         });
         this.search(query, page, size);
     }
@@ -84,14 +79,12 @@ export default class SearchPage extends BasePageTemplate {
         this.context.router.push(`/search/?query=${this.state.query}&page=${page}`);
     };
 
+    renderMessage(message, color) {
+        return <div style={{textAlign: "center", marginTop: 32, color}}><p>{message}</p></div>;
+    }
+
     renderHeader() {
-        return (
-            <div style={styles.pageTitle}>
-                <div style={styles.title}>
-                    <h3>Search results:</h3>
-                </div>
-            </div>
-        )
+        return <h3>Search results:</h3>;
     }
 
     renderContent() {
@@ -109,15 +102,23 @@ export default class SearchPage extends BasePageTemplate {
                             boundaryLinks
                             items={this.state.pageTotal}
                             maxButtons={3}
-                            activePage={parseInt(this.state.page)}
+                            activePage={this.state.page}
                             onSelect={this.handlePageClick} />
                     </div>
                 </div>
                 }
 
-                {this.state.content.length === 0 &&
-                <div style={{textAlign: "center", marginTop: 32}}><p>{`Nothing found for '${this.state.query}'`}</p></div>
-                }
+                {(() => {
+                    if (this.state.content.length === 0 ) {
+                        if (this.state.error) {
+                            return this.renderMessage(this.state.error, "red");
+                        } else if (this.state.loading) {
+                            return this.renderMessage(`Loading...`);
+                        } else {
+                            return this.renderMessage(`Nothing found for '${this.state.query}'`);
+                        }
+                    }
+                })()}
             </div>
         )
     }
