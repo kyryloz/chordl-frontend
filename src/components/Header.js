@@ -89,10 +89,11 @@ export default class Header extends React.Component {
                     <Modal.Title>Authenticate</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p>You should log in first</p>
+                    <p>To add song you should login with your Facebook account.</p>
+                    <p>We do not post anything on your page.</p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.handleDialogClose}>Close</Button>
+                    <Button style={{width: 120}} onClick={this.handleDialogClose}>Cancel</Button>
                 </Modal.Footer>
             </Modal>
         );
