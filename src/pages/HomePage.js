@@ -3,7 +3,20 @@ import * as $ from "jquery";
 import SearchResultList from "../components/SearchResultList";
 import BasePageTemplate from "./BasePageTemplate";
 import api from "../global/api";
-import { Badge } from "react-bootstrap/lib";
+import colors from "../global/colors";
+import {Badge} from "react-bootstrap/lib";
+import {Link} from "react-router";
+
+const styles = {
+    link: {
+        color: colors.defaultPrimaryColor
+    },
+    node: {
+        paddingTop: 16,
+        paddingBottom: 16,
+        paddingRight: 16
+    }
+};
 
 export default class HomePage extends BasePageTemplate {
 
@@ -37,30 +50,23 @@ export default class HomePage extends BasePageTemplate {
         });
     }
 
-    renderListItem(node) {
-        const performer = {
-            title: node.title,
-            performerId: node.performerId,
-            performerName: node.performer,
-            id: node.songId
-        };
+    renderPerformerItem(performer) {
         return (
             <div style={styles.node}>
-                <SongTitle
+                <Link
                     style={styles.link}
-                    song={performer}
-                    linkifySong={true}
-                    linkifyPerformer={true}
-                    hlEnabled={true}
-                />
-                {node.snippet && this.renderSnippet(node.snippet)}
+                    to={"/performer/" + performer.id}>
+                    {performer.name}
+                </Link>
+                &nbsp;
+                <Badge>{performer.songCount}</Badge>
             </div>
         )
     }
 
     renderPerformerList = () => {
         const resultNodes = this.state.performers.map((performer) => {
-            return <li key={performer.id}>{performer.name} <Badge>{performer.songCount}</Badge></li>;
+            return <li key={performer.id}>{this.renderPerformerItem(performer)}</li>;
         });
 
         var result = null;
