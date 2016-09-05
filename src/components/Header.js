@@ -1,6 +1,18 @@
 import React from "react";
 import {Link} from "react-router";
-import {Modal, Button, Navbar, Nav, NavItem, FormGroup, FormControl, NavDropdown, MenuItem} from "react-bootstrap/lib";
+import {
+    OverlayTrigger,
+    Popover,
+    Modal,
+    Button,
+    Navbar,
+    Nav,
+    NavItem,
+    FormGroup,
+    FormControl,
+    NavDropdown,
+    MenuItem
+} from "react-bootstrap/lib";
 
 export default class Header extends React.Component {
 
@@ -61,7 +73,15 @@ export default class Header extends React.Component {
 
     renderAddButton = () => {
         if (!this.props.history.isActive("add")) {
-            return <NavItem onClick={this.handleAddPress}>Add new song</NavItem>;
+            return (
+                !this.props.user
+                    ?
+                    <OverlayTrigger trigger={["hover", "focus"]} placement="bottom" overlay={this.renderLoginPopover()}>
+                        <NavItem onClick={this.handleAddPress}>Add new song</NavItem>
+                    </OverlayTrigger>
+                    :
+                    <NavItem onClick={this.handleAddPress}>Add new song</NavItem>
+            )
         } else {
             return <div></div>;
         }
@@ -81,22 +101,18 @@ export default class Header extends React.Component {
         }
     }
 
-    renderLoginDialog = () => {
-        // TODO make tooltip
-        return (
-            <Modal show={this.state.showLoginDialog} onHide={this.handleDialogClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Authenticate</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+    renderLoginPopover = () => {
+        if (this.props.user) {
+            return <div></div>
+        } else {
+            return (
+                <Popover title="Authenticate">
                     <p>To add song you should login with your Facebook account.</p>
                     <p>We do not post anything on your page.</p>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button style={{width: 120}} onClick={this.handleDialogClose}>Cancel</Button>
-                </Modal.Footer>
-            </Modal>
-        );
+                </Popover>
+            );
+        }
+
     };
 
     render() {
@@ -107,7 +123,6 @@ export default class Header extends React.Component {
                         <Link to="/">Chords database</Link>
                     </Navbar.Brand>
                     <Navbar.Toggle />
-                    {this.renderLoginDialog()}
                 </Navbar.Header>
                 <Navbar.Collapse>
                     <Nav pullRight>
