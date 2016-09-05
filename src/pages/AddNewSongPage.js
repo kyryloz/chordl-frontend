@@ -2,9 +2,10 @@ import React from "react";
 import * as $ from "jquery";
 import BasePageTemplate from "./BasePageTemplate";
 import api from "../global/api";
-import {Button, FormGroup, ControlLabel, FormControl} from "react-bootstrap/lib";
+import {HelpBlock, Button, FormGroup, ControlLabel, FormControl} from "react-bootstrap/lib";
 import update from "react-addons-update";
-import SelectPerformer from "../components/SelectPerformer"
+import SelectPerformer from "../components/SelectPerformer";
+import * as validator from "../util/validator";
 
 export default class AddNewSongPage extends BasePageTemplate {
 
@@ -18,7 +19,8 @@ export default class AddNewSongPage extends BasePageTemplate {
             },
             performerName: "",
             performerId: -1,
-            performerExists: true
+            performerExists: false,
+            error: ""
         };
     }
 
@@ -42,16 +44,20 @@ export default class AddNewSongPage extends BasePageTemplate {
 
     handleSongSubmit = (e) => {
         e.preventDefault();
-        this.getPerformerId(this.state.performer, (err, result) => {
+        this.getPerformerId((err, result) => {
             if (!err) {
                 this.submitSong(result);
+            } else {
+                this.setState({
+                    error: `Performer '${this.state.performerName}' not found`
+                })
             }
         });
     };
 
-    getPerformerId(performerName, callback) {
+    getPerformerId(callback) {
         $.ajax({
-            url: `${api.performers}/search/${this.state.performerName}`,
+            url: `${api.performers}/v2/search/?name=${this.state.performerName}`,
             type: 'GET',
             success: function (data) {
                 callback(null, data.id);
@@ -78,8 +84,9 @@ export default class AddNewSongPage extends BasePageTemplate {
                 this.context.router.replace(`/song/${data.id}`);
             }.bind(this),
             error: function (xhr, status, err) {
-                console.error(status, err.toString());
-                // TODO handle error
+                this.setState({
+                    error: "Can't process request, please try again later"
+                })
             }.bind(this)
         });
     };
@@ -87,7 +94,8 @@ export default class AddNewSongPage extends BasePageTemplate {
     handlePerformerNameChange = (name, exists) => {
         this.setState({
             performerName: name,
-            performerExists: exists
+            performerExists: exists,
+            error: ""
         });
     };
 
@@ -95,7 +103,8 @@ export default class AddNewSongPage extends BasePageTemplate {
         var newState = update(this.state, {
             song: {
                 title: {$set: e.target.value}
-            }
+            },
+            error: {$set: ""}
         });
         this.setState(newState);
     };
@@ -104,7 +113,8 @@ export default class AddNewSongPage extends BasePageTemplate {
         var newState = update(this.state, {
             song: {
                 lyrics: {$set: e.target.value}
-            }
+            },
+            error: {$set: ""}
         });
         this.setState(newState);
     };
@@ -114,19 +124,11 @@ export default class AddNewSongPage extends BasePageTemplate {
         this.context.router.goBack();
     };
 
-    validateEmptyInput(text) {
-        const length = text.length;
-        if (length > 1) return 'success';
-        else if (length > 0) return 'error';
-    }
-
-    validatePerformer() {
-        const length = this.state.performerName.length;
-        if (length > 1) {
-            return this.state.performerExists ? 'success' : "warning";
-        }
-        else if (length > 0) return 'error';
-    }
+    validateAll = () => {
+        return validator.validatePerformer(this.state.performerName, this.state.performerExists, true)
+            && validator.validateLyrics(this.state.song.lyrics, true)
+            && validator.validateTitle(this.state.song.title, true);
+    };
 
     renderHeader() {
         return (
@@ -139,7 +141,7 @@ export default class AddNewSongPage extends BasePageTemplate {
             <form onSubmit={this.handleSongSubmit} style={{marginTop: 16}}>
                 <FormGroup
                     controlId="formBasicText"
-                    validationState={this.validatePerformer()}
+                    validationState={validator.validatePerformer(this.state.performerName, this.state.performerExists)}
                 >
                     <ControlLabel>Performer</ControlLabel>
                     <SelectPerformer
@@ -150,7 +152,7 @@ export default class AddNewSongPage extends BasePageTemplate {
 
                 <FormGroup
                     controlId="formBasicText"
-                    validationState={this.validateEmptyInput(this.state.song.title)}
+                    validationState={validator.validateTitle(this.state.song.title)}
                 >
                     <ControlLabel>Title</ControlLabel>
                     <FormControl
@@ -164,7 +166,7 @@ export default class AddNewSongPage extends BasePageTemplate {
 
                 <FormGroup
                     controlId="formBasicText"
-                    validationState={this.validateEmptyInput(this.state.song.lyrics)}
+                    validationState={validator.validateLyrics(this.state.song.lyrics)}
                 >
                     <ControlLabel>Lyrics</ControlLabel>
                     <FormControl
@@ -177,12 +179,10 @@ export default class AddNewSongPage extends BasePageTemplate {
                     />
                     <FormControl.Feedback />
                 </FormGroup>
+                <HelpBlock style={{color: "red"}}>{this.state.error}</HelpBlock>
                 <FormGroup>
                     <Button
-                        disabled={
-                            this.state.song.title.length < 2
-                            || this.state.song.lyrics.length < 2
-                            || !this.state.performerExists}
+                        disabled={!this.validateAll()}
                         type="submit"
                         bsStyle="success"
                         style={{width: 120}}>

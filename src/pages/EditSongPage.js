@@ -4,7 +4,8 @@ import update from "react-addons-update";
 import BasePageTemplate from "./BasePageTemplate";
 import api from "../global/api";
 import SongTitle from "../components/SongTitle";
-import {Button, FormGroup, ControlLabel, FormControl} from "react-bootstrap/lib";
+import {HelpBlock, Button, FormGroup, ControlLabel, FormControl} from "react-bootstrap/lib";
+import * as validator from "../util/validator";
 
 export default class EditSongPage extends BasePageTemplate {
 
@@ -16,7 +17,8 @@ export default class EditSongPage extends BasePageTemplate {
                 title: "",
                 lyrics: "",
                 performerName: ""
-            }
+            },
+            error: ""
         }
     }
 
@@ -37,8 +39,10 @@ export default class EditSongPage extends BasePageTemplate {
                 this.setState({song: data});
             }.bind(this),
             error: function (xhr, status, err) {
-                console.error(status, err.toString());
-            }
+                this.setState({
+                    error: "Can't load song, please try again later"
+                })
+            }.bind(this)
         });
     }
 
@@ -52,11 +56,13 @@ export default class EditSongPage extends BasePageTemplate {
             },
             data: JSON.stringify(this.state.song),
             success: function (data) {
-                this.context.router.replace("/song/" + this.state.song.id)
+                this.context.router.replace("/song/" + data.id)
             }.bind(this),
             error: function (xhr, status, err) {
-                console.error(status, err);
-            }
+                this.setState({
+                    error: "Can't process request, please try again later"
+                })
+            }.bind(this)
         });
     }
 
@@ -67,14 +73,15 @@ export default class EditSongPage extends BasePageTemplate {
 
     handleCancel = (e) => {
         e.preventDefault();
-        this.context.router.replace("/song/" + this.state.song.id)
+        this.context.router.replace("/song/" + this.props.params.id)
     };
 
     handleTitleChange = (e) => {
         var newState = update(this.state, {
             song: {
                 title: {$set: e.target.value}
-            }
+            },
+            error: {$set: ""}
         });
         this.setState(newState);
     };
@@ -83,16 +90,16 @@ export default class EditSongPage extends BasePageTemplate {
         var newState = update(this.state, {
             song: {
                 lyrics: {$set: e.target.value}
-            }
+            },
+            error: {$set: ""}
         });
         this.setState(newState);
     };
 
-    validateEmptyInput(text) {
-        const length = text.length;
-        if (length > 1) return 'success';
-        else if (length > 0) return 'error';
-    }
+    validateAll = () => {
+        return validator.validateLyrics(this.state.song.lyrics, true)
+            && validator.validateTitle(this.state.song.title, true);
+    };
 
     renderHeader() {
         return (
@@ -109,7 +116,7 @@ export default class EditSongPage extends BasePageTemplate {
             <form onSubmit={this.handleSave} style={{marginTop: 16}}>
                 <FormGroup
                     controlId="formBasicText"
-                    validationState={this.validateEmptyInput(this.state.song.title)}
+                    validationState={validator.validateTitle(this.state.song.title)}
                 >
                     <ControlLabel>Title</ControlLabel>
                     <FormControl
@@ -124,7 +131,7 @@ export default class EditSongPage extends BasePageTemplate {
 
                 <FormGroup
                     controlId="formBasicText"
-                    validationState={this.validateEmptyInput(this.state.song.lyrics)}
+                    validationState={validator.validateLyrics(this.state.song.lyrics)}
                 >
                     <ControlLabel>Lyrics</ControlLabel>
                     <FormControl
@@ -137,9 +144,10 @@ export default class EditSongPage extends BasePageTemplate {
                     />
                     <FormControl.Feedback />
                 </FormGroup>
+                <HelpBlock style={{color: "red"}}>{this.state.error}</HelpBlock>
                 <FormGroup>
                     <Button
-                        disabled={this.state.song.title.length < 2 || this.state.song.lyrics.length < 2}
+                        disabled={!this.validateAll()}
                         type="submit"
                         bsStyle="success"
                         style={{width: 120}}>
