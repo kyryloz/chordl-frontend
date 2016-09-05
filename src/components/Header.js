@@ -125,6 +125,7 @@ export default class Header extends React.Component {
                         <Navbar.Form pullRight>
                             <FormGroup>
                                 <FormControl
+                                    style={{width: 280}}
                                     onChange={this.handleSearchQueryChange}
                                     value={this.state.searchQuery}
                                     type="text"
