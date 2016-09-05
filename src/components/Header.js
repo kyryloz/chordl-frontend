@@ -1,13 +1,14 @@
 import React from "react";
 import {Link} from "react-router";
-import {Navbar, Nav, NavItem, FormGroup, FormControl, NavDropdown, MenuItem} from "react-bootstrap/lib";
+import {Modal, Button, Navbar, Nav, NavItem, FormGroup, FormControl, NavDropdown, MenuItem} from "react-bootstrap/lib";
 
 export default class Header extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            searchQuery: ""
+            searchQuery: "",
+            showLoginDialog: false
         }
     }
 
@@ -42,18 +43,27 @@ export default class Header extends React.Component {
 
     handleAddPress = (e) => {
         e.preventDefault();
-        this.context.router.push("/add")
+
+        if (this.props.user) {
+            this.context.router.push("/add");
+        } else {
+            this.setState({
+                showLoginDialog: true
+            });
+        }
+    };
+
+    handleDialogClose = () => {
+        this.setState({
+            showLoginDialog: false
+        })
     };
 
     renderAddButton = () => {
         if (!this.props.history.isActive("add")) {
-            if (this.props.user) {
-                return <NavItem onClick={this.handleAddPress}>Add new song</NavItem>;
-            } else {
-                return <div></div>;
-            }
+            return <NavItem onClick={this.handleAddPress}>Add new song</NavItem>;
         } else {
-            return <div></div>
+            return <div></div>;
         }
     };
 
@@ -71,6 +81,23 @@ export default class Header extends React.Component {
         }
     }
 
+    renderLoginDialog = () => {
+        // TODO make tooltip
+        return (
+            <Modal show={this.state.showLoginDialog} onHide={this.handleDialogClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Authenticate</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>You should log in first</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={this.handleDialogClose}>Close</Button>
+                </Modal.Footer>
+            </Modal>
+        );
+    };
+
     render() {
         return (
             <Navbar fixedTop={true} inverse>
@@ -79,6 +106,7 @@ export default class Header extends React.Component {
                         <Link to="/">Chords database</Link>
                     </Navbar.Brand>
                     <Navbar.Toggle />
+                    {this.renderLoginDialog()}
                 </Navbar.Header>
                 <Navbar.Collapse>
                     <Nav pullRight>
