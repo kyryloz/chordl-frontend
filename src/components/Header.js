@@ -65,27 +65,25 @@ export default class Header extends React.Component {
         }
     };
 
-    handleDialogClose = () => {
-        this.setState({
-            showLoginDialog: false
-        })
-    };
-
     renderAddButton = () => {
         if (!this.props.history.isActive("add")) {
             return (
-                !this.props.user
+                this.props.user
                     ?
-                    <OverlayTrigger trigger={["hover", "focus"]} placement="bottom" overlay={this.renderLoginPopover()}>
-                        <NavItem onClick={this.handleAddPress}>Add new song</NavItem>
-                    </OverlayTrigger>
+                    this.renderAddNewSong()
                     :
-                    <NavItem onClick={this.handleAddPress}>Add new song</NavItem>
+                    <OverlayTrigger trigger={["hover", "focus"]} placement="bottom" overlay={this.renderLoginPopover()}>
+                        {this.renderAddNewSong()}
+                    </OverlayTrigger>
             )
         } else {
             return <div></div>;
         }
     };
+
+    renderAddNewSong() {
+        return <NavItem onClick={this.handleAddPress}>Add new song</NavItem>;
+    }
 
     renderLoginBlock() {
         if (this.props.user) {
