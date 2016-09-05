@@ -3,8 +3,6 @@ import {Link} from "react-router";
 import {
     OverlayTrigger,
     Popover,
-    Modal,
-    Button,
     Navbar,
     Nav,
     NavItem,
