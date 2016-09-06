@@ -77,8 +77,7 @@ export default class HomePage extends BasePageTemplate {
     };
 
     renderHeader() {
-        return <div>
-        </div>
+        return null;
     }
 
     renderContent() {

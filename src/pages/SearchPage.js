@@ -96,6 +96,7 @@ export default class SearchPage extends BasePageTemplate {
 
                     <div style={styles.paginationContainer}>
                         <Pagination
+                            inverse
                             first
                             last
                             ellipsis

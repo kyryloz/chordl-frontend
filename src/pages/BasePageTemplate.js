@@ -37,7 +37,7 @@ export default class BasePageTemplate extends React.Component {
                     <div style={styles.title}>
                         {this.renderHeader()}
                     </div>
-                    <div style={{marginTop: 16}}>
+                    <div>
                         {this.renderMenu()}
                     </div>
                 </div>

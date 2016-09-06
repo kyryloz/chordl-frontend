@@ -1,4 +1,5 @@
-import "./index.css";
+import "./style/css/bootstrap.min.css";
+import "./style/index.css";
 import React from "react";
 import ReactDOM from "react-dom";
 import Routes from "./config/Routes";
