@@ -2,16 +2,9 @@ import React from "react";
 import * as $ from "jquery";
 import SongsList from "../components/SongsList";
 import {Link} from "react-router";
-import colors from "../global/colors";
 import BasePageTemplate from "./BasePageTemplate";
 import {Button} from "react-bootstrap/lib";
 import api from "../global/api";
-
-const styles = {
-    link: {
-        color: colors.defaultPrimaryColor
-    }
-};
 
 export default class PerformerPage extends BasePageTemplate {
 
@@ -91,7 +84,7 @@ export default class PerformerPage extends BasePageTemplate {
 
     renderHeader() {
         return <h3>
-            <Link to={'/'} style={styles.link}>#</Link>
+            <Link to="/">#</Link>
             &nbsp;&nbsp;|&nbsp;&nbsp;
             {this.state.performer.name}
         </h3>

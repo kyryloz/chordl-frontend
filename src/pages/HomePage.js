@@ -3,14 +3,10 @@ import * as $ from "jquery";
 import SearchResultList from "../components/SearchResultList";
 import BasePageTemplate from "./BasePageTemplate";
 import api from "../global/api";
-import colors from "../global/colors";
 import {Badge} from "react-bootstrap/lib";
 import {Link} from "react-router";
 
 const styles = {
-    link: {
-        color: colors.defaultPrimaryColor
-    },
     node: {
         paddingTop: 16,
         paddingBottom: 16,
@@ -54,7 +50,6 @@ export default class HomePage extends BasePageTemplate {
         return (
             <div style={styles.node}>
                 <Link
-                    style={styles.link}
                     to={"/performer/" + performer.id}>
                     {performer.name}
                 </Link>

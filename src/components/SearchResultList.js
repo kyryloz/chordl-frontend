@@ -1,12 +1,8 @@
 import * as React from "react";
-import colors from "../global/colors";
 import SongTitle from "../components/SongTitle";
 import Highlight from "../components/Highlight";
 
 const styles = {
-    link: {
-        color: colors.defaultPrimaryColor
-    },
     node: {
         paddingTop: 16,
         paddingBottom: 16,
@@ -24,7 +20,7 @@ export default class SearchResultList extends React.Component {
         )
     }
 
-    renderListItem(searchNode, index) {
+    renderListItem(searchNode) {
         const song = {
             title: searchNode.title,
             performerId: searchNode.performerId,
@@ -34,7 +30,6 @@ export default class SearchResultList extends React.Component {
         return (
             <div style={styles.node}>
                 <SongTitle
-                    style={styles.link}
                     song={song}
                     linkifySong={true}
                     linkifyPerformer={true}

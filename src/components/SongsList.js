@@ -1,11 +1,7 @@
 import * as React from "react";
-import colors from "../global/colors";
 import SongTitle from "../components/SongTitle";
 
 const styles = {
-    link: {
-        color: colors.defaultPrimaryColor
-    },
     node: {
         paddingTop: 16,
         paddingBottom: 16,

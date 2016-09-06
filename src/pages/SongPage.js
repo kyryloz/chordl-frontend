@@ -1,17 +1,10 @@
 import React from "react";
 import * as $ from "jquery";
 import {Link} from "react-router";
-import colors from "../global/colors";
 import BasePageTemplate from "./BasePageTemplate";
 import SongTitle from "../components/SongTitle";
 import api from "../global/api";
 import {Button} from "react-bootstrap/lib";
-
-const styles = {
-    link: {
-        color: colors.defaultPrimaryColor
-    }
-};
 
 export default class SongPage extends BasePageTemplate {
 
@@ -69,14 +62,9 @@ export default class SongPage extends BasePageTemplate {
 
     renderHeader() {
         return <h3 style={{display: 'flex', flexDirection: 'row'}}>
-            <Link
-                style={styles.link}
-                to={'/'}>
-                #
-            </Link>
+            <Link to="/">#</Link>
             &nbsp;&nbsp;|&nbsp;&nbsp;
             <SongTitle
-                style={styles.link}
                 song={this.state.song}
                 linkifyPerformer={true}
             />

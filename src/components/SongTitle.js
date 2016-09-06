@@ -1,6 +1,6 @@
 import * as React from "react";
 import {Link} from "react-router";
-import Highlight from "./Highlight"
+import Highlight from "./Highlight";
 
 export default class SongTitle extends React.Component {
 

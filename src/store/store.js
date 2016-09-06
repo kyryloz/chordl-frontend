@@ -2,7 +2,7 @@ import {createStore, applyMiddleware, compose} from "redux";
 import {syncHistoryWithStore, routerMiddleware} from "react-router-redux";
 import {browserHistory} from "react-router";
 import reducers from "../reducers/reducers";
-import thunk from 'redux-thunk';
+import thunk from "redux-thunk";
 
 const defaultState = {
     auth: {}

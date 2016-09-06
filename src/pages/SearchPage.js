@@ -2,7 +2,7 @@ import React from "react";
 import * as $ from "jquery";
 import SearchResultList from "../components/SearchResultList";
 import api from "../global/api";
-import BasePageTemplate from "./BasePageTemplate"
+import BasePageTemplate from "./BasePageTemplate";
 import {Pagination} from "react-bootstrap/lib";
 
 const DEFAULT_PAGE_LIMIT = 10;
