@@ -31,14 +31,15 @@ export default class BasePageTemplate extends React.Component {
     }
 
     render() {
+        const menuComponent = this.renderMenu();
         return (
             <div>
                 <div style={styles.pageTitle}>
                     <div style={styles.title}>
                         {this.renderHeader()}
                     </div>
-                    <div>
-                        {this.renderMenu()}
+                    <div style={{marginTop: menuComponent ? 16 : 0}}>
+                        {menuComponent}
                     </div>
                 </div>
                 <div style={styles.content}>

@@ -99,7 +99,7 @@ export default class Header extends React.Component {
 
     render() {
         return (
-            <Navbar fixedTop={true} inverse>
+            <Navbar fixedTop={true}>
                 <Navbar.Header>
                     <Navbar.Brand>
                         <Link to="/">Chords database</Link>

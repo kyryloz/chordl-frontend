@@ -73,7 +73,7 @@ export default class SongPage extends BasePageTemplate {
 
     renderMenu() {
         if (this.props.user) {
-            return <Button bsStyle="link" onClick={this.handleEdit}>EDIT</Button>
+            return <Button onClick={this.handleEdit}>EDIT</Button>
         } else {
             return null;
         }

@@ -92,7 +92,7 @@ export default class PerformerPage extends BasePageTemplate {
 
     renderMenu() {
         if (this.isUserAdmin()) {
-            return <Button bsStyle="link" onClick={this.handleEdit}>EDIT</Button>
+            return <Button onClick={this.handleEdit}>EDIT</Button>
         } else {
             return null;
         }
