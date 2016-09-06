@@ -9,7 +9,6 @@ export default class Header extends React.Component {
         super(props);
         this.state = {
             searchQuery: "",
-            showLoginDialog: false
         }
     }
 
@@ -44,30 +43,26 @@ export default class Header extends React.Component {
 
     handleAddPress = (e) => {
         e.preventDefault();
-
         if (this.props.user) {
             this.context.router.push("/add");
-        } else {
-            this.setState({
-                showLoginDialog: true
-            });
         }
     };
 
+    handleAboutPress = (e) => {
+        e.preventDefault();
+        this.context.router.push("/about");
+    };
+
     renderAddButton = () => {
-        if (!this.context.router.isActive("add")) {
-            return (
-                this.props.user
-                    ?
-                    this.renderAddNewSong()
-                    :
-                    <OverlayTrigger trigger={["hover", "focus"]} placement="bottom" overlay={this.renderLoginPopover()}>
-                        {this.renderAddNewSong()}
-                    </OverlayTrigger>
-            )
-        } else {
-            return null;
-        }
+        return (
+            this.props.user
+                ?
+                this.renderAddNewSong()
+                :
+                <OverlayTrigger trigger={["hover", "focus"]} placement="bottom" overlay={this.renderLoginPopover()}>
+                    {this.renderAddNewSong()}
+                </OverlayTrigger>
+        )
     };
 
     renderAddNewSong() {
@@ -124,6 +119,7 @@ export default class Header extends React.Component {
                     </form>
                     <Nav pullRight>
                         {this.renderAddButton()}
+                        <NavItem onClick={this.handleAboutPress}>About this project</NavItem>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

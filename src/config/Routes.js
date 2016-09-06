@@ -7,6 +7,7 @@ import HomePage from "../pages/HomePage";
 import EditPerformerPage from "../pages/EditPerformerPage";
 import EditSongPage from "../pages/EditSongPage";
 import SearchPage from "../pages/SearchPage";
+import AboutPage from "../pages/AboutPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import {Provider} from "react-redux";
 import App from "./App";
@@ -51,6 +52,7 @@ export default class Routes extends React.Component {
                             <Route path='/song/:id' component={SongPage}/>
                             <Route path='/song/:id/edit' component={EditSongPage}/>
                             <Route path='/search' component={SearchPage}/>
+                            <Route path='/about' component={AboutPage}/>
                             <Route path='*' component={NotFoundPage}/>
                         </Route>
                     </Router>
