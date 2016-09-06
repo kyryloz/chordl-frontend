@@ -53,7 +53,6 @@ export default class SelectPerformer extends React.Component {
             type: 'POST',
             data: JSON.stringify(data),
             success: function (data) {
-                console.log("Submit success", data);
                 this.onPerformerSubmitted(data);
             }.bind(this),
             error: function (xhr, status, err) {

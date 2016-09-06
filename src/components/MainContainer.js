@@ -12,7 +12,6 @@ export default class MainContainer extends React.Component {
     }
 
     handleResize = () => {
-        console.log(window.innerWidth);
         this.setState({windowWidth: window.innerWidth});
     };
 
