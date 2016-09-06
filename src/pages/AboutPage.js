@@ -17,7 +17,7 @@ export default class AboutPage extends BasePageTemplate {
                 <p>
                     This project will develop and many of features will appear in the future.
                     Such features as favorites,
-                    history of edits, comments, pre-moderation, improving the store page,
+                    history of edits, comments, pre-moderation, better look and feel,
                     mobile clients and so on.
                 </p>
 
@@ -53,6 +53,9 @@ export default class AboutPage extends BasePageTemplate {
                                 <a href="https://facebook.github.io/react/">React</a>
                                 &nbsp;+&nbsp;
                                 <a href="http://redux.js.org/">Redux</a>
+                            </li>
+                            <li>
+                                Bootstrap
                             </li>
                             <li>
                                 Node.js server
