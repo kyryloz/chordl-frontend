@@ -107,3 +107,12 @@ a {
         background-color: #426685;
     }
 }
+
+.example .pagination>li>a,
+.example .pagination>li>span {
+    border: 0;
+}
+.pagination>li.active>a {
+    background: #426685;
+    color: #fff;
+}
