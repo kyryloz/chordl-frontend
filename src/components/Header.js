@@ -1,16 +1,7 @@
+/* global FB */
 import React from "react";
 import {Link} from "react-router";
-import {
-    OverlayTrigger,
-    Popover,
-    Navbar,
-    Nav,
-    NavItem,
-    FormGroup,
-    FormControl,
-    NavDropdown,
-    MenuItem
-} from "react-bootstrap/lib";
+import {OverlayTrigger, Popover, Navbar, Nav, NavItem, FormGroup, FormControl, NavDropdown} from "react-bootstrap/lib";
 
 export default class Header extends React.Component {
 
@@ -64,7 +55,7 @@ export default class Header extends React.Component {
     };
 
     renderAddButton = () => {
-        if (!this.props.history.isActive("add")) {
+        if (!this.context.router.isActive("add")) {
             return (
                 this.props.user
                     ?
@@ -75,7 +66,7 @@ export default class Header extends React.Component {
                     </OverlayTrigger>
             )
         } else {
-            return <div></div>;
+            return null;
         }
     };
 
@@ -87,7 +78,7 @@ export default class Header extends React.Component {
         if (this.props.user) {
             return (
                 <NavDropdown title={`Hello, ${this.props.user.username}`} id="basic-nav-dropdown">
-                    <MenuItem onClick={this.handleLogout}>Log out</MenuItem>
+                    <NavItem onClick={this.handleLogout}>Log out</NavItem>
                 </NavDropdown>
             )
         } else {
@@ -99,7 +90,7 @@ export default class Header extends React.Component {
 
     renderLoginPopover = () => {
         return (
-            <Popover title="Authenticate">
+            <Popover title="Authenticate" id="authenticate-popover">
                 <p>To add song you should login with your Facebook account.</p>
                 <p>We do not post anything on your page.</p>
             </Popover>

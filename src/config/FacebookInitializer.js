@@ -1,3 +1,5 @@
+/* global FB */
+
 export default function init() {
     window.fbAsyncInit = function () {
         FB.init({
