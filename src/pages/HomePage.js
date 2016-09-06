@@ -91,7 +91,7 @@ export default class HomePage extends BasePageTemplate {
         });
 
         return (
-            <div style={{display: "flex"}}>
+            <div style={{display: "flex", flexWrap: "wrap"}}>
                 <div style={{flexGrow: 1}}>
                     <h3>Performers:</h3>
                     {this.renderPerformerList()}
