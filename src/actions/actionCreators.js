@@ -1,13 +1,13 @@
 import Action from "../global/actions";
 import * as api from "../global/api";
-import AuthStore from "../store/authStore";
+import LocalStorage from "../util/LocalStorage";
 import ajaxInitializer from "../config/AjaxInitializer";
 import "whatwg-fetch";
 
-const authStore = new AuthStore;
+const storage = new LocalStorage();
 
 export function authLogoutUser() {
-    authStore.removeJwtToken();
+    storage.removeJwtToken();
     ajaxInitializer();
     return {
         type: Action.AUTH_LOGOUT_USER
@@ -36,7 +36,7 @@ export function authUser(authData) {
             .then(checkStatus)
             .then(res => res.json())
             .then(result => {
-                authStore.setJwtToken(result.jwtToken);
+                storage.setJwtToken(result.jwtToken);
                 ajaxInitializer();
                 dispatch(authGetUserAsync())
             })
@@ -48,13 +48,14 @@ export function authUser(authData) {
 }
 
 export function authGetUserAsync() {
-    if (!authStore.getJwtToken()) {
+    var jwtToken = storage.getJwtToken();
+    if (!jwtToken) {
         return authLogoutUser();
     }
 
     const props = {
         headers: {
-            'Authorization': `Bearer ${authStore.getJwtToken()}`
+            'Authorization': `Bearer ${jwtToken}`
         },
         dataType: "json"
     };

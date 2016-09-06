@@ -1,13 +1,23 @@
 import * as $ from "jquery";
-import AuthStore from "../store/authStore";
-const auth = new AuthStore;
+import LocalStorage from "../util/LocalStorage";
+const storage = new LocalStorage();
 
 export default function init() {
-    $.ajaxSetup({
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${auth.createAuthorizationTokenHeader()}`
-        },
-    });
+    var jwtToken = storage.getJwtToken();
+    if (jwtToken) {
+        $.ajaxSetup({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${jwtToken}`
+            },
+        });
+    } else {
+        $.ajaxSetup({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        });
+    }
 }
