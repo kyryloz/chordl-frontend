@@ -4,6 +4,7 @@ import update from "react-addons-update";
 import BasePageTemplate from "./BasePageTemplate";
 import api from "../global/api";
 import {Button, FormGroup, ControlLabel, FormControl} from "react-bootstrap/lib";
+import * as validator from "../util/validator";
 
 export default class EditPerformerPage extends BasePageTemplate {
 
@@ -68,9 +69,22 @@ export default class EditPerformerPage extends BasePageTemplate {
         this.context.router.replace("/performer/" + this.state.performer.id)
     };
 
-    getValidationState(text) {
-        if (text.length === 0) return 'error';
+    deletePerformer() {
+        $.ajax({
+            url: `${api.performers}/${this.state.performer.id}`,
+            type: 'DELETE',
+            success: function (data) {
+                this.router.replace("/");
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(xhr, status, err);
+            }
+        });
     }
+
+    handleDelete = () => {
+        this.deletePerformer();
+    };
 
     renderHeader() {
         return (
@@ -85,7 +99,7 @@ export default class EditPerformerPage extends BasePageTemplate {
             <form onSubmit={this.handleSave}>
                 <FormGroup
                     controlId="formBasicText"
-                    validationState={this.getValidationState(this.state.performer.name)}
+                    validationState={validator.validatePerformer(this.state.performer.name, true)}
                 >
                     <ControlLabel>Name</ControlLabel>
                     <FormControl
@@ -104,6 +118,9 @@ export default class EditPerformerPage extends BasePageTemplate {
                         bsStyle="success"
                         style={{width: 120}}>
                         Save
+                    </Button>
+                    <Button type="warning" style={{marginLeft: 16, width: 120}} onClick={this.handleDelete}>
+                        Delete
                     </Button>
                     <Button style={{marginLeft: 16, width: 120}} onClick={this.handleCancel}>
                         Cancel

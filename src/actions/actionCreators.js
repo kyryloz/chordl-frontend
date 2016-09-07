@@ -40,10 +40,12 @@ export function authUser(authData) {
                 ajaxInitializer();
                 dispatch(authGetUserAsync())
             })
-            .catch(error => {
-                console.error(error);
-                dispatch(authLogoutUser());
-            })
+            .catch(error => error.response.json()
+                .then((json) => {
+                    console.error("Get user error", json);
+                    dispatch(authLogoutUser());
+                })
+            )
     };
 }
 
@@ -71,10 +73,11 @@ export function authGetUserAsync() {
                     facebookUserId: result.facebookUserId
                 }))
             })
-            .catch(error => {
-                    console.error(error);
+            .catch(error => error.response.json()
+                .then((json) => {
+                    console.error("Get user error", json);
                     dispatch(authLogoutUser());
-                }
+                })
             )
     };
 }

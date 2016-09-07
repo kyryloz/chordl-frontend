@@ -56,23 +56,6 @@ export default class PerformerPage extends BasePageTemplate {
         });
     }
 
-    deletePerformer() {
-        $.ajax({
-            url: `${api.performers}/${this.props.params.id}`,
-            type: 'DELETE',
-            success: function (data) {
-                this.router.replace('/');
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(status, err.toString());
-            }
-        });
-    }
-
-    handleDelete = () => {
-        this.deletePerformer();
-    };
-
     handleEdit = (e) => {
         e.preventDefault();
         this.router.push("/performer/" + this.state.performer.id + "/edit");

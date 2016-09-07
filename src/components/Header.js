@@ -1,7 +1,7 @@
 /* global FB */
 import React from "react";
 import {Link} from "react-router";
-import {OverlayTrigger, Popover, Navbar, Nav, NavItem, FormGroup, FormControl, NavDropdown} from "react-bootstrap/lib";
+import {Button, Alert, OverlayTrigger, Popover, Navbar, Nav, NavItem, FormGroup, FormControl, NavDropdown} from "react-bootstrap/lib";
 
 export default class Header extends React.Component {
 
@@ -9,6 +9,7 @@ export default class Header extends React.Component {
         super(props);
         this.state = {
             searchQuery: "",
+            showLoginWarning: false
         }
     }
 
@@ -16,13 +17,37 @@ export default class Header extends React.Component {
         this.props.authGetUserAsync();
     }
 
-    handleLogin = () => {
+    handleLogin = (rerequest) => {
+        this.setState({
+            showLoginWarning: false
+        });
+
         FB.login((response) => {
-            const authData = {
-                userId: response.authResponse.userID,
-                socialToken: response.authResponse.accessToken
-            };
-            this.props.authUser(authData);
+            if (response.authResponse) {
+                const {userID, accessToken, grantedScopes} = response.authResponse;
+                const scopesArr = grantedScopes.split(',');
+
+                if (scopesArr.indexOf("email") < 0) {
+                    this.setState({
+                        showLoginWarning: true
+                    });
+                    return;
+                }
+
+                const authData = {
+                    userId: userID,
+                    socialToken: accessToken,
+                    scopes: scopesArr
+                };
+                this.props.authUser(authData);
+            }
+        }, rerequest === true ? {
+            scope: "email,public_profile",
+            return_scopes: true,
+            auth_type: "rerequest"
+        } : {
+            scope: "email,public_profile",
+            return_scopes: true
         });
     };
 
@@ -51,6 +76,28 @@ export default class Header extends React.Component {
     handleAboutPress = (e) => {
         e.preventDefault();
         this.context.router.push("/about");
+    };
+
+    handleAlertDismiss = () => {
+        this.setState({
+            showLoginWarning: false
+        });
+    };
+
+    renderLoginWarning = () => {
+        if (this.state.showLoginWarning) {
+            return (
+                <Alert bsStyle="danger" onDismiss={this.handleAlertDismiss}>
+                    <h4>Oh snap!</h4>
+                    <p>Sorry, but we need your email in order to authenticate you.</p>
+                    <p>
+                        <Button onClick={this.handleLogin.bind(null, true)} bsStyle="danger">Add email</Button>
+                        <span> or </span>
+                        <Button onClick={this.handleAlertDismiss}>Go to hell</Button>
+                    </p>
+                </Alert>
+            );
+        }
     };
 
     renderAddButton = () => {
@@ -94,35 +141,38 @@ export default class Header extends React.Component {
 
     render() {
         return (
-            <Navbar fixedTop={true}>
-                <Navbar.Header>
-                    <Navbar.Brand>
-                        <Link to="/">Chords database</Link>
-                    </Navbar.Brand>
-                    <Navbar.Toggle />
-                </Navbar.Header>
-                <Navbar.Collapse>
-                    <Nav pullRight>
-                        {this.renderLoginBlock()}
-                    </Nav>
-                    <form onSubmit={this.handleSearch}>
-                        <Navbar.Form pullRight>
-                            <FormGroup>
-                                <FormControl
-                                    style={{width: 280, marginRight: 16}}
-                                    onChange={this.handleSearchQueryChange}
-                                    value={this.state.searchQuery}
-                                    type="text"
-                                    placeholder="Search"/>
-                            </FormGroup>
-                        </Navbar.Form>
-                    </form>
-                    <Nav pullRight>
-                        {this.renderAddButton()}
-                        <NavItem onClick={this.handleAboutPress}>About this project</NavItem>
-                    </Nav>
-                </Navbar.Collapse>
-            </Navbar>
+            <div>
+                <Navbar fixedTop={true}>
+                    <Navbar.Header>
+                        <Navbar.Brand>
+                            <Link to="/">Chords database</Link>
+                        </Navbar.Brand>
+                        <Navbar.Toggle />
+                    </Navbar.Header>
+                    <Navbar.Collapse>
+                        <Nav pullRight>
+                            {this.renderLoginBlock()}
+                        </Nav>
+                        <form onSubmit={this.handleSearch}>
+                            <Navbar.Form pullRight>
+                                <FormGroup>
+                                    <FormControl
+                                        style={{width: 280, marginRight: 16}}
+                                        onChange={this.handleSearchQueryChange}
+                                        value={this.state.searchQuery}
+                                        type="text"
+                                        placeholder="Search"/>
+                                </FormGroup>
+                            </Navbar.Form>
+                        </form>
+                        <Nav pullRight>
+                            {this.renderAddButton()}
+                            <NavItem onClick={this.handleAboutPress}>About this project</NavItem>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Navbar>
+                {this.renderLoginWarning()}
+            </div>
         )
     }
 }
