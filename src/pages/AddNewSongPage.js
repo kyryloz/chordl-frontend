@@ -20,7 +20,8 @@ export default class AddNewSongPage extends BasePageTemplate {
             performerName: "",
             performerId: -1,
             performerExists: false,
-            error: ""
+            error: "",
+            submitting: false
         };
     }
 
@@ -35,7 +36,9 @@ export default class AddNewSongPage extends BasePageTemplate {
             dataType: 'json',
             type: 'GET',
             success: function (data) {
-                this.setState({performerNames: data});
+                this.setState({
+                    performerNames: data
+                });
                 this.finishLoading();
             }.bind(this),
             error: function (xhr, status, err) {
@@ -46,10 +49,18 @@ export default class AddNewSongPage extends BasePageTemplate {
 
     handleSongSubmit = (e) => {
         e.preventDefault();
+
+        this.setState({
+            submitting: true
+        });
+
         this.getPerformerId((err, result) => {
             if (!err) {
                 this.submitSong(result);
             } else {
+                this.setState({
+                    submitting: false
+                });
                 this.setState({
                     error: `Performer '${this.state.performerName}' not found`
                 })
@@ -83,10 +94,14 @@ export default class AddNewSongPage extends BasePageTemplate {
             type: 'POST',
             data: JSON.stringify(data),
             success: function (data) {
+                this.setState({
+                    submitting: false
+                });
                 this.context.router.replace(`/song/${data.id}`);
             }.bind(this),
             error: function (xhr, status, err) {
                 this.setState({
+                    submitting: false,
                     error: "Can't process request, please try again later"
                 })
             }.bind(this)
@@ -147,6 +162,7 @@ export default class AddNewSongPage extends BasePageTemplate {
                 >
                     <ControlLabel>Performer</ControlLabel>
                     <SelectPerformer
+                        submitting={this.state.submitting}
                         callback={this.handlePerformerNameChange}
                         performerNames={this.state.performerNames}/>
                     <FormControl.Feedback />
@@ -158,6 +174,7 @@ export default class AddNewSongPage extends BasePageTemplate {
                 >
                     <ControlLabel>Title</ControlLabel>
                     <FormControl
+                        disabled={this.state.submitting}
                         type="text"
                         placeholder="Title"
                         value={this.state.song.title}
@@ -172,6 +189,7 @@ export default class AddNewSongPage extends BasePageTemplate {
                 >
                     <ControlLabel>Lyrics</ControlLabel>
                     <FormControl
+                        disabled={this.state.submitting}
                         style={{fontFamily: "monospace", resize: "vertical", minHeight: 340}}
                         componentClass="textarea"
                         type="text"
@@ -184,13 +202,16 @@ export default class AddNewSongPage extends BasePageTemplate {
                 <HelpBlock style={{color: "red"}}>{this.state.error}</HelpBlock>
                 <FormGroup>
                     <Button
-                        disabled={!this.validateAll()}
+                        disabled={!this.validateAll() || this.state.submitting}
                         type="submit"
                         bsStyle="success"
                         style={{width: 120}}>
-                        Save
+                        {this.state.submitting ? "Saving..." : "Save"}
                     </Button>
-                    <Button style={{marginLeft: 16, width: 120}} onClick={this.handleCancel}>
+                    <Button
+                        disabled={this.state.submitting}
+                        style={{marginLeft: 16, width: 120}}
+                        onClick={this.handleCancel}>
                         Cancel
                     </Button>
                 </FormGroup>

@@ -12,7 +12,7 @@ export default class SelectPerformer extends React.Component {
 
         this.state = {
             performerName: "",
-            performerSubmitting: false,
+            performerSubmitting: false
         }
     }
 
@@ -82,7 +82,9 @@ export default class SelectPerformer extends React.Component {
         return (
             <div style={{margin: '12px 0'}}>
                 <Button
-                    disabled={this.isPerformerSubmittingInProgress() || !this.state.performerName}
+                    disabled={this.isPerformerSubmittingInProgress()
+                    || !this.state.performerName
+                    || this.props.submitting}
                     bsStyle="link"
                     onClick={this.handlePerformerSubmit}>
                     {this.isPerformerSubmittingInProgress() ? 'Creating...' : 'CREATE NEW'}
@@ -95,6 +97,7 @@ export default class SelectPerformer extends React.Component {
         return (
             <div>
                 <Typeahead
+                    disabled={this.props.submitting}
                     placeholder="Start typing the name of performer"
                     onInputChange={this.handlePerformerInputChange}
                     value={this.state.performerName}

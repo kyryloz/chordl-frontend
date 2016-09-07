@@ -18,7 +18,8 @@ export default class EditSongPage extends BasePageTemplate {
                 lyrics: "",
                 performerName: ""
             },
-            error: ""
+            error: "",
+            submitting: false
         }
     }
 
@@ -49,6 +50,9 @@ export default class EditSongPage extends BasePageTemplate {
     }
 
     updateSong() {
+        this.setState({
+            submitting: true
+        });
         $.ajax({
             url: `${api.songs}/${this.props.params.id}`,
             type: 'PUT',
@@ -58,6 +62,9 @@ export default class EditSongPage extends BasePageTemplate {
             },
             data: JSON.stringify(this.state.song),
             success: function (data) {
+                this.setState({
+                    submitting: false
+                });
                 this.context.router.replace("/song/" + data.id)
             }.bind(this),
             error: function (xhr, status, err) {
@@ -133,6 +140,7 @@ export default class EditSongPage extends BasePageTemplate {
     }
 
     renderContent() {
+        console.log("submitting: " + this.state.submitting);
         return (
             <form onSubmit={this.handleSave} style={{marginTop: 16}}>
                 <FormGroup
@@ -141,6 +149,7 @@ export default class EditSongPage extends BasePageTemplate {
                 >
                     <ControlLabel>Title</ControlLabel>
                     <FormControl
+                        disabled={this.state.submitting}
                         style={{fontFamily: "monospace"}}
                         type="text"
                         placeholder="Title"
@@ -156,6 +165,7 @@ export default class EditSongPage extends BasePageTemplate {
                 >
                     <ControlLabel>Lyrics</ControlLabel>
                     <FormControl
+                        disabled={this.state.submitting}
                         style={{fontFamily: "monospace", resize: "vertical", minHeight: 400}}
                         componentClass="textarea"
                         type="text"
@@ -168,13 +178,16 @@ export default class EditSongPage extends BasePageTemplate {
                 <HelpBlock style={{color: "red"}}>{this.state.error}</HelpBlock>
                 <FormGroup>
                     <Button
-                        disabled={!this.validateAll()}
+                        disabled={!this.validateAll() || this.state.submitting}
                         type="submit"
                         bsStyle="success"
                         style={{width: 120}}>
-                        Save
+                        {this.state.submitting ? "Submitting..." : "Save"}
                     </Button>
-                    <Button style={{marginLeft: 16, width: 120}} onClick={this.handleCancel}>
+                    <Button
+                        disabled={this.state.submitting}
+                        style={{marginLeft: 16, width: 120}}
+                        onClick={this.handleCancel}>
                         Cancel
                     </Button>
                 </FormGroup>
