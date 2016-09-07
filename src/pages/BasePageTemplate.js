@@ -17,7 +17,9 @@ const styles = {
 };
 
 const Loading = () => {
-    return <div style={{textAlign: "center", marginTop: 70}}>Loading...</div>
+    return (
+        <div></div>
+    )
 };
 
 export default class BasePageTemplate extends React.Component {
@@ -57,7 +59,7 @@ export default class BasePageTemplate extends React.Component {
     render() {
         const menuComponent = this.renderMenu();
         if (this.state.loading) {
-            return <Loading/>
+            return <Loading />
         }
         return (
             <div>
