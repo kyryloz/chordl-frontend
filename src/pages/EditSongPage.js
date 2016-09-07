@@ -66,6 +66,10 @@ export default class EditSongPage extends BasePageTemplate {
         });
     }
 
+    isUserAdmin = () => {
+        return this.props.user ? this.props.user.authorities.indexOf("ROLE_ADMIN") >= 0 : false;
+    };
+
     handleSave = (e) => {
         e.preventDefault();
         this.updateSong();
@@ -94,6 +98,21 @@ export default class EditSongPage extends BasePageTemplate {
             error: {$set: ""}
         });
         this.setState(newState);
+    };
+
+    handleDelete = (e) => {
+        e.preventDefault();
+
+        $.ajax({
+            url: `${api.songs}/${this.state.song.id}`,
+            type: 'DELETE',
+            success: function (data) {
+                this.context.router.replace('performer/' + this.state.song.performerId);
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(xhr, status, err);
+            }
+        });
     };
 
     validateAll = () => {
@@ -157,6 +176,15 @@ export default class EditSongPage extends BasePageTemplate {
                         Cancel
                     </Button>
                 </FormGroup>
+                {this.isUserAdmin() &&
+                    <FormGroup>
+                        <ControlLabel style={{marginTop: 32}}>Danger section</ControlLabel>
+                        <br/>
+                        <Button bsStyle="danger" onClick={this.handleDelete}>
+                            Delete song
+                        </Button>
+                    </FormGroup>
+                }
             </form>
         )
     }

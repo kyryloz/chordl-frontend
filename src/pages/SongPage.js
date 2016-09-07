@@ -40,21 +40,6 @@ export default class SongPage extends BasePageTemplate {
         });
     }
 
-    handleDelete = (e) => {
-        e.preventDefault();
-
-        $.ajax({
-            url: this.urlGetSong,
-            type: 'DELETE',
-            success: function (data) {
-                this.context.router.replace('performer/' + this.state.song.performerId);
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(status, err);
-            }
-        });
-    };
-
     handleEdit = (e) => {
         e.preventDefault();
         this.context.router.push("/song/" + this.state.song.id + "/edit");
