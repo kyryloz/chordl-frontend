@@ -2,16 +2,12 @@ body {
     padding-top: 50px;
     font-size: medium;
     font-family: "Roboto Thin", sans-serif;
-    font-weight: 100;
-    /*background-image: url("./images/guitar.png");*/
-    /*background-repeat: no-repeat;*/
-    /*background-attachment: fixed;*/
-    /*background-position: left;*/
+    font-weight: 300;
 }
 
 h3 {
     font-family: "Roboto Thin", sans-serif;
-    font-weight: 100;
+    font-weight: 300;
 }
 
 a {
