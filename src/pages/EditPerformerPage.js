@@ -74,7 +74,7 @@ export default class EditPerformerPage extends BasePageTemplate {
             url: `${api.performers}/${this.state.performer.id}`,
             type: 'DELETE',
             success: function (data) {
-                this.router.replace("/");
+                this.context.router.replace("/");
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(xhr, status, err);
@@ -119,11 +119,15 @@ export default class EditPerformerPage extends BasePageTemplate {
                         style={{width: 120}}>
                         Save
                     </Button>
-                    <Button type="warning" style={{marginLeft: 16, width: 120}} onClick={this.handleDelete}>
-                        Delete
-                    </Button>
                     <Button style={{marginLeft: 16, width: 120}} onClick={this.handleCancel}>
                         Cancel
+                    </Button>
+                </FormGroup>
+                <FormGroup>
+                    <ControlLabel style={{marginTop: 32}}>Danger section</ControlLabel>
+                    <br/>
+                    <Button bsStyle="danger" onClick={this.handleDelete}>
+                        Delete performer with all songs
                     </Button>
                 </FormGroup>
             </form>

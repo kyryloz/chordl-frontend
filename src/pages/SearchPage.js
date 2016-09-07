@@ -34,6 +34,8 @@ export default class SearchPage extends BasePageTemplate {
     }
 
     search(term, page, size) {
+        if (!term) return;
+
         this.setState({
             loading: true
         });
