@@ -151,7 +151,7 @@ export default class Header extends React.Component {
                 <Navbar fixedTop={true}>
                     <Navbar.Header>
                         <Navbar.Brand>
-                            <Link to="/">Chords Library</Link>
+                            <Link to="/">Chords Library <sup>beta</sup></Link>
                         </Navbar.Brand>
                         <Navbar.Toggle />
                     </Navbar.Header>
