@@ -27,6 +27,7 @@ export default class EditSongPage extends BasePageTemplate {
     }
 
     loadSong() {
+        this.startLoading();
         $.ajax({
             url: `${api.songs}/${this.props.params.id}`,
             dataType: 'json',
@@ -37,6 +38,7 @@ export default class EditSongPage extends BasePageTemplate {
             },
             success: function (data) {
                 this.setState({song: data});
+                this.finishLoading();
             }.bind(this),
             error: function (xhr, status, err) {
                 this.setState({

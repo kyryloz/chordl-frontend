@@ -28,11 +28,13 @@ export default class SongPage extends BasePageTemplate {
     }
 
     loadSong() {
+        this.startLoading();
         $.ajax({
             url: `${api.songs}/${this.props.params.id}`,
             type: 'GET',
             success: function (data) {
                 this.setState({song: data});
+                this.finishLoading();
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err.toString());

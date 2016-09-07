@@ -22,12 +22,14 @@ export default class EditPerformerPage extends BasePageTemplate {
     }
 
     loadPerformer() {
+        this.startLoading();
         $.ajax({
             url: `${api.performers}/${this.props.params.id}`,
             dataType: 'json',
             type: 'GET',
             success: function (data) {
                 this.setState({performer: data});
+                this.finishLoading();
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err.toString());

@@ -23,6 +23,7 @@ export default class PerformerPage extends BasePageTemplate {
     }
 
     loadPerformer() {
+        this.startLoading();
         $.ajax({
             url: `${api.performers}/${this.props.params.id}`,
             dataType: 'json',
@@ -49,6 +50,7 @@ export default class PerformerPage extends BasePageTemplate {
                 this.setState({
                     songs: data
                 });
+                this.finishLoading();
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err.toString());

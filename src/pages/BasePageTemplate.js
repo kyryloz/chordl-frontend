@@ -16,7 +16,31 @@ const styles = {
     }
 };
 
+const Loading = () => {
+    return <div style={{textAlign: "center", marginTop: 70}}>Loading...</div>
+};
+
 export default class BasePageTemplate extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            loading: false
+        };
+    }
+
+    startLoading() {
+        this.setState({
+            loading: true
+        })
+    }
+
+    finishLoading() {
+        this.setState({
+            loading: false
+        })
+    }
 
     renderHeader() {
         return null;
@@ -32,6 +56,9 @@ export default class BasePageTemplate extends React.Component {
 
     render() {
         const menuComponent = this.renderMenu();
+        if (this.state.loading) {
+            return <Loading/>
+        }
         return (
             <div>
                 <div style={styles.pageTitle}>

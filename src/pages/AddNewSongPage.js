@@ -29,12 +29,14 @@ export default class AddNewSongPage extends BasePageTemplate {
     }
 
     loadAllPerformers() {
+        this.startLoading();
         $.ajax({
             url: `${api.performers}/all`,
             dataType: 'json',
             type: 'GET',
             success: function (data) {
                 this.setState({performerNames: data});
+                this.finishLoading();
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err.toString());

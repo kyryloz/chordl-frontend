@@ -30,6 +30,7 @@ export default class HomePage extends BasePageTemplate {
     }
 
     loadFeatured() {
+        this.startLoading();
         $.ajax({
             url: api.featured,
             dataType: 'json',
@@ -37,8 +38,9 @@ export default class HomePage extends BasePageTemplate {
             success: function (data) {
                 this.setState({
                     songs: data.songs,
-                    performers: data.performers
+                    performers: data.performers,
                 });
+                this.finishLoading();
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(status, err.toString());
