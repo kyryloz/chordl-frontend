@@ -21,6 +21,12 @@ export function authLoginUser(user) {
     };
 }
 
+export function authShowLoading() {
+    return {
+        type: Action.AUTH_LOGIN_LOADING
+    };
+}
+
 export function authUser(authData) {
     const props = {
         dataType: "json",
@@ -31,7 +37,11 @@ export function authUser(authData) {
         method: "post",
         body: JSON.stringify(authData)
     };
+
     return function (dispatch) {
+
+        dispatch(authShowLoading());
+
         return fetch(`${api.auth}/signin`, props)
             .then(checkStatus)
             .then(res => res.json())

@@ -117,16 +117,22 @@ export default class Header extends React.Component {
     }
 
     renderLoginBlock() {
-        if (this.props.user) {
+        if (this.props.loginLoading) {
             return (
-                <NavDropdown title={`Hello, ${this.props.user.username}`} id="basic-nav-dropdown">
-                    <NavItem onClick={this.handleLogout}>Log out</NavItem>
-                </NavDropdown>
+                <NavItem>Loading...</NavItem>
             )
         } else {
-            return (
-                <NavItem onClick={this.handleLogin}>Log in with Facebook</NavItem>
-            )
+            if (this.props.user) {
+                return (
+                    <NavDropdown title={`Hello, ${this.props.user.username}`} id="basic-nav-dropdown">
+                        <NavItem onClick={this.handleLogout}>Log out</NavItem>
+                    </NavDropdown>
+                )
+            } else {
+                return (
+                    <NavItem onClick={this.handleLogin}>Log in with Facebook</NavItem>
+                )
+            }
         }
     }
 

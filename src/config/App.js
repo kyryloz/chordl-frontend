@@ -5,7 +5,8 @@ import MainContainer from "../components/MainContainer";
 
 function mapStateToProps(state) {
     return {
-        user: state.auth.user
+        user: state.auth.user,
+        loginLoading: state.auth.loginLoading
     }
 }
 
