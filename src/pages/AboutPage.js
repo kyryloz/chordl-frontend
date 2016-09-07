@@ -11,11 +11,11 @@ export default class AboutPage extends BasePageTemplate {
         return (
             <div style={{marginTop: 16}}>
                 <p>
-                    This project is created by an amateur musician to keep the chords to favorite songs.
-                    You can edit the chords to any song if you see it necessary.
+                    This project is a simple song book with ability to edit any song if you feel it necessary.
+                    Just keep the chords right.
                 </p>
                 <p>
-                    This project will develop and many of features will appear in the future.
+                    It's still in development and many of features will appear in the future.
                     Such features as favorites,
                     history of edits, comments, pre-moderation, better look and feel,
                     mobile clients and so on.
@@ -64,7 +64,7 @@ export default class AboutPage extends BasePageTemplate {
                             Linux VPS on <a href="https://www.digitalocean.com/">Digital Ocean</a>
                         </li>
                         <li>
-                            Nginx as revers proxy
+                            Nginx as reverse proxy
                         </li>
                     </ul>
                 </pre>
