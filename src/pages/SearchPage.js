@@ -21,7 +21,6 @@ export default class SearchPage extends BasePageTemplate {
         this.state = {
             query: props.location.query.query || "",
             page: props.location.query.page || 1,
-            size: DEFAULT_PAGE_LIMIT,
             content: [],
             pageTotal: 0,
             loading: false,
@@ -30,10 +29,10 @@ export default class SearchPage extends BasePageTemplate {
     }
 
     componentDidMount() {
-        this.search(this.state.query, this.state.page, this.state.size);
+        this.search(this.state.query, this.state.page);
     }
 
-    search(term, page, size) {
+    search(term, page) {
         if (!term) return;
 
         this.setState({
@@ -41,7 +40,7 @@ export default class SearchPage extends BasePageTemplate {
         });
 
         $.ajax({
-            url: api.search + "?query=" + term + "&page=" + (page - 1) + "&size=" + size,
+            url: api.search + "?query=" + term + "&page=" + (page - 1) + "&size=" + DEFAULT_PAGE_LIMIT,
             type: 'GET',
             success: function (data) {
                 this.setState({
@@ -57,23 +56,25 @@ export default class SearchPage extends BasePageTemplate {
                     loading: false,
                     error: "Error has occurred, please try again later"
                 });
-            }
+            }.bind(this)
         });
     }
 
     componentWillReceiveProps(nextProps) {
         const query = nextProps.location.query.query;
         const page = nextProps.location.query.page || 1;
-        const size = nextProps.location.query.size || DEFAULT_PAGE_LIMIT;
 
-        this.setState({
-            query: query,
-            content: [],
-            page: page,
-            loading: false,
-            error: ""
-        });
-        this.search(query, page, size);
+        if (query != this.state.query
+            || page != this.state.page) {
+            this.setState({
+                query: query,
+                content: [],
+                page: page,
+                loading: false,
+                error: ""
+            });
+            this.search(query, page);
+        }
     }
 
     handlePageClick = (page) => {
@@ -97,7 +98,6 @@ export default class SearchPage extends BasePageTemplate {
 
                     <div style={styles.paginationContainer}>
                         <Pagination
-                            inverse
                             first
                             last
                             ellipsis
@@ -105,13 +105,13 @@ export default class SearchPage extends BasePageTemplate {
                             items={this.state.pageTotal}
                             maxButtons={3}
                             activePage={this.state.page}
-                            onSelect={this.handlePageClick} />
+                            onSelect={this.handlePageClick}/>
                     </div>
                 </div>
                 }
 
                 {(() => {
-                    if (this.state.content.length === 0 ) {
+                    if (this.state.content.length === 0) {
                         if (this.state.error) {
                             return this.renderMessage(this.state.error, "red");
                         } else if (this.state.loading) {
