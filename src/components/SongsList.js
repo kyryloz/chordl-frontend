@@ -19,7 +19,6 @@ export default class SongsList extends React.Component {
                     song={song}
                     linkifySong={true}
                     hidePerformer={true}
-                    hlEnabled={false}
                 />
             </div>
         )

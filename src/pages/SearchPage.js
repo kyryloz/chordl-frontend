@@ -64,8 +64,8 @@ export default class SearchPage extends BasePageTemplate {
         const query = nextProps.location.query.query;
         const page = nextProps.location.query.page || 1;
 
-        if (query != this.state.query
-            || page != this.state.page) {
+        if (query !== this.state.query
+            || page !== this.state.page) {
             this.setState({
                 query: query,
                 content: [],

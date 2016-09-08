@@ -7,12 +7,13 @@ export default class Highlight extends React.Component {
         super(props);
 
         this.state = {
-            enabled: props.enabled ? props.enabled : true,
+            enabled: props.enabled ? props.enabled : false,
         }
     }
 
     highlightText(text) {
         if (text && this.state.enabled) {
+            console.log("highlight txt: " + text)
             text = DOMPurify.sanitize(text);
             return <div dangerouslySetInnerHTML={{__html: text}}/>
         } else {

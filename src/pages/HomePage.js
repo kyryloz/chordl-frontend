@@ -1,6 +1,6 @@
 import React from "react";
 import * as $ from "jquery";
-import SearchResultList from "../components/SearchResultList";
+import LastUpdatedList from "../components/LastUpdatedList";
 import BasePageTemplate from "./BasePageTemplate";
 import api from "../global/api";
 import {Badge} from "react-bootstrap/lib";
@@ -100,7 +100,7 @@ export default class HomePage extends BasePageTemplate {
                 </div>
                 <div>
                     <h3>Last updated:</h3>
-                    <SearchResultList result={songsAdapter} />
+                    <LastUpdatedList result={songsAdapter} />
                 </div>
             </div>
         )
