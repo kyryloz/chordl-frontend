@@ -140,7 +140,6 @@ export default class EditSongPage extends BasePageTemplate {
     }
 
     renderContent() {
-        console.log("submitting: " + this.state.submitting);
         return (
             <form onSubmit={this.handleSave} style={{marginTop: 16}}>
                 <FormGroup
