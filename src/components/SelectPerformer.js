@@ -3,7 +3,7 @@ import * as $ from "jquery";
 import api from "../global/api";
 import Typeahead from "react-bootstrap-typeahead";
 import {Button} from "react-bootstrap/lib";
-
+import * as validator from "../util/validator";
 
 export default class SelectPerformer extends React.Component {
 
@@ -83,7 +83,7 @@ export default class SelectPerformer extends React.Component {
             <div style={{margin: '12px 0'}}>
                 <Button
                     disabled={this.isPerformerSubmittingInProgress()
-                    || !this.state.performerName
+                    || !validator.validatePerformer(this.state.performerName, true, true)
                     || this.props.submitting}
                     bsStyle="link"
                     onClick={this.handlePerformerSubmit}>
