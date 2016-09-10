@@ -19,12 +19,23 @@ export default class DiffList extends React.Component {
     };
 
     renderListItem(diff) {
+        const lines = diff.diff.split("\n");
         return (
             <div style={styles.node}>
                 <a style={styles.link} onClick={this.handleDiffSlick.bind(null, diff)}>
                     {diff.timestamp}
                 </a>
-                <pre>{diff.diff}</pre>
+                <pre>
+                    {lines.map(line => {
+                        if (line.startsWith("-")) {
+                            return <p style={{color: "red"}}>{line}</p>
+                        } else if (line.startsWith("+")) {
+                            return <p style={{color: "green"}}>{line}</p>
+                        } else {
+                            return <p>{line}</p>
+                        }
+                    })}
+                </pre>
             </div>
         )
     }
