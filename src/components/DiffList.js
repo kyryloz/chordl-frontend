@@ -5,6 +5,10 @@ const styles = {
         paddingTop: 16,
         paddingBottom: 16,
         paddingRight: 16
+    },
+
+    link: {
+        cursor: "pointer"
     }
 };
 
@@ -17,9 +21,10 @@ export default class DiffList extends React.Component {
     renderListItem(diff) {
         return (
             <div style={styles.node}>
-                <a onClick={this.handleDiffSlick.bind(null, diff)}>
-                    {diff.diff}
+                <a style={styles.link} onClick={this.handleDiffSlick.bind(null, diff)}>
+                    {diff.timestamp}
                 </a>
+                <pre>{diff.diff}</pre>
             </div>
         )
     }

@@ -105,6 +105,7 @@ export default class SongPage extends BasePageTemplate {
             <div>
                 <pre style={{marginTop: 16}}>{this.state.song.lyrics}</pre>
                 <br/>
+                <h4>History:</h4>
                 <DiffList callback={this.handleDiffClick} diffs={this.state.diffs}/>
             </div>
         )
