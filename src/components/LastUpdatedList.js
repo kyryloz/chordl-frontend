@@ -1,6 +1,5 @@
 import * as React from "react";
 import SongTitle from "../components/SongTitle";
-import Highlight from "../components/Highlight";
 
 const styles = {
     node: {

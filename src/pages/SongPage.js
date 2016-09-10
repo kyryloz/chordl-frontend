@@ -5,6 +5,7 @@ import BasePageTemplate from "./BasePageTemplate";
 import SongTitle from "../components/SongTitle";
 import api from "../global/api";
 import {Button} from "react-bootstrap/lib";
+import DiffList from "../components/DiffList";
 
 export default class SongPage extends BasePageTemplate {
 
@@ -19,7 +20,8 @@ export default class SongPage extends BasePageTemplate {
                 title: "",
                 lyrics: ""
             },
-            contextMenuOpened: false
+            contextMenuOpened: false,
+            diffs: []
         }
     }
 
@@ -34,10 +36,26 @@ export default class SongPage extends BasePageTemplate {
             type: 'GET',
             success: function (data) {
                 this.setState({song: data});
+                this.loadSongDiffs();
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(xhr, status, err);
+            }
+        });
+    }
+
+    loadSongDiffs() {
+        $.ajax({
+            url: `${api.diff}/${this.state.song.id}`,
+            type: 'GET',
+            success: function (data) {
+                this.setState({
+                    diffs: data
+                });
                 this.finishLoading();
             }.bind(this),
             error: function (xhr, status, err) {
-                console.error(status, err.toString());
+                console.error(xhr, status, err);
             }
         });
     }
@@ -45,6 +63,22 @@ export default class SongPage extends BasePageTemplate {
     handleEdit = (e) => {
         e.preventDefault();
         this.context.router.push("/song/" + this.state.song.id + "/edit");
+    };
+
+    handleDiffClick = (diff) => {
+        $.ajax({
+            url: `${api.diff}/undo?diffId=${diff.id}&songId=${this.state.song.id}`,
+            type: 'GET',
+            success: function (data) {
+                this.setState({
+                    song: data
+                });
+                this.loadSongDiffs();
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(xhr, status, err);
+            }
+        });
     };
 
     renderHeader() {
@@ -67,7 +101,13 @@ export default class SongPage extends BasePageTemplate {
     }
 
     renderContent() {
-        return <pre style={{marginTop: 16}}>{this.state.song.lyrics}</pre>
+        return (
+            <div>
+                <pre style={{marginTop: 16}}>{this.state.song.lyrics}</pre>
+                <br/>
+                <DiffList callback={this.handleDiffClick} diffs={this.state.diffs}/>
+            </div>
+        )
     }
 }
 
