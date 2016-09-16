@@ -1,4 +1,6 @@
 import * as React from "react";
+var diffMatchPatch = require('diff-match-patch-node');
+import Highlight from "../components/Highlight";
 
 const styles = {
     node: {
@@ -19,22 +21,13 @@ export default class DiffList extends React.Component {
     };
 
     renderListItem(diff) {
-        const lines = diff.diff.split("\n");
         return (
             <div style={styles.node}>
                 <a style={styles.link} onClick={this.handleDiffSlick.bind(null, diff)}>
                     {diff.timestamp}
                 </a>
                 <pre>
-                    {lines.map(line => {
-                        if (line.startsWith("-")) {
-                            return <p style={{color: "red"}}>{line}</p>
-                        } else if (line.startsWith("+")) {
-                            return <p style={{color: "green"}}>{line}</p>
-                        } else {
-                            return <p>{line}</p>
-                        }
-                    })}
+                    <Highlight enabled={true} text={diff.diff}/>
                 </pre>
             </div>
         )

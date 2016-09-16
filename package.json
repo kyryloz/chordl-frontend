@@ -6,6 +6,7 @@
     "react-scripts": "0.3.0"
   },
   "dependencies": {
+    "diff-match-patch-node": "^0.9.1",
     "dompurify": "^0.8.3",
     "jquery": "^3.1.0",
     "react": "^15.3.1",
