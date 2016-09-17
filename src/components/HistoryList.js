@@ -1,4 +1,5 @@
 import * as React from "react";
+import moment from "moment";
 
 const styles = {
     node: {
@@ -22,7 +23,7 @@ export default class HistoryList extends React.Component {
         return (
             <div style={styles.node}>
                 <a style={styles.link} onClick={this.handleHistoryClick.bind(null, history)}>
-                    {history.timestamp}
+                    {moment(history.timestamp).format("MMMM, D, YYYY, HH:mm")}
                 </a>
             </div>
         )

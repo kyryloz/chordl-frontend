@@ -4,6 +4,7 @@ import HistoryList from "./HistoryList";
 import Highlight from "./Highlight";
 import api from "../global/api";
 import * as $ from "jquery";
+import moment from "moment";
 
 export default class History extends React.Component {
 
@@ -24,7 +25,8 @@ export default class History extends React.Component {
                 this.setState({
                     historyPretty: data.diff,
                     historyPrettyModalOpened: true,
-                    historyClickedId: history.id
+                    historyClickedId: history.id,
+                    historyDate: moment(history.timestamp).format("MMMM, D, YYYY, HH:mm")
                 });
             }.bind(this),
             error: function (xhr, status, err) {
@@ -33,7 +35,7 @@ export default class History extends React.Component {
         });
     };
 
-    handleApplyHistoryClick = (history) => {
+    handleApplyClick = (history) => {
         $.ajax({
             url: `${api.history}/apply?historyId=${this.state.historyClickedId}&songId=${this.state.id}`,
             type: 'GET',
@@ -64,7 +66,7 @@ export default class History extends React.Component {
                 <HistoryList callback={this.handleHistoryClick} history={this.props.histories}/>
                 <Modal show={this.state.historyPrettyModalOpened} onHide={this.handleHistoryModalClose}>
                     <Modal.Header>
-                        <Modal.Title>History</Modal.Title>
+                        <Modal.Title>{this.state.historyDate}</Modal.Title>
                     </Modal.Header>
 
                     <Modal.Body>
@@ -75,7 +77,7 @@ export default class History extends React.Component {
 
                     <Modal.Footer>
                         <Button onClick={this.handleHistoryModalClose}>Close</Button>
-                        <Button onClick={this.handleApplyHistoryClick} bsStyle="primary">Rollback</Button>
+                        <Button onClick={this.handleApplyClick} bsStyle="primary">Rollback</Button>
                     </Modal.Footer>
                 </Modal>
             </div>
