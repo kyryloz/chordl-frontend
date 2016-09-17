@@ -4,9 +4,8 @@ import {Link} from "react-router";
 import BasePageTemplate from "./BasePageTemplate";
 import SongTitle from "../components/SongTitle";
 import api from "../global/api";
-import {Button, Alert} from "react-bootstrap/lib";
-import HistoryList from "../components/HistoryList";
-import Highlight from "../components/Highlight";
+import {Button} from "react-bootstrap/lib";
+import History from "../components/History";
 
 export default class SongPage extends BasePageTemplate {
 
@@ -20,9 +19,6 @@ export default class SongPage extends BasePageTemplate {
             title: "",
             lyrics: "",
             histories: [],
-            historyPretty: "",
-            historyPrettyModalOpened: false,
-            historyClickedId: -1
         }
     }
 
@@ -45,50 +41,13 @@ export default class SongPage extends BasePageTemplate {
         });
     }
 
+    onHistoryApplied = (song) => {
+        this.setState(song);
+    };
+
     handleEdit = (e) => {
         e.preventDefault();
         this.context.router.push("/song/" + this.state.id + "/edit");
-    };
-
-    handleHistoryClick = (history) => {
-        $.ajax({
-            url: `${api.history}/pretty?historyId=${history.id}`,
-            type: 'GET',
-            success: function (data) {
-                this.setState({
-                    historyPretty: data.diff,
-                    historyPrettyModalOpened: true,
-                    historyClickedId: history.id
-                });
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(xhr, status, err);
-            }
-        });
-    };
-
-    handleApplyHistoryClick = (history) => {
-        $.ajax({
-            url: `${api.history}/apply?historyId=${this.state.historyClickedId}&songId=${this.state.id}`,
-            type: 'GET',
-            success: function (data) {
-                this.setState({
-                    ...data,
-                    historyPretty: "",
-                    historyPrettyModalOpened: false,
-                    historyClickedId: -1
-                });
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(xhr, status, err);
-            }
-        });
-    };
-
-    handleHistoryModalClose = () => {
-        this.setState({
-            historyPrettyModalOpened: false
-        });
     };
 
     renderHeader() {
@@ -115,21 +74,7 @@ export default class SongPage extends BasePageTemplate {
             <div>
                 <pre style={{marginTop: 16}}>{this.state.lyrics}</pre>
                 <br/>
-                <h4>History:</h4>
-                {this.state.historyPrettyModalOpened &&
-                <Alert>
-                        <pre>
-                            <Highlight enabled={true} text={this.state.historyPretty}/>
-                        </pre>
-                    <Button onClick={this.handleApplyHistoryClick}>
-                        Rollback
-                    </Button>
-                    <Button onClick={this.handleHistoryModalClose}>
-                        Close
-                    </Button>
-                </Alert>
-                }
-                <HistoryList callback={this.handleHistoryClick} history={this.state.histories}/>
+                <History histories={this.state.histories} callback={this.onHistoryApplied}/>
             </div>
         )
     }
