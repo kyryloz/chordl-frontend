@@ -9,6 +9,7 @@
     "diff-match-patch-node": "^0.9.1",
     "dompurify": "^0.8.3",
     "jquery": "^3.1.0",
+    "moment": "^2.15.0",
     "react": "^15.3.1",
     "react-addons-update": "^15.3.0",
     "react-bootstrap": "^0.30.2",

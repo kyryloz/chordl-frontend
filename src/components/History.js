@@ -61,28 +61,23 @@ export default class History extends React.Component {
         return (
             <div>
                 <h4>History:</h4>
-                {this.state.historyPrettyModalOpened &&
-                <div className="static-modal">
-                    <Modal.Dialog>
-                        <Modal.Header>
-                            <Modal.Title>History</Modal.Title>
-                        </Modal.Header>
-
-                        <Modal.Body>
-                            <pre>
-                                <Highlight enabled={true} text={this.state.historyPretty}/>
-                            </pre>
-                        </Modal.Body>
-
-                        <Modal.Footer>
-                            <Button onClick={this.handleHistoryModalClose}>Close</Button>
-                            <Button onClick={this.handleApplyHistoryClick} bsStyle="primary">Rollback</Button>
-                        </Modal.Footer>
-
-                    </Modal.Dialog>
-                </div>
-                }
                 <HistoryList callback={this.handleHistoryClick} history={this.props.histories}/>
+                <Modal show={this.state.historyPrettyModalOpened} onHide={this.handleHistoryModalClose}>
+                    <Modal.Header>
+                        <Modal.Title>History</Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <pre>
+                            <Highlight enabled={true} text={this.state.historyPretty}/>
+                        </pre>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button onClick={this.handleHistoryModalClose}>Close</Button>
+                        <Button onClick={this.handleApplyHistoryClick} bsStyle="primary">Rollback</Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         )
     }
