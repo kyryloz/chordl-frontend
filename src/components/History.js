@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Modal} from "react-bootstrap/lib";
+import {Button, Modal, Collapse, Well} from "react-bootstrap/lib";
 import HistoryList from "./HistoryList";
 import Highlight from "./Highlight";
 import api from "../global/api";
@@ -13,6 +13,7 @@ export default class History extends React.Component {
         this.state = {
             historyPretty: "",
             historyPrettyModalOpened: false,
+            historyListOpened: false,
             historyClickedId: -1
         }
     }
@@ -59,11 +60,29 @@ export default class History extends React.Component {
         });
     };
 
+    handleShowHistoryClick = () => {
+        this.setState({
+            historyListOpened: !this.state.historyListOpened
+        })
+    };
+
     render() {
         return (
             <div>
-                <h4>History:</h4>
-                <HistoryList callback={this.handleHistoryClick} history={this.props.histories}/>
+                <small>
+                    <p>This song was edited {this.props.histories.length} times.</p>
+                    <a onClick={this.handleShowHistoryClick}>
+                        {this.state.historyListOpened ? "Hide" : "Show"} history
+                    </a>
+                    <Collapse in={this.state.historyListOpened}>
+                        <div>
+                            <Well>
+                                <HistoryList callback={this.handleHistoryClick} history={this.props.histories}/>
+                            </Well>
+                        </div>
+                    </Collapse>
+                </small>
+
                 <Modal show={this.state.historyPrettyModalOpened} onHide={this.handleHistoryModalClose}>
                     <Modal.Header>
                         <Modal.Title>{this.state.historyDate}</Modal.Title>
