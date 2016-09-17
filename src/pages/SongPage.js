@@ -4,8 +4,9 @@ import {Link} from "react-router";
 import BasePageTemplate from "./BasePageTemplate";
 import SongTitle from "../components/SongTitle";
 import api from "../global/api";
-import {Button} from "react-bootstrap/lib";
-import DiffList from "../components/DiffList";
+import {Button, Alert} from "react-bootstrap/lib";
+import HistoryList from "../components/HistoryList";
+import Highlight from "../components/Highlight";
 
 export default class SongPage extends BasePageTemplate {
 
@@ -13,15 +14,15 @@ export default class SongPage extends BasePageTemplate {
         super(props);
 
         this.state = {
-            song: {
-                id: -1,
-                performerId: -1,
-                performerName: "",
-                title: "",
-                lyrics: ""
-            },
-            contextMenuOpened: false,
-            diffs: []
+            id: -1,
+            performerId: -1,
+            performerName: "",
+            title: "",
+            lyrics: "",
+            histories: [],
+            historyPretty: "",
+            historyPrettyModalOpened: false,
+            historyClickedId: -1
         }
     }
 
@@ -35,23 +36,7 @@ export default class SongPage extends BasePageTemplate {
             url: `${api.songs}/${this.props.params.id}`,
             type: 'GET',
             success: function (data) {
-                this.setState({song: data});
-                this.loadSongDiffs();
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(xhr, status, err);
-            }
-        });
-    }
-
-    loadSongDiffs() {
-        $.ajax({
-            url: `${api.diff}/${this.state.song.id}`,
-            type: 'GET',
-            success: function (data) {
-                this.setState({
-                    diffs: data
-                });
+                this.setState(data);
                 this.finishLoading();
             }.bind(this),
             error: function (xhr, status, err) {
@@ -62,22 +47,47 @@ export default class SongPage extends BasePageTemplate {
 
     handleEdit = (e) => {
         e.preventDefault();
-        this.context.router.push("/song/" + this.state.song.id + "/edit");
+        this.context.router.push("/song/" + this.state.id + "/edit");
     };
 
-    handleDiffClick = (diff) => {
+    handleHistoryClick = (history) => {
         $.ajax({
-            url: `${api.diff}/undo?diffId=${diff.id}&songId=${this.state.song.id}`,
+            url: `${api.history}/pretty?historyId=${history.id}`,
             type: 'GET',
             success: function (data) {
                 this.setState({
-                    song: data
+                    historyPretty: data.diff,
+                    historyPrettyModalOpened: true,
+                    historyClickedId: history.id
                 });
-                this.loadSongDiffs();
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(xhr, status, err);
             }
+        });
+    };
+
+    handleApplyHistoryClick = (history) => {
+        $.ajax({
+            url: `${api.history}/apply?historyId=${this.state.historyClickedId}&songId=${this.state.id}`,
+            type: 'GET',
+            success: function (data) {
+                this.setState({
+                    ...data,
+                    historyPretty: "",
+                    historyPrettyModalOpened: false,
+                    historyClickedId: -1
+                });
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(xhr, status, err);
+            }
+        });
+    };
+
+    handleHistoryModalClose = () => {
+        this.setState({
+            historyPrettyModalOpened: false
         });
     };
 
@@ -86,7 +96,7 @@ export default class SongPage extends BasePageTemplate {
             <Link to="/">#</Link>
             &nbsp;&nbsp;|&nbsp;&nbsp;
             <SongTitle
-                song={this.state.song}
+                song={this.state}
                 linkifyPerformer={true}
             />
         </h3>
@@ -103,10 +113,23 @@ export default class SongPage extends BasePageTemplate {
     renderContent() {
         return (
             <div>
-                <pre style={{marginTop: 16}}>{this.state.song.lyrics}</pre>
+                <pre style={{marginTop: 16}}>{this.state.lyrics}</pre>
                 <br/>
                 <h4>History:</h4>
-                <DiffList callback={this.handleDiffClick} diffs={this.state.diffs}/>
+                {this.state.historyPrettyModalOpened &&
+                <Alert>
+                        <pre>
+                            <Highlight enabled={true} text={this.state.historyPretty}/>
+                        </pre>
+                    <Button onClick={this.handleApplyHistoryClick}>
+                        Rollback
+                    </Button>
+                    <Button onClick={this.handleHistoryModalClose}>
+                        Close
+                    </Button>
+                </Alert>
+                }
+                <HistoryList callback={this.handleHistoryClick} history={this.state.histories}/>
             </div>
         )
     }
