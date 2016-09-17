@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Modal, Collapse, Well} from "react-bootstrap/lib";
+import {Button, Modal, Collapse, Panel} from "react-bootstrap/lib";
 import HistoryList from "./HistoryList";
 import Highlight from "./Highlight";
 import api from "../global/api";
@@ -76,9 +76,9 @@ export default class History extends React.Component {
                     </a>
                     <Collapse in={this.state.historyListOpened}>
                         <div>
-                            <Well>
+                            <Panel>
                                 <HistoryList callback={this.handleHistoryClick} history={this.props.histories}/>
-                            </Well>
+                            </Panel>
                         </div>
                     </Collapse>
                 </small>
