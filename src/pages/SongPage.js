@@ -74,7 +74,12 @@ export default class SongPage extends BasePageTemplate {
             <div>
                 <pre style={{marginTop: 16}}>{this.state.lyrics}</pre>
                 <br/>
-                <History histories={this.state.histories} callback={this.onHistoryApplied}/>
+                {this.state.histories.length > 0
+                    ?
+                    <History histories={this.state.histories} callback={this.onHistoryApplied}/>
+                    :
+                    <div></div>
+                }
             </div>
         )
     }
