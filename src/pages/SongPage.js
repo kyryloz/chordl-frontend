@@ -5,6 +5,7 @@ import BasePageTemplate from "./BasePageTemplate";
 import SongTitle from "../components/SongTitle";
 import api from "../global/api";
 import {Button} from "react-bootstrap/lib";
+import History from "../components/History";
 
 export default class SongPage extends BasePageTemplate {
 
@@ -12,14 +13,12 @@ export default class SongPage extends BasePageTemplate {
         super(props);
 
         this.state = {
-            song: {
-                id: -1,
-                performerId: -1,
-                performerName: "",
-                title: "",
-                lyrics: ""
-            },
-            contextMenuOpened: false
+            id: -1,
+            performerId: -1,
+            performerName: "",
+            title: "",
+            lyrics: "",
+            histories: [],
         }
     }
 
@@ -33,18 +32,22 @@ export default class SongPage extends BasePageTemplate {
             url: `${api.songs}/${this.props.params.id}`,
             type: 'GET',
             success: function (data) {
-                this.setState({song: data});
+                this.setState(data);
                 this.finishLoading();
             }.bind(this),
             error: function (xhr, status, err) {
-                console.error(status, err.toString());
+                console.error(xhr, status, err);
             }
         });
     }
 
+    onHistoryApplied = (song) => {
+        this.setState(song);
+    };
+
     handleEdit = (e) => {
         e.preventDefault();
-        this.context.router.push("/song/" + this.state.song.id + "/edit");
+        this.context.router.push("/song/" + this.state.id + "/edit");
     };
 
     renderHeader() {
@@ -52,7 +55,7 @@ export default class SongPage extends BasePageTemplate {
             <Link to="/">#</Link>
             &nbsp;&nbsp;|&nbsp;&nbsp;
             <SongTitle
-                song={this.state.song}
+                song={this.state}
                 linkifyPerformer={true}
             />
         </h3>
@@ -67,7 +70,18 @@ export default class SongPage extends BasePageTemplate {
     }
 
     renderContent() {
-        return <pre style={{marginTop: 16}}>{this.state.song.lyrics}</pre>
+        return (
+            <div>
+                <pre style={{marginTop: 16}}>{this.state.lyrics}</pre>
+                <br/>
+                {this.state.histories.length > 0
+                    ?
+                    <History histories={this.state.histories} callback={this.onHistoryApplied}/>
+                    :
+                    <div></div>
+                }
+            </div>
+        )
     }
 }
 

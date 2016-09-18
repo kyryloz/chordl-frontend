@@ -54,7 +54,7 @@ export default class EditSongPage extends BasePageTemplate {
             submitting: true
         });
         $.ajax({
-            url: `${api.songs}/${this.props.params.id}`,
+            url: `${api.songs}`,
             type: 'PUT',
             headers: {
                 'Accept': 'application/json',

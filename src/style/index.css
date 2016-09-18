@@ -12,6 +12,7 @@ h3 {
 
 a {
     color: #426685;
+    cursor: pointer;
 }
 
 .navbar-default {
