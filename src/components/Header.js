@@ -18,12 +18,12 @@ export default class Header extends React.Component {
 
         // debug stuff
 
-        this.props.authLoginUser({
-            username: "John Doe",
-            authorities: ["ROLE_ADMIN"],
-            facebookLink: "link",
-            facebookUserId: "123"
-        });
+        // this.props.authLoginUser({
+        //     username: "John Doe",
+        //     authorities: ["ROLE_ADMIN"],
+        //     facebookLink: "link",
+        //     facebookUserId: "123"
+        // });
     }
 
     handleLogin = (rerequest) => {
