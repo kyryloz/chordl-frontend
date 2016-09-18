@@ -76,12 +76,7 @@ export function authGetUserAsync() {
             .then(checkStatus)
             .then(res => res.json())
             .then(result => {
-                dispatch(authLoginUser({
-                    username: result.name,
-                    authorities: result.authorities,
-                    facebookLink: result.facebookLink,
-                    facebookUserId: result.facebookUserId
-                }))
+                dispatch(authLoginUser(createUser(result)))
             })
             .catch(error => error.response.json()
                 .then((json) => {
@@ -100,4 +95,12 @@ function checkStatus(response) {
         error.response = response;
         throw error;
     }
+}
+
+function createUser(userDto) {
+    return {
+        username: userDto.name,
+        authorities: userDto.authorities,
+        isAdmin: userDto.authorities.indexOf("ROLE_ADMIN") >= 0
+    };
 }

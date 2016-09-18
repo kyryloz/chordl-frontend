@@ -76,7 +76,7 @@ export default class SongPage extends BasePageTemplate {
                 <br/>
                 {this.state.histories.length > 0
                     ?
-                    <History histories={this.state.histories} callback={this.onHistoryApplied}/>
+                    <History {...this.props} histories={this.state.histories} callback={this.onHistoryApplied}/>
                     :
                     <div></div>
                 }

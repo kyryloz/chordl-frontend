@@ -64,7 +64,7 @@ export default class PerformerPage extends BasePageTemplate {
     };
 
     isUserAdmin = () => {
-        return this.props.user ? this.props.user.authorities.indexOf("ROLE_ADMIN") >= 0 : false;
+        return this.props.user && this.props.user.isAdmin;
     };
 
     renderHeader() {

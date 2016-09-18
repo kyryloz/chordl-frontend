@@ -18,6 +18,10 @@ export default class History extends React.Component {
         }
     }
 
+    isUserAdmin = () => {
+        return this.props.user && this.props.user.isAdmin;
+    };
+
     handleHistoryClick = (history) => {
         $.ajax({
             url: `${api.history}/pretty?historyId=${history.id}`,
@@ -66,11 +70,10 @@ export default class History extends React.Component {
         })
     };
 
-    render() {
-        return (
-            <div>
-                <small>
-                    <p>This song was edited {this.props.histories.length} times.</p>
+    renderHistoryList = () => {
+        if (this.isUserAdmin()) {
+            return (
+                <div>
                     <a onClick={this.handleShowHistoryClick}>
                         {this.state.historyListOpened ? "Hide" : "Show"} history
                     </a>
@@ -81,6 +84,19 @@ export default class History extends React.Component {
                             </Panel>
                         </div>
                     </Collapse>
+                </div>
+            )
+        } else {
+            return <div></div>
+        }
+    };
+
+    render() {
+        return (
+            <div>
+                <small>
+                    <p>This song was edited {this.props.histories.length} times.</p>
+                    {this.renderHistoryList()}
                 </small>
 
                 <Modal show={this.state.historyPrettyModalOpened} onHide={this.handleHistoryModalClose}>
