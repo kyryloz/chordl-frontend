@@ -19,6 +19,7 @@ export default class SongPage extends BasePageTemplate {
             title: "",
             lyrics: "",
             histories: [],
+            createdByName: ""
         }
     }
 
@@ -32,7 +33,10 @@ export default class SongPage extends BasePageTemplate {
             url: `${api.songs}/${this.props.params.id}`,
             type: 'GET',
             success: function (data) {
-                this.setState(data);
+                this.setState({
+                    ...data,
+                    createdByName: data.createdBy ? data.createdBy.name : "Unknown"
+                });
                 this.finishLoading();
             }.bind(this),
             error: function (xhr, status, err) {
@@ -42,6 +46,7 @@ export default class SongPage extends BasePageTemplate {
     }
 
     onHistoryApplied = (song) => {
+        console.log("song", song);
         this.setState(song);
     };
 
@@ -74,6 +79,7 @@ export default class SongPage extends BasePageTemplate {
             <div>
                 <pre style={{marginTop: 16}}>{this.state.lyrics}</pre>
                 <br/>
+                <small>Created by <i>{this.state.createdByName}</i>.</small>
                 {this.state.histories.length > 0
                     ?
                     <History {...this.props} histories={this.state.histories} callback={this.onHistoryApplied}/>
