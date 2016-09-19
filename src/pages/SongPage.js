@@ -79,7 +79,7 @@ export default class SongPage extends BasePageTemplate {
             <div>
                 <pre style={{marginTop: 16}}>{this.state.lyrics}</pre>
                 <br/>
-                <small>Created by <i>{this.state.createdByName}</i></small>
+                <small>Created by <i>{this.state.createdByName}</i>.</small>
                 {this.state.histories.length > 0
                     ?
                     <History {...this.props} histories={this.state.histories} callback={this.onHistoryApplied}/>

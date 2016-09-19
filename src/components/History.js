@@ -22,6 +22,10 @@ export default class History extends React.Component {
         return this.props.user && this.props.user.isAdmin;
     };
 
+    findLastEditedName = () => {
+        return this.props.histories[0].createdBy.name;
+    };
+
     handleHistoryClick = (history) => {
         $.ajax({
             url: `${api.history}/pretty?historyId=${history.id}`,
@@ -95,7 +99,9 @@ export default class History extends React.Component {
         return (
             <div>
                 <small>
-                    <p>This song was edited {this.props.histories.length} times.</p>
+                    <p>Was edited {this.props.histories.length} times.
+                        Last by <i>{this.findLastEditedName()}</i>.
+                    </p>
                     {this.renderHistoryList()}
                 </small>
 

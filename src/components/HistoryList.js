@@ -13,6 +13,7 @@ export default class HistoryList extends React.Component {
                 <a onClick={this.handleHistoryClick.bind(null, history)}>
                     {moment(history.timestamp).format("MMMM, D, YYYY, HH:mm")}
                 </a>
+                <p>by {history.createdBy ? history.createdBy.name : "Unknown"}</p>
             </div>
         )
     }
