@@ -23,7 +23,9 @@ export default class History extends React.Component {
     };
 
     findLastEditedName = () => {
-        return this.props.histories[0].createdBy.name;
+        return this.props.histories[0].createdBy
+            ? this.props.histories[0].createdBy.name
+            : "Unknown";
     };
 
     handleHistoryClick = (history) => {
