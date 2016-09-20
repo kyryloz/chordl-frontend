@@ -6,6 +6,8 @@ import SongTitle from "../components/SongTitle";
 import api from "../global/api";
 import {Button} from "react-bootstrap/lib";
 import History from "../components/History";
+import ChordParser from "chord-parser";
+import Highlight from "../components/Highlight";
 
 export default class SongPage extends BasePageTemplate {
 
@@ -36,6 +38,14 @@ export default class SongPage extends BasePageTemplate {
                 this.setState({
                     ...data,
                     createdByName: data.createdBy ? data.createdBy.name : "Unknown"
+                }, () => {
+                    const tabs = new ChordParser(this.state.lyrics);
+                    const wrappedTab = tabs.wrap((chord) => {
+                        return '<a href="">' + chord + '</a>';
+                    });
+                    this.setState({
+                        lyrics: wrappedTab
+                    })
                 });
                 this.finishLoading();
             }.bind(this),
@@ -46,7 +56,6 @@ export default class SongPage extends BasePageTemplate {
     }
 
     onHistoryApplied = (song) => {
-        console.log("song", song);
         this.setState(song);
     };
 
@@ -77,7 +86,9 @@ export default class SongPage extends BasePageTemplate {
     renderContent() {
         return (
             <div>
-                <pre style={{marginTop: 16}}>{this.state.lyrics}</pre>
+                <pre style={{marginTop: 16}}>
+                    <Highlight enabled={true} text={this.state.lyrics}/>
+                </pre>
                 <br/>
                 <small>Created by <i>{this.state.createdByName}</i>.</small>
                 {this.state.histories.length > 0
