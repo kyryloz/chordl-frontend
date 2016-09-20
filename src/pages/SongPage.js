@@ -39,13 +39,7 @@ export default class SongPage extends BasePageTemplate {
                     ...data,
                     createdByName: data.createdBy ? data.createdBy.name : "Unknown"
                 }, () => {
-                    const tabs = new ChordParser(this.state.lyrics);
-                    const wrappedTab = tabs.wrap((chord) => {
-                        return '<a href="">' + chord + '</a>';
-                    });
-                    this.setState({
-                        lyrics: wrappedTab
-                    })
+                    this.parseChords();
                 });
                 this.finishLoading();
             }.bind(this),
@@ -53,6 +47,17 @@ export default class SongPage extends BasePageTemplate {
                 console.error(xhr, status, err);
             }
         });
+    }
+
+    parseChords() {
+        const parsed = new ChordParser(this.state.lyrics);
+        const wrapped = parsed.wrap(chord => "<a href=''>" + chord + "</a>");
+        this.setState({
+            lyrics: wrapped
+        });
+        const uniques = parsed.unique();
+        // TODO
+        console.log("unique chords", uniques);
     }
 
     onHistoryApplied = (song) => {
