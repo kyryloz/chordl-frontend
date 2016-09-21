@@ -51,7 +51,7 @@ export default class SongPage extends BasePageTemplate {
 
     parseChords() {
         const parsed = new ChordParser(this.state.lyrics);
-        const wrapped = parsed.wrap(chord => "<a href=''>" + chord + "</a>");
+        const wrapped = parsed.wrap(chord => "<span style=color:#2e6da4>" + chord + "</span>");
         this.setState({
             lyrics: wrapped
         });

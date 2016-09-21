@@ -31,6 +31,7 @@ export function validatePerformer(name, exists, returnBool) {
 }
 
 function containsIllegalChars(text) {
-    var illegal = /[\\\/<>\^`{}]/i;
-    return illegal.test(text);
+    return false;
+    // var illegal = /[\\<>\^`{}]/i;
+    // return illegal.test(text);
 }
