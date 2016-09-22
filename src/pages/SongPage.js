@@ -6,7 +6,7 @@ import SongTitle from "../components/SongTitle";
 import api from "../global/api";
 import {Button} from "react-bootstrap/lib";
 import History from "../components/History";
-import ChordParser from "chord-parser";
+import ChordParser from "chord-parser-render";
 import Highlight from "../components/Highlight";
 
 export default class SongPage extends BasePageTemplate {
