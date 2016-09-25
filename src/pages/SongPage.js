@@ -6,8 +6,7 @@ import SongTitle from "../components/SongTitle";
 import api from "../global/api";
 import {Button} from "react-bootstrap/lib";
 import History from "../components/History";
-import ChordParser from "chord-parser-render";
-import Highlight from "../components/Highlight";
+import {Chordify, Chord, Parser} from "react-chord-parser";
 
 export default class SongPage extends BasePageTemplate {
 
@@ -38,8 +37,6 @@ export default class SongPage extends BasePageTemplate {
                 this.setState({
                     ...data,
                     createdByName: data.createdBy ? data.createdBy.name : "Unknown"
-                }, () => {
-                    this.parseChords();
                 });
                 this.finishLoading();
             }.bind(this),
@@ -47,17 +44,6 @@ export default class SongPage extends BasePageTemplate {
                 console.error(xhr, status, err);
             }
         });
-    }
-
-    parseChords() {
-        const parsed = new ChordParser(this.state.lyrics);
-        const wrapped = parsed.wrap(chord => "<span style=color:#2e6da4>" + chord + "</span>");
-        this.setState({
-            lyrics: wrapped
-        });
-        const uniques = parsed.unique();
-        // TODO
-        console.log("unique chords", uniques);
     }
 
     onHistoryApplied = (song) => {
@@ -68,6 +54,27 @@ export default class SongPage extends BasePageTemplate {
         e.preventDefault();
         this.context.router.push("/song/" + this.state.id + "/edit");
     };
+
+    diagramSupplier = (chord) => {
+        switch (chord) {
+            case "C":
+                return "x32010";
+            case "D":
+                return "xx0232";
+            case "Em":
+                return "022000";
+            case "G":
+                return "320033";
+            default:
+                return "xxxxxx";
+        }
+    };
+
+    renderUniqueChords() {
+        return new Parser(this.state.lyrics)
+            .unique()
+            .map(chord => <Chord key={chord} name={chord} diagram={this.diagramSupplier(chord)}/>);
+    }
 
     renderHeader() {
         return <h3 style={{display: 'flex', flexDirection: 'row'}}>
@@ -90,10 +97,18 @@ export default class SongPage extends BasePageTemplate {
 
     renderContent() {
         return (
-            <div>
-                <pre style={{marginTop: 16}}>
-                    <Highlight enabled={true} text={this.state.lyrics}/>
-                </pre>
+            <div style={{marginTop: 16}}>
+                <div style={{display: "flex", flexDirection: "row"}}>
+                    <div style={{flexGrow: 1}}>
+                        <pre>
+                            <Chordify color="#aa4444" input={this.state.lyrics}/>
+                        </pre>
+                    </div>
+                    <div style={{width: 100, marginLeft: 70}}>
+                        {this.renderUniqueChords()}
+                    </div>
+                </div>
+
                 <br/>
                 <small>Created by <i>{this.state.createdByName}</i>.</small>
                 {this.state.histories.length > 0
