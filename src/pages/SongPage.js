@@ -20,8 +20,9 @@ export default class SongPage extends BasePageTemplate {
             title: "",
             lyrics: "",
             histories: [],
-            createdByName: ""
-        }
+            createdByName: "",
+            chords: []
+        };
     }
 
     componentDidMount() {
@@ -37,6 +38,33 @@ export default class SongPage extends BasePageTemplate {
                 this.setState({
                     ...data,
                     createdByName: data.createdBy ? data.createdBy.name : "Unknown"
+                }, () => this.hydrateChords());
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(xhr, status, err);
+            }
+        });
+    }
+
+    hydrateChords = () => {
+        const chords = new Parser(this.state.lyrics)
+            .unique()
+            .map(chordName => ({name: chordName}));
+
+        const input = {
+            input: chords
+        };
+
+        $.ajax({
+            url: `${api.chord}/hydrate`,
+            type: 'POST',
+            data: JSON.stringify(input),
+            success: function (data) {
+                const result = {};
+                data.forEach(chordDto => result[chordDto.name] = chordDto.diagram || "xxxxxx");
+
+                this.setState({
+                    chords: result
                 });
                 this.finishLoading();
             }.bind(this),
@@ -44,7 +72,7 @@ export default class SongPage extends BasePageTemplate {
                 console.error(xhr, status, err);
             }
         });
-    }
+    };
 
     onHistoryApplied = (song) => {
         this.setState(song);
@@ -55,25 +83,10 @@ export default class SongPage extends BasePageTemplate {
         this.context.router.push("/song/" + this.state.id + "/edit");
     };
 
-    diagramSupplier = (chord) => {
-        switch (chord) {
-            case "C":
-                return "x32010";
-            case "D":
-                return "xx0232";
-            case "Em":
-                return "022000";
-            case "G":
-                return "320033";
-            default:
-                return "xxxxxx";
-        }
-    };
-
     renderUniqueChords() {
         return new Parser(this.state.lyrics)
             .unique()
-            .map(chord => <Chord key={chord} name={chord} diagram={this.diagramSupplier(chord)}/>);
+            .map(chord => <Chord key={chord} name={chord} diagram={this.state.chords[chord] || "xxxxxx"}/>);
     }
 
     renderHeader() {
