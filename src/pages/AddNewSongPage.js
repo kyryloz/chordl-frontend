@@ -6,7 +6,7 @@ import {HelpBlock, Button, FormGroup, ControlLabel, FormControl} from "react-boo
 import update from "react-addons-update";
 import SelectPerformer from "../components/SelectPerformer";
 import * as validator from "../util/validator";
-import {Chordify, Chord, Parser} from "react-chord-parser";
+import {Chord, Parser} from "react-chord-parser";
 
 export default class AddNewSongPage extends BasePageTemplate {
 
@@ -132,22 +132,28 @@ export default class AddNewSongPage extends BasePageTemplate {
         const newLyrics = e.target.value;
 
         const savedChords = Object.keys(this.state.chords);
-        const uniqueChords = new Parser(newLyrics)
-            .unique();
+        const uniqueChords = new Parser(newLyrics).unique();
 
+        const deletedChords = savedChords.filter(i => uniqueChords.indexOf(i) < 0);
         const newChords = uniqueChords.filter(i => savedChords.indexOf(i) < 0);
 
-        if (newChords.length) {
-            this.hydrateChords(newChords);
-        }
+        const {chords} = this.state;
+        deletedChords.forEach(chord => {
+            delete chords[chord];
+        });
 
         const newState = update(this.state, {
             song: {
                 lyrics: {$set: newLyrics}
             },
+            chords: {$set: chords},
             error: {$set: ""}
         });
-        this.setState(newState);
+        this.setState(newState, () => {
+            if (newChords.length) {
+                this.hydrateChords(newChords);
+            }
+        });
     };
 
     hydrateChords = (chords) => {
@@ -155,15 +161,11 @@ export default class AddNewSongPage extends BasePageTemplate {
             input: chords.map(chordName => ({name: chordName}))
         };
 
-        console.log("hydrate", input);
-
         $.ajax({
             url: `${api.chord}/hydrate`,
             type: 'POST',
             data: JSON.stringify(input),
             success: function (data) {
-                console.log("hydrate result", data);
-
                 const {chords} = this.state;
                 data.forEach(chordDto => chords[chordDto.name] = chordDto.diagram || "xxxxxx");
                 this.setState({
