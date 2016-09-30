@@ -6,6 +6,7 @@ import {HelpBlock, Button, FormGroup, ControlLabel, FormControl} from "react-boo
 import update from "react-addons-update";
 import SelectPerformer from "../components/SelectPerformer";
 import * as validator from "../util/validator";
+import {Chordify, Chord, Parser} from "react-chord-parser";
 
 export default class AddNewSongPage extends BasePageTemplate {
 
@@ -21,7 +22,8 @@ export default class AddNewSongPage extends BasePageTemplate {
             performerId: -1,
             performerExists: false,
             error: "",
-            submitting: false
+            submitting: false,
+            chords: {}
         };
     }
 
@@ -117,7 +119,7 @@ export default class AddNewSongPage extends BasePageTemplate {
     };
 
     handleTitleChange = (e) => {
-        var newState = update(this.state, {
+        const newState = update(this.state, {
             song: {
                 title: {$set: e.target.value}
             },
@@ -127,13 +129,51 @@ export default class AddNewSongPage extends BasePageTemplate {
     };
 
     handleLyricsChange = (e) => {
-        var newState = update(this.state, {
+        const newLyrics = e.target.value;
+
+        const savedChords = Object.keys(this.state.chords);
+        const uniqueChords = new Parser(newLyrics)
+            .unique();
+
+        const newChords = uniqueChords.filter(i => savedChords.indexOf(i) < 0);
+
+        if (newChords.length) {
+            this.hydrateChords(newChords);
+        }
+
+        const newState = update(this.state, {
             song: {
-                lyrics: {$set: e.target.value}
+                lyrics: {$set: newLyrics}
             },
             error: {$set: ""}
         });
         this.setState(newState);
+    };
+
+    hydrateChords = (chords) => {
+        const input = {
+            input: chords.map(chordName => ({name: chordName}))
+        };
+
+        console.log("hydrate", input);
+
+        $.ajax({
+            url: `${api.chord}/hydrate`,
+            type: 'POST',
+            data: JSON.stringify(input),
+            success: function (data) {
+                console.log("hydrate result", data);
+
+                const {chords} = this.state;
+                data.forEach(chordDto => chords[chordDto.name] = chordDto.diagram || "xxxxxx");
+                this.setState({
+                    chords
+                });
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(xhr, status, err);
+            }
+        });
     };
 
     handleCancel = (e) => {
@@ -151,6 +191,11 @@ export default class AddNewSongPage extends BasePageTemplate {
         return (
             <h3>Add new song</h3>
         )
+    }
+
+    renderUniqueChords() {
+        return Object.keys(this.state.chords)
+            .map(chord => <Chord key={chord} name={chord} diagram={this.state.chords[chord]}/>);
     }
 
     renderContent() {
@@ -200,6 +245,12 @@ export default class AddNewSongPage extends BasePageTemplate {
                     <FormControl.Feedback />
                 </FormGroup>
                 <HelpBlock style={{color: "red"}}>{this.state.error}</HelpBlock>
+                <p>
+                    Used chords:
+                </p>
+                <div>
+                    {this.renderUniqueChords()}
+                </div>
                 <FormGroup>
                     <Button
                         disabled={!this.validateAll() || this.state.submitting}
