@@ -30,6 +30,15 @@ export function validatePerformer(name, exists, returnBool) {
     else if (length > 0 || length > 60) return (returnBool ? false : 'error');
 }
 
+export function validateChord(diagram, returnBool) {
+    const pattern = /^[0-9xX]{6}$/;
+    if (pattern.test(diagram)) {
+        return (returnBool ? true : 'success');
+    } else {
+        return (returnBool ? false : 'error')
+    }
+}
+
 function containsIllegalChars(text) {
     return false;
     // var illegal = /[\\<>\^`{}]/i;

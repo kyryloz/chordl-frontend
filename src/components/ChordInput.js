@@ -1,6 +1,7 @@
 import * as React from "react";
 import {Chord} from "react-chord-parser";
 import {FormGroup, FormControl} from "react-bootstrap/lib";
+import * as validator from "../util/validator";
 
 export default class ChordInput extends React.Component {
 
@@ -15,8 +16,7 @@ export default class ChordInput extends React.Component {
 
     handleInputChange = (e) => {
         var input = e.target.value;
-        const pattern = /^[0-9xX]{6}$/;
-        if (pattern.test(input)) {
+        if (validator.validateChord(input, true)) {
             this.setState({diagram: input});
         }
 
@@ -27,12 +27,13 @@ export default class ChordInput extends React.Component {
         return (
             <FormGroup
                 controlId="formBasicText"
-                validationState="error"
+                validationState={validator.validateChord(this.state.input)}
                 style={{width: 160, marginRight: 16}}
             >
                 <FormControl
-                    disabled={false}
+                    disabled={this.props.submitting}
                     type="text"
+                    maxLength={6}
                     placeholder="x32010"
                     value={this.state.input}
                     onChange={this.handleInputChange}

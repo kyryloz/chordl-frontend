@@ -211,21 +211,11 @@ export default class AddNewSongPage extends BasePageTemplate {
         )
     }
 
-    renderUsedChords() {
-        const nodes = [];
-
-        Object.keys(this.state.chords).forEach(key => {
-            nodes.push(<span style={{color: "#aa4444"}} key={`known-${key}`}>{key}&nbsp;</span>);
-        });
-
-        return nodes;
-    }
-
     renderUnknownChords() {
         const nodes = [];
 
         this.state.unknownChordNames.forEach(chord => {
-            nodes.push(<ChordInput style={{marginLeft: 16}} key={chord} name={chord} diagram="xxxxxx"/>)
+            nodes.push(<ChordInput submitting={this.state.submitting} style={{marginLeft: 16}} key={chord} name={chord} diagram="xxxxxx"/>)
         });
 
         return nodes;
@@ -266,6 +256,7 @@ export default class AddNewSongPage extends BasePageTemplate {
                     validationState={validator.validateLyrics(this.state.song.lyrics)}
                 >
                     <ControlLabel>Lyrics</ControlLabel>
+                    <p><small>Wrap each chord into braces (e.g., [Am]) to highlight it</small></p>
                     <FormControl
                         disabled={this.state.submitting}
                         style={{fontFamily: "monospace", resize: "vertical", minHeight: 340}}
@@ -278,16 +269,6 @@ export default class AddNewSongPage extends BasePageTemplate {
                     <FormControl.Feedback />
                 </FormGroup>
                 <HelpBlock style={{color: "red"}}>{this.state.error}</HelpBlock>
-                {Object.keys(this.state.chords).length > 0 &&
-                    <div>
-                        <p>
-                            Used chords:
-                        </p>
-                        <div>
-                            {this.renderUsedChords()}
-                        </div>
-                    </div>
-                }
                 {this.state.unknownChordNames.length > 0 &&
                     <div>
                         <p style={{marginTop: 16}}>
