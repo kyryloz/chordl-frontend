@@ -7,6 +7,7 @@ import update from "react-addons-update";
 import SelectPerformer from "../components/SelectPerformer";
 import * as validator from "../util/validator";
 import {Chord, Parser} from "react-chord-parser";
+import ChordInput from "../components/ChordInput";
 
 export default class AddNewSongPage extends BasePageTemplate {
 
@@ -167,10 +168,8 @@ export default class AddNewSongPage extends BasePageTemplate {
             data: JSON.stringify(input),
             success: function (data) {
                 const {chords} = this.state;
-                data.forEach(chordDto => chords[chordDto.name] = chordDto.diagram || "xxxxxx");
-                this.setState({
-                    chords
-                });
+                data.forEach(chordDto => chords[chordDto.name] = chordDto.diagram);
+                this.setState({chords});
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(xhr, status, err);
@@ -195,9 +194,31 @@ export default class AddNewSongPage extends BasePageTemplate {
         )
     }
 
-    renderUniqueChords() {
-        return Object.keys(this.state.chords)
-            .map(chord => <Chord key={chord} name={chord} diagram={this.state.chords[chord]}/>);
+    renderChordsInput() {
+        const nodes = [];
+
+        const knownChords = [];
+        const unknownChords = [];
+
+        Object.keys(this.state.chords).forEach(key => {
+            if (this.state.chords[key]) {
+                knownChords.push(key);
+            } else {
+                unknownChords.push(key);
+            }
+        });
+
+        knownChords.forEach(chord => {
+            nodes.push(<p key={chord}>{chord}</p>)
+        });
+
+        nodes.push(<p key="title">Unknown chords:</p>)
+
+        unknownChords.forEach(chord => {
+            nodes.push(<ChordInput key={chord} name={chord} diagram="xxxxxx"/>)
+        });
+
+        return nodes;
     }
 
     renderContent() {
@@ -251,7 +272,7 @@ export default class AddNewSongPage extends BasePageTemplate {
                     Used chords:
                 </p>
                 <div>
-                    {this.renderUniqueChords()}
+                    {this.renderChordsInput()}
                 </div>
                 <FormGroup>
                     <Button
