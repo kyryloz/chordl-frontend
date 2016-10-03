@@ -1,6 +1,6 @@
 import * as React from "react";
-import {Chord, Parser} from "react-chord-parser";
-import {HelpBlock, Button, FormGroup, ControlLabel, FormControl} from "react-bootstrap/lib";
+import {Chord} from "react-chord-parser";
+import {FormGroup, FormControl} from "react-bootstrap/lib";
 
 export default class ChordInput extends React.Component {
 
@@ -28,16 +28,17 @@ export default class ChordInput extends React.Component {
             <FormGroup
                 controlId="formBasicText"
                 validationState="error"
+                style={{width: 160, marginRight: 16}}
             >
                 <FormControl
                     disabled={false}
                     type="text"
-                    placeholder="xx00232"
-                    style={{width: 120}}
+                    placeholder="x32010"
                     value={this.state.input}
                     onChange={this.handleInputChange}
                 />
-                <Chord key={this.props.name} name={this.props.name} diagram={this.state.diagram}/>
+                <FormControl.Feedback/>
+                <Chord style={{marginTop: 4, marginLeft: 20, width: 120, height: 120}} key={this.props.name} name={this.props.name} diagram={this.state.diagram}/>
             </FormGroup>
 
         )

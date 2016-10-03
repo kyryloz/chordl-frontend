@@ -6,7 +6,7 @@ import {HelpBlock, Button, FormGroup, ControlLabel, FormControl} from "react-boo
 import update from "react-addons-update";
 import SelectPerformer from "../components/SelectPerformer";
 import * as validator from "../util/validator";
-import {Chord, Parser} from "react-chord-parser";
+import {Parser} from "react-chord-parser";
 import ChordInput from "../components/ChordInput";
 
 export default class AddNewSongPage extends BasePageTemplate {
@@ -24,7 +24,8 @@ export default class AddNewSongPage extends BasePageTemplate {
             performerExists: false,
             error: "",
             submitting: false,
-            chords: {}
+            chords: {},
+            unknownChordNames: []
         };
     }
 
@@ -139,8 +140,10 @@ export default class AddNewSongPage extends BasePageTemplate {
         const newChords = uniqueChords.filter(i => savedChords.indexOf(i) < 0);
 
         const {chords} = this.state;
+        const {unknownChordNames} = this.state;
         deletedChords.forEach(chord => {
             delete chords[chord];
+            unknownChordNames.splice($.inArray(chord, unknownChordNames), 1);
         });
 
         const newState = update(this.state, {
@@ -148,6 +151,7 @@ export default class AddNewSongPage extends BasePageTemplate {
                 lyrics: {$set: newLyrics}
             },
             chords: {$set: chords},
+            unknownChordNames: {$set: unknownChordNames},
             error: {$set: ""}
         });
         this.setState(newState, () => {
@@ -166,16 +170,29 @@ export default class AddNewSongPage extends BasePageTemplate {
             url: `${api.chord}/hydrate`,
             type: 'POST',
             data: JSON.stringify(input),
-            success: function (data) {
-                const {chords} = this.state;
-                data.forEach(chordDto => chords[chordDto.name] = chordDto.diagram);
-                this.setState({chords});
-            }.bind(this),
-            error: function (xhr, status, err) {
+            success: data => {
+                this.processChordServerResponse(data);
+            },
+            error: (xhr, status, err) => {
                 console.error(xhr, status, err);
             }
         });
     };
+
+    processChordServerResponse(data) {
+        const {chords} = this.state;
+
+        data.forEach(chordDto => {
+            chords[chordDto.name] = chordDto.diagram;
+        });
+
+        const unknownChordNames = Object.keys(chords).filter(key => !chords[key]);
+
+        this.setState({
+            chords,
+            unknownChordNames
+        });
+    }
 
     handleCancel = (e) => {
         e.preventDefault();
@@ -194,28 +211,21 @@ export default class AddNewSongPage extends BasePageTemplate {
         )
     }
 
-    renderChordsInput() {
+    renderUsedChords() {
         const nodes = [];
 
-        const knownChords = [];
-        const unknownChords = [];
-
         Object.keys(this.state.chords).forEach(key => {
-            if (this.state.chords[key]) {
-                knownChords.push(key);
-            } else {
-                unknownChords.push(key);
-            }
+            nodes.push(<span style={{color: "#aa4444"}} key={`known-${key}`}>{key}&nbsp;</span>);
         });
 
-        knownChords.forEach(chord => {
-            nodes.push(<p key={chord}>{chord}</p>)
-        });
+        return nodes;
+    }
 
-        nodes.push(<p key="title">Unknown chords:</p>)
+    renderUnknownChords() {
+        const nodes = [];
 
-        unknownChords.forEach(chord => {
-            nodes.push(<ChordInput key={chord} name={chord} diagram="xxxxxx"/>)
+        this.state.unknownChordNames.forEach(chord => {
+            nodes.push(<ChordInput style={{marginLeft: 16}} key={chord} name={chord} diagram="xxxxxx"/>)
         });
 
         return nodes;
@@ -268,12 +278,27 @@ export default class AddNewSongPage extends BasePageTemplate {
                     <FormControl.Feedback />
                 </FormGroup>
                 <HelpBlock style={{color: "red"}}>{this.state.error}</HelpBlock>
-                <p>
-                    Used chords:
-                </p>
-                <div>
-                    {this.renderChordsInput()}
-                </div>
+                {Object.keys(this.state.chords).length > 0 &&
+                    <div>
+                        <p>
+                            Used chords:
+                        </p>
+                        <div>
+                            {this.renderUsedChords()}
+                        </div>
+                    </div>
+                }
+                {this.state.unknownChordNames.length > 0 &&
+                    <div>
+                        <p style={{marginTop: 16}}>
+                            Some chords are unknown.
+                            Please, specify a diagram for each chord (e.g., for C chord – 'x32010'):
+                        </p>
+                        <div style={{display: "flex", flexWrap: "wrap"}}>
+                            {this.renderUnknownChords()}
+                        </div>
+                    </div>
+                }
                 <FormGroup>
                     <Button
                         disabled={!this.validateAll() || this.state.submitting}
