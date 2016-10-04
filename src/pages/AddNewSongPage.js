@@ -13,6 +13,7 @@ export default class AddNewSongPage extends BasePageTemplate {
 
     constructor() {
         super();
+
         this.state = {
             performerNames: [],
             song: {
@@ -24,8 +25,7 @@ export default class AddNewSongPage extends BasePageTemplate {
             performerExists: false,
             error: "",
             submitting: false,
-            chords: {},
-            unknownChordNames: []
+            chords: []
         };
     }
 
@@ -63,9 +63,7 @@ export default class AddNewSongPage extends BasePageTemplate {
                 this.submitSong(result);
             } else {
                 this.setState({
-                    submitting: false
-                });
-                this.setState({
+                    submitting: false,
                     error: `Performer '${this.state.performerName}' not found`
                 })
             }
@@ -132,31 +130,20 @@ export default class AddNewSongPage extends BasePageTemplate {
 
     handleLyricsChange = (e) => {
         const newLyrics = e.target.value;
-
-        const savedChords = Object.keys(this.state.chords);
         const uniqueChords = new Parser(newLyrics).unique();
 
-        const deletedChords = savedChords.filter(i => uniqueChords.indexOf(i) < 0);
-        const newChords = uniqueChords.filter(i => savedChords.indexOf(i) < 0);
-
-        const {chords} = this.state;
-        const {unknownChordNames} = this.state;
-        deletedChords.forEach(chord => {
-            delete chords[chord];
-            unknownChordNames.splice($.inArray(chord, unknownChordNames), 1);
-        });
+        const newChords = uniqueChords.filter(chord => this.state.chords.map(chord => chord.name).indexOf(chord.name) < 0);
 
         const newState = update(this.state, {
             song: {
                 lyrics: {$set: newLyrics}
             },
-            chords: {$set: chords},
-            unknownChordNames: {$set: unknownChordNames},
             error: {$set: ""}
         });
+
         this.setState(newState, () => {
             if (newChords.length) {
-                this.hydrateChords(newChords);
+                this.hydrateChords(uniqueChords);
             }
         });
     };
@@ -171,7 +158,9 @@ export default class AddNewSongPage extends BasePageTemplate {
             type: 'POST',
             data: JSON.stringify(input),
             success: data => {
-                this.processChordServerResponse(data);
+                this.setState({
+                    chords: data
+                });
             },
             error: (xhr, status, err) => {
                 console.error(xhr, status, err);
@@ -179,30 +168,38 @@ export default class AddNewSongPage extends BasePageTemplate {
         });
     };
 
-    processChordServerResponse(data) {
-        const {chords} = this.state;
-
-        data.forEach(chordDto => {
-            chords[chordDto.name] = chordDto.diagram;
-        });
-
-        const unknownChordNames = Object.keys(chords).filter(key => !chords[key]);
-
-        this.setState({
-            chords,
-            unknownChordNames
-        });
-    }
-
     handleCancel = (e) => {
         e.preventDefault();
         this.context.router.goBack();
     };
 
+    handleChordDiagramChange = (newChord) => {
+        const {chords} = this.state;
+
+        chords.forEach(chord => {
+            if (chord.name === newChord.name) {
+                chord.diagram = newChord.diagram;
+                chord.isNew = true;
+            }
+        });
+
+        this.setState({chords})
+    };
+
     validateAll = () => {
         return validator.validatePerformer(this.state.performerName, this.state.performerExists, true)
             && validator.validateLyrics(this.state.song.lyrics, true)
-            && validator.validateTitle(this.state.song.title, true);
+            && validator.validateTitle(this.state.song.title, true)
+            && this.validateChords();
+    };
+
+    validateChords = () => {
+        var validated = this.state.chords.filter(chord => {
+            var validateChord = validator.validateChord(chord.diagram, true);
+            console.log("validate chord", chord, validateChord);
+            return validateChord
+        });
+        return validated.length === this.state.chords.length;
     };
 
     renderHeader() {
@@ -214,8 +211,16 @@ export default class AddNewSongPage extends BasePageTemplate {
     renderUnknownChords() {
         const nodes = [];
 
-        this.state.unknownChordNames.forEach(chord => {
-            nodes.push(<ChordInput submitting={this.state.submitting} style={{marginLeft: 16}} key={chord} name={chord} diagram="xxxxxx"/>)
+        this.state.chords.forEach((chord, i) => {
+            if (!chord.diagram || chord.isNew) {
+                nodes.push(<ChordInput
+                    callback={this.handleChordDiagramChange}
+                    submitting={this.state.submitting}
+                    style={{marginLeft: 16}}
+                    key={i}
+                    name={chord.name}
+                    diagram="xxxxxx"/>)
+            }
         });
 
         return nodes;
@@ -256,7 +261,6 @@ export default class AddNewSongPage extends BasePageTemplate {
                     validationState={validator.validateLyrics(this.state.song.lyrics)}
                 >
                     <ControlLabel>Lyrics</ControlLabel>
-                    <p><small>Wrap each chord into braces (e.g., [Am]) to highlight it</small></p>
                     <FormControl
                         disabled={this.state.submitting}
                         style={{fontFamily: "monospace", resize: "vertical", minHeight: 340}}
@@ -267,9 +271,10 @@ export default class AddNewSongPage extends BasePageTemplate {
                         onChange={this.handleLyricsChange}
                     />
                     <FormControl.Feedback />
+                    <HelpBlock>Wrap each chord into braces (e.g., [Am]) to highlight it</HelpBlock>
                 </FormGroup>
                 <HelpBlock style={{color: "red"}}>{this.state.error}</HelpBlock>
-                {this.state.unknownChordNames.length > 0 &&
+                {this.state.chords.filter(chord => !chord.diagram || chord.isNew).length > 0 &&
                     <div>
                         <p style={{marginTop: 16}}>
                             Some chords are unknown.

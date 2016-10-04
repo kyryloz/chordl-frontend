@@ -30,7 +30,15 @@ export function validatePerformer(name, exists, returnBool) {
     else if (length > 0 || length > 60) return (returnBool ? false : 'error');
 }
 
-export function validateChord(diagram, returnBool) {
+export function validateChord(diagram = "", returnBool) {
+    if (!diagram) {
+        return (returnBool ? false : 'warning');
+    }
+
+    const length = diagram.trim().length;
+
+    if (length < 6) return (returnBool ? false : 'warning');
+
     const pattern = /^[0-9xX]{6}$/;
     if (pattern.test(diagram)) {
         return (returnBool ? true : 'success');

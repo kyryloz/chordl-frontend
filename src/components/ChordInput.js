@@ -16,6 +16,9 @@ export default class ChordInput extends React.Component {
 
     handleInputChange = (e) => {
         var input = e.target.value;
+
+        this.props.callback({name: this.props.name, diagram: input});
+
         if (validator.validateChord(input, true)) {
             this.setState({diagram: input});
         }
@@ -39,9 +42,11 @@ export default class ChordInput extends React.Component {
                     onChange={this.handleInputChange}
                 />
                 <FormControl.Feedback/>
-                <Chord style={{marginTop: 4, marginLeft: 20, width: 120, height: 120}} key={this.props.name} name={this.props.name} diagram={this.state.diagram}/>
+                <Chord style={{marginTop: 4, marginLeft: 20, width: 120, height: 120}}
+                       key={this.props.name}
+                       name={this.props.name}
+                       diagram={this.state.diagram}/>
             </FormGroup>
-
         )
     }
 }
