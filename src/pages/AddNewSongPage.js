@@ -8,6 +8,7 @@ import SelectPerformer from "../components/SelectPerformer";
 import * as validator from "../util/validator";
 import {Parser} from "react-chord-parser";
 import ChordInput from "../components/ChordInput";
+import Optional from "optional-js";
 
 export default class AddNewSongPage extends BasePageTemplate {
 
@@ -130,27 +131,42 @@ export default class AddNewSongPage extends BasePageTemplate {
 
     handleLyricsChange = (e) => {
         const newLyrics = e.target.value;
-        const uniqueChords = new Parser(newLyrics).unique();
+        const uniqueChords = new Parser(newLyrics)
+            .unique()
+            .map(chordName => ({name: chordName}));
 
-        const newChords = uniqueChords.filter(chord => this.state.chords.map(chord => chord.name).indexOf(chord.name) < 0);
+        uniqueChords.forEach(uniqueChord => {
+            var foundChord = this.state.chords.filter(chord => chord.name === uniqueChord.name)[0];
+            uniqueChord.diagram = Optional
+                .ofNullable(foundChord)
+                .map(chord => chord.diagram)
+                .orElse("");
+            uniqueChord.isNew = Optional
+                .ofNullable(foundChord)
+                .map(chord => chord.isNew)
+                .orElse(false)
+        });
 
         const newState = update(this.state, {
             song: {
                 lyrics: {$set: newLyrics}
             },
+            chords: {$set: uniqueChords},
             error: {$set: ""}
         });
 
         this.setState(newState, () => {
-            if (newChords.length) {
-                this.hydrateChords(uniqueChords);
-            }
+            this.hydrateChords(this.state.chords.filter(chord => {
+                return !chord.diagram;
+            }));
         });
     };
 
-    hydrateChords = (chords) => {
+    hydrateChords = (inputChords) => {
+        if (inputChords.length === 0) return;
+
         const input = {
-            input: chords.map(chordName => ({name: chordName}))
+            input: inputChords
         };
 
         $.ajax({
@@ -158,9 +174,14 @@ export default class AddNewSongPage extends BasePageTemplate {
             type: 'POST',
             data: JSON.stringify(input),
             success: data => {
-                this.setState({
-                    chords: data
-                });
+                const {chords} = this.state;
+
+                chords.filter(chord => inputChords.map(input => input.name).indexOf(chord.name) > 0)
+                    .forEach(chord =>
+                        chord.diagram = data
+                            .filter(dataChord => dataChord.name === chord.name)[0].diagram);
+
+                this.setState({chords});
             },
             error: (xhr, status, err) => {
                 console.error(xhr, status, err);
@@ -196,7 +217,6 @@ export default class AddNewSongPage extends BasePageTemplate {
     validateChords = () => {
         var validated = this.state.chords.filter(chord => {
             var validateChord = validator.validateChord(chord.diagram, true);
-            console.log("validate chord", chord, validateChord);
             return validateChord
         });
         return validated.length === this.state.chords.length;
@@ -211,14 +231,14 @@ export default class AddNewSongPage extends BasePageTemplate {
     renderUnknownChords() {
         const nodes = [];
 
-        this.state.chords.forEach((chord, i) => {
+        this.state.chords.forEach(chord => {
             if (!chord.diagram || chord.isNew) {
                 nodes.push(<ChordInput
                     callback={this.handleChordDiagramChange}
+                    chord={chord}
                     submitting={this.state.submitting}
                     style={{marginLeft: 16}}
-                    key={i}
-                    name={chord.name}
+                    key={chord.name}
                     diagram="xxxxxx"/>)
             }
         });

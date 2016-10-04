@@ -10,19 +10,21 @@ export default class ChordInput extends React.Component {
 
         this.state = {
             input: "",
-            diagram: "xxxxxx"
         };
     }
 
+    getDiagram = () => {
+        const {diagram} = this.props.chord;
+        if (validator.validateChord(diagram, true)) {
+            return diagram;
+        } else {
+            return "xxxxxx";
+        }
+    };
+
     handleInputChange = (e) => {
         var input = e.target.value;
-
-        this.props.callback({name: this.props.name, diagram: input});
-
-        if (validator.validateChord(input, true)) {
-            this.setState({diagram: input});
-        }
-
+        this.props.callback({name: this.props.chord.name, diagram: input});
         this.setState({input});
     };
 
@@ -43,9 +45,9 @@ export default class ChordInput extends React.Component {
                 />
                 <FormControl.Feedback/>
                 <Chord style={{marginTop: 4, marginLeft: 20, width: 120, height: 120}}
-                       key={this.props.name}
-                       name={this.props.name}
-                       diagram={this.state.diagram}/>
+                       key={this.props.chord.name}
+                       name={this.props.chord.name}
+                       diagram={this.getDiagram()}/>
             </FormGroup>
         )
     }
