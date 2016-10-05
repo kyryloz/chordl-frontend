@@ -15,25 +15,25 @@ export default {
     chord: `${backend}/chord`
 };
 
-export function getAllPerformers() {
+export function requestGetAllPerformers() {
     return fetch(`${backend}/performers/all`, createGetProps())
         .then(checkStatus)
         .then(res => res.json());
 }
 
-export function getPerformerIdByName(name) {
+export function requestGetPerformerIdByName(name) {
     return fetch(`${backend}/performers/v2/search/?name=${name}`, createGetProps())
         .then(checkStatus)
         .then(res => res.json());
 }
 
-export function submitNewSong(song) {
+export function requestSubmitNewSong(song) {
     return fetch(`${backend}/songs`, createPostProps(song))
         .then(checkStatus)
         .then(res => res.json());
 }
 
-export function hydrateChords(input) {
+export function requestHydrateChords(input) {
     return fetch(`${backend}/chord/hydrate`, createPostProps(input))
         .then(checkStatus)
         .then(res => res.json());

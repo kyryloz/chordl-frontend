@@ -1,6 +1,6 @@
 import React from "react";
 import BasePageTemplate from "./BasePageTemplate";
-import * as Api from "../global/api";
+import {requestSubmitNewSong, requestGetPerformerIdByName, requestHydrateChords} from "../global/api";
 import {HelpBlock} from "react-bootstrap/lib";
 import FormGroupSelectPerformer from "../components/FormGroupSelectPerformer";
 import FormGroupEditTitle from "../components/FormGroupEditTitle";
@@ -35,7 +35,7 @@ export default class AddNewSongPage extends BasePageTemplate {
             submitting: true
         });
 
-        Api.getPerformerIdByName(this.state.performerName)
+        requestGetPerformerIdByName(this.state.performerName)
             .then(data => {
                 this.submitSong(data.id);
             })
@@ -54,7 +54,7 @@ export default class AddNewSongPage extends BasePageTemplate {
             lyrics: this.state.songLyrics.trim(),
         };
 
-        Api.submitNewSong(song)
+        requestSubmitNewSong(song)
             .then(data => {
                 this.setState({
                     submitting: false
@@ -120,7 +120,7 @@ export default class AddNewSongPage extends BasePageTemplate {
             input: inputChords
         };
 
-        Api.hydrateChords(input)
+        requestHydrateChords(input)
             .then(data => {
                 const {chords} = this.state;
 
@@ -197,11 +197,11 @@ export default class AddNewSongPage extends BasePageTemplate {
                 <HelpBlock style={{color: "red"}}>{this.state.error}</HelpBlock>
 
                 {this.hasUnknownChords() &&
-                    <ChordInputList
-                        disabled={this.state.submitting}
-                        onChange={this.handleChordDiagramChange}
-                        chords={this.state.chords}
-                    />
+                <ChordInputList
+                    disabled={this.state.submitting}
+                    onChange={this.handleChordDiagramChange}
+                    chords={this.state.chords}
+                />
                 }
 
                 <FormGroupSongSubmitButtons

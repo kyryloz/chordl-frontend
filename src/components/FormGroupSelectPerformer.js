@@ -2,7 +2,7 @@ import React from "react";
 import SelectPerformer from "./SelectPerformer";
 import {FormGroup, ControlLabel, FormControl} from "react-bootstrap/lib";
 import * as Validator from "../util/validator";
-import * as Api from "../global/api";
+import {requestGetAllPerformers} from "../global/api";
 
 export default class FormGroupSelectPerformer extends React.Component {
 
@@ -19,7 +19,7 @@ export default class FormGroupSelectPerformer extends React.Component {
     }
 
     loadAllPerformers() {
-        Api.getAllPerformers()
+        requestGetAllPerformers()
             .then(data => {
                 this.setState({
                     performerNames: data
