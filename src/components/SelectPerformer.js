@@ -20,7 +20,7 @@ export default class SelectPerformer extends React.Component {
         this.setState({
             performerName: typeof name === "string" ? name : name[0],
         }, () => {
-            this.props.callback(name, this.isPerformerExists());
+            this.props.onChange(name, this.isPerformerExists());
         });
     };
 
@@ -70,7 +70,7 @@ export default class SelectPerformer extends React.Component {
                 performerName: data.name,
                 performerSubmitting: false,
             });
-            this.props.callback(data.name, true);
+            this.props.onChange(data.name, true);
         } else {
             this.setState({
                 performerSubmitting: false,
@@ -97,7 +97,7 @@ export default class SelectPerformer extends React.Component {
         return (
             <div>
                 <Typeahead
-                    disabled={this.props.submitting}
+                    disabled={this.props.disabled}
                     placeholder="Start typing the name of performer"
                     onInputChange={this.handlePerformerInputChange}
                     value={this.state.performerName}

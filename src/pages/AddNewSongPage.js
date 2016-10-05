@@ -3,8 +3,8 @@ import BasePageTemplate from "./BasePageTemplate";
 import * as Api from "../global/api";
 import {HelpBlock, Button, FormGroup, ControlLabel, FormControl} from "react-bootstrap/lib";
 import update from "react-addons-update";
-import SelectPerformer from "../components/SelectPerformer";
-import * as validator from "../util/validator";
+import FormGroupSelectPerformer from "../components/FormGroupSelectPerformer";
+import * as Validator from "../util/validator";
 import {Parser} from "react-chord-parser";
 import ChordInput from "../components/ChordInput";
 import Optional from "optional-js";
@@ -15,7 +15,6 @@ export default class AddNewSongPage extends BasePageTemplate {
         super();
 
         this.state = {
-            performerNames: [],
             song: {
                 title: "",
                 lyrics: "",
@@ -27,23 +26,6 @@ export default class AddNewSongPage extends BasePageTemplate {
             submitting: false,
             chords: []
         };
-    }
-
-    componentDidMount() {
-        this.loadAllPerformers();
-    }
-
-    loadAllPerformers() {
-        this.startLoading();
-
-        Api.getAllPerformers()
-            .then(data => {
-                this.finishLoading();
-                this.setState({
-                    performerNames: data
-                });
-            })
-            .catch(error => console.log(error))
     }
 
     handleSongSubmit = (e) => {
@@ -178,15 +160,15 @@ export default class AddNewSongPage extends BasePageTemplate {
     };
 
     validateAll = () => {
-        return validator.validatePerformer(this.state.performerName, this.state.performerExists, true)
-            && validator.validateLyrics(this.state.song.lyrics, true)
-            && validator.validateTitle(this.state.song.title, true)
+        return Validator.validatePerformer(this.state.performerName, this.state.performerExists, true)
+            && Validator.validateLyrics(this.state.song.lyrics, true)
+            && Validator.validateTitle(this.state.song.title, true)
             && this.validateChords();
     };
 
     validateChords = () => {
         var validated = this.state.chords.filter(chord => {
-            return validator.validateChord(chord.diagram, true)
+            return Validator.validateChord(chord.diagram, true)
         });
         return validated.length === this.state.chords.length;
     };
@@ -218,21 +200,16 @@ export default class AddNewSongPage extends BasePageTemplate {
     renderContent() {
         return (
             <form onSubmit={this.handleSongSubmit} style={{marginTop: 16}}>
-                <FormGroup
-                    controlId="formBasicText"
-                    validationState={validator.validatePerformer(this.state.performerName, this.state.performerExists)}
-                >
-                    <ControlLabel>Performer</ControlLabel>
-                    <SelectPerformer
-                        submitting={this.state.submitting}
-                        callback={this.handlePerformerNameChange}
-                        performerNames={this.state.performerNames}/>
-                    <FormControl.Feedback />
-                </FormGroup>
+                <FormGroupSelectPerformer
+                    disabled={this.state.submitting}
+                    performerName={this.state.performerName}
+                    performerExists={this.state.performerExists}
+                    onChange={this.handlePerformerNameChange}
+                />
 
                 <FormGroup
                     controlId="formBasicText"
-                    validationState={validator.validateTitle(this.state.song.title)}
+                    validationState={Validator.validateTitle(this.state.song.title)}
                 >
                     <ControlLabel>Title</ControlLabel>
                     <FormControl
@@ -247,7 +224,7 @@ export default class AddNewSongPage extends BasePageTemplate {
 
                 <FormGroup
                     controlId="formBasicText"
-                    validationState={validator.validateLyrics(this.state.song.lyrics)}
+                    validationState={Validator.validateLyrics(this.state.song.lyrics)}
                 >
                     <ControlLabel>Lyrics</ControlLabel>
                     <FormControl
