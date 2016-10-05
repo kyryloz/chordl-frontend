@@ -40,7 +40,7 @@ export default class AddNewSongPage extends BasePageTemplate {
 
         Api.getPerformerIdByName(this.state.performerName)
             .then(data => {
-                this.submitSong(data);
+                this.submitSong(data.id);
             })
             .catch(() => {
                 this.setState({
