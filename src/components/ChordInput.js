@@ -36,7 +36,7 @@ export default class ChordInput extends React.Component {
                 style={{width: 160, marginRight: 16}}
             >
                 <FormControl
-                    disabled={this.props.submitting}
+                    disabled={this.props.disabled}
                     type="text"
                     maxLength={6}
                     placeholder="x32010"

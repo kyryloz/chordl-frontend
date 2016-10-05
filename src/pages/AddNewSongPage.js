@@ -1,12 +1,14 @@
 import React from "react";
 import BasePageTemplate from "./BasePageTemplate";
 import * as Api from "../global/api";
-import {HelpBlock, Button, FormGroup, ControlLabel, FormControl} from "react-bootstrap/lib";
+import {HelpBlock, Button, FormGroup} from "react-bootstrap/lib";
 import update from "react-addons-update";
 import FormGroupSelectPerformer from "../components/FormGroupSelectPerformer";
+import FormGroupEditTitle from "../components/FormGroupEditTitle";
+import FormGroupEditLyrics from "../components/FormGroupEditLyrics";
+import ChordInputList from "../components/ChordInputList";
 import * as Validator from "../util/validator";
 import {Parser} from "react-chord-parser";
-import ChordInput from "../components/ChordInput";
 import Optional from "optional-js";
 
 export default class AddNewSongPage extends BasePageTemplate {
@@ -173,33 +175,20 @@ export default class AddNewSongPage extends BasePageTemplate {
         return validated.length === this.state.chords.length;
     };
 
+    hasUnknownChords = () => {
+        return this.state.chords.filter(chord => !chord.diagram || chord.isNew).length > 0;
+    };
+
     renderHeader() {
         return (
             <h3>Add new song</h3>
         )
     }
 
-    renderUnknownChords() {
-        const nodes = [];
-
-        this.state.chords.forEach(chord => {
-            if (!chord.diagram || chord.isNew) {
-                nodes.push(<ChordInput
-                    callback={this.handleChordDiagramChange}
-                    chord={chord}
-                    submitting={this.state.submitting}
-                    style={{marginLeft: 16}}
-                    key={chord.name}
-                    diagram="xxxxxx"/>)
-            }
-        });
-
-        return nodes;
-    }
-
     renderContent() {
         return (
             <form onSubmit={this.handleSongSubmit} style={{marginTop: 16}}>
+
                 <FormGroupSelectPerformer
                     disabled={this.state.submitting}
                     performerName={this.state.performerName}
@@ -207,50 +196,28 @@ export default class AddNewSongPage extends BasePageTemplate {
                     onChange={this.handlePerformerNameChange}
                 />
 
-                <FormGroup
-                    controlId="formBasicText"
-                    validationState={Validator.validateTitle(this.state.song.title)}
-                >
-                    <ControlLabel>Title</ControlLabel>
-                    <FormControl
-                        disabled={this.state.submitting}
-                        type="text"
-                        placeholder="Title"
-                        value={this.state.song.title}
-                        onChange={this.handleTitleChange}
-                    />
-                    <FormControl.Feedback />
-                </FormGroup>
+                <FormGroupEditTitle
+                    disabled={this.state.submitting}
+                    value={this.state.song.title}
+                    onChange={this.handleTitleChange}
+                />
 
-                <FormGroup
-                    controlId="formBasicText"
-                    validationState={Validator.validateLyrics(this.state.song.lyrics)}
-                >
-                    <ControlLabel>Lyrics</ControlLabel>
-                    <FormControl
-                        disabled={this.state.submitting}
-                        style={{fontFamily: "monospace", resize: "vertical", minHeight: 340}}
-                        componentClass="textarea"
-                        type="text"
-                        placeholder="Lyrics"
-                        value={this.state.song.lyrics}
-                        onChange={this.handleLyricsChange}
-                    />
-                    <FormControl.Feedback />
-                    <HelpBlock>Wrap each chord into braces (e.g., [Am]) to highlight it</HelpBlock>
-                </FormGroup>
+                <FormGroupEditLyrics
+                    disabled={this.state.submitting}
+                    value={this.state.song.lyrics}
+                    onChange={this.handleLyricsChange}
+                />
+
                 <HelpBlock style={{color: "red"}}>{this.state.error}</HelpBlock>
-                {this.state.chords.filter(chord => !chord.diagram || chord.isNew).length > 0 &&
-                <div>
-                    <p style={{marginTop: 16}}>
-                        Some chords are unknown.
-                        Please, specify a diagram for each chord (e.g., for C chord – 'x32010'):
-                    </p>
-                    <div style={{display: "flex", flexWrap: "wrap"}}>
-                        {this.renderUnknownChords()}
-                    </div>
-                </div>
+
+                {this.hasUnknownChords() &&
+                    <ChordInputList
+                        disabled={this.state.submitting}
+                        onChange={this.handleChordDiagramChange}
+                        chords={this.state.chords}
+                    />
                 }
+
                 <FormGroup>
                     <Button
                         disabled={!this.validateAll() || this.state.submitting}
