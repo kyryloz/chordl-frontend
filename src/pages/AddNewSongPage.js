@@ -1,7 +1,6 @@
 import React from "react";
-import * as $ from "jquery";
 import BasePageTemplate from "./BasePageTemplate";
-import api from "../global/api";
+import * as Api from "../global/api";
 import {HelpBlock, Button, FormGroup, ControlLabel, FormControl} from "react-bootstrap/lib";
 import update from "react-addons-update";
 import SelectPerformer from "../components/SelectPerformer";
@@ -36,20 +35,15 @@ export default class AddNewSongPage extends BasePageTemplate {
 
     loadAllPerformers() {
         this.startLoading();
-        $.ajax({
-            url: `${api.performers}/all`,
-            dataType: 'json',
-            type: 'GET',
-            success: function (data) {
+
+        Api.getAllPerformers()
+            .then(data => {
+                this.finishLoading();
                 this.setState({
                     performerNames: data
                 });
-                this.finishLoading();
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(status, err.toString());
-            }
-        });
+            })
+            .catch(error => console.log(error))
     }
 
     handleSongSubmit = (e) => {
@@ -59,56 +53,38 @@ export default class AddNewSongPage extends BasePageTemplate {
             submitting: true
         });
 
-        this.getPerformerId((err, result) => {
-            if (!err) {
-                this.submitSong(result);
-            } else {
+        Api.getPerformerIdByName(this.state.performerName)
+            .then(data => {
+                this.submitSong(data);
+            })
+            .catch(() => {
                 this.setState({
                     submitting: false,
                     error: `Performer '${this.state.performerName}' not found`
                 })
-            }
-        });
+            });
     };
 
-    getPerformerId(callback) {
-        $.ajax({
-            url: `${api.performers}/v2/search/?name=${this.state.performerName}`,
-            type: 'GET',
-            success: function (data) {
-                callback(null, data.id);
-            },
-            error: function (xhr, status, err) {
-                console.error(status, err.toString());
-                callback(err);
-            }
-        });
-    }
-
     submitSong = (performerId) => {
-        var data = {
+        var song = {
             performerId: performerId,
             title: this.state.song.title.trim(),
             lyrics: this.state.song.lyrics.trim(),
         };
 
-        $.ajax({
-            url: api.songs,
-            type: 'POST',
-            data: JSON.stringify(data),
-            success: function (data) {
+        Api.submitNewSong(song)
+            .then(data => {
                 this.setState({
                     submitting: false
                 });
                 this.context.router.replace(`/song/${data.id}`);
-            }.bind(this),
-            error: function (xhr, status, err) {
+            })
+            .catch(() => {
                 this.setState({
                     submitting: false,
                     error: "Can't process request, please try again later"
                 })
-            }.bind(this)
-        });
+            });
     };
 
     handlePerformerNameChange = (name, exists) => {
@@ -169,11 +145,8 @@ export default class AddNewSongPage extends BasePageTemplate {
             input: inputChords
         };
 
-        $.ajax({
-            url: `${api.chord}/hydrate`,
-            type: 'POST',
-            data: JSON.stringify(input),
-            success: data => {
+        Api.hydrateChords(input)
+            .then(data => {
                 const {chords} = this.state;
 
                 chords.filter(chord => inputChords.map(input => input.name).indexOf(chord.name) > 0)
@@ -182,11 +155,8 @@ export default class AddNewSongPage extends BasePageTemplate {
                             .filter(dataChord => dataChord.name === chord.name)[0].diagram);
 
                 this.setState({chords});
-            },
-            error: (xhr, status, err) => {
-                console.error(xhr, status, err);
-            }
-        });
+            })
+            .catch(error => console.error(error));
     };
 
     handleCancel = (e) => {
@@ -216,8 +186,7 @@ export default class AddNewSongPage extends BasePageTemplate {
 
     validateChords = () => {
         var validated = this.state.chords.filter(chord => {
-            var validateChord = validator.validateChord(chord.diagram, true);
-            return validateChord
+            return validator.validateChord(chord.diagram, true)
         });
         return validated.length === this.state.chords.length;
     };
@@ -295,15 +264,15 @@ export default class AddNewSongPage extends BasePageTemplate {
                 </FormGroup>
                 <HelpBlock style={{color: "red"}}>{this.state.error}</HelpBlock>
                 {this.state.chords.filter(chord => !chord.diagram || chord.isNew).length > 0 &&
-                    <div>
-                        <p style={{marginTop: 16}}>
-                            Some chords are unknown.
-                            Please, specify a diagram for each chord (e.g., for C chord – 'x32010'):
-                        </p>
-                        <div style={{display: "flex", flexWrap: "wrap"}}>
-                            {this.renderUnknownChords()}
-                        </div>
+                <div>
+                    <p style={{marginTop: 16}}>
+                        Some chords are unknown.
+                        Please, specify a diagram for each chord (e.g., for C chord – 'x32010'):
+                    </p>
+                    <div style={{display: "flex", flexWrap: "wrap"}}>
+                        {this.renderUnknownChords()}
                     </div>
+                </div>
                 }
                 <FormGroup>
                     <Button

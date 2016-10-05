@@ -1,5 +1,5 @@
 import Action from "../global/actions";
-import * as api from "../global/api";
+import api from "../global/api";
 import LocalStorage from "../util/LocalStorage";
 import ajaxInitializer from "../config/AjaxInitializer";
 import "whatwg-fetch";
