@@ -1,11 +1,12 @@
 import React from "react";
 import BasePageTemplate from "./BasePageTemplate";
 import * as Api from "../global/api";
-import {HelpBlock, Button, FormGroup} from "react-bootstrap/lib";
+import {HelpBlock} from "react-bootstrap/lib";
 import update from "react-addons-update";
 import FormGroupSelectPerformer from "../components/FormGroupSelectPerformer";
 import FormGroupEditTitle from "../components/FormGroupEditTitle";
 import FormGroupEditLyrics from "../components/FormGroupEditLyrics";
+import FormGroupSongSubmitButtons from "../components/FormGroupSongSubmitButtons";
 import ChordInputList from "../components/ChordInputList";
 import * as Validator from "../util/validator";
 import {Parser} from "react-chord-parser";
@@ -143,11 +144,6 @@ export default class AddNewSongPage extends BasePageTemplate {
             .catch(error => console.error(error));
     };
 
-    handleCancel = (e) => {
-        e.preventDefault();
-        this.context.router.goBack();
-    };
-
     handleChordDiagramChange = (newChord) => {
         const {chords} = this.state;
 
@@ -218,21 +214,11 @@ export default class AddNewSongPage extends BasePageTemplate {
                     />
                 }
 
-                <FormGroup>
-                    <Button
-                        disabled={!this.validateAll() || this.state.submitting}
-                        type="submit"
-                        bsStyle="success"
-                        style={{width: 120}}>
-                        {this.state.submitting ? "Saving..." : "Save"}
-                    </Button>
-                    <Button
-                        disabled={this.state.submitting}
-                        style={{marginLeft: 16, width: 120}}
-                        onClick={this.handleCancel}>
-                        Cancel
-                    </Button>
-                </FormGroup>
+                <FormGroupSongSubmitButtons
+                    disabled={this.state.submitting || !this.validateAll()}
+                    submitting={this.state.submitting}
+                />
+
             </form>
         )
     }
