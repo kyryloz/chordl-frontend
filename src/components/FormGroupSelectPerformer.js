@@ -15,17 +15,13 @@ export default class FormGroupSelectPerformer extends React.Component {
     }
 
     componentDidMount() {
-        this.loadAllPerformers();
-    }
-
-    loadAllPerformers() {
         requestGetAllPerformers()
             .then(data => {
                 this.setState({
                     performerNames: data
                 });
             })
-            .catch(error => console.log(error))
+            .catch(console.log)
     }
 
     render() {
