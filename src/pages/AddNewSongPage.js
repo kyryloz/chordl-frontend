@@ -2,7 +2,6 @@ import React from "react";
 import BasePageTemplate from "./BasePageTemplate";
 import * as Api from "../global/api";
 import {HelpBlock} from "react-bootstrap/lib";
-import update from "react-addons-update";
 import FormGroupSelectPerformer from "../components/FormGroupSelectPerformer";
 import FormGroupEditTitle from "../components/FormGroupEditTitle";
 import FormGroupEditLyrics from "../components/FormGroupEditLyrics";
@@ -18,10 +17,8 @@ export default class AddNewSongPage extends BasePageTemplate {
         super();
 
         this.state = {
-            song: {
-                title: "",
-                lyrics: "",
-            },
+            songTitle: "",
+            songLyrics: "",
             performerName: "",
             performerId: -1,
             performerExists: false,
@@ -53,8 +50,8 @@ export default class AddNewSongPage extends BasePageTemplate {
     submitSong = (performerId) => {
         var song = {
             performerId: performerId,
-            title: this.state.song.title.trim(),
-            lyrics: this.state.song.lyrics.trim(),
+            title: this.state.songTitle.trim(),
+            lyrics: this.state.songLyrics.trim(),
         };
 
         Api.submitNewSong(song)
@@ -81,13 +78,10 @@ export default class AddNewSongPage extends BasePageTemplate {
     };
 
     handleTitleChange = (e) => {
-        const newState = update(this.state, {
-            song: {
-                title: {$set: e.target.value}
-            },
-            error: {$set: ""}
+        this.setState({
+            songTitle: e.target.value,
+            error: ""
         });
-        this.setState(newState);
     };
 
     handleLyricsChange = (e) => {
@@ -108,15 +102,11 @@ export default class AddNewSongPage extends BasePageTemplate {
                 .orElse(false)
         });
 
-        const newState = update(this.state, {
-            song: {
-                lyrics: {$set: newLyrics}
-            },
-            chords: {$set: uniqueChords},
-            error: {$set: ""}
-        });
-
-        this.setState(newState, () => {
+        this.setState({
+            songLyrics: newLyrics,
+            chords: uniqueChords,
+            error: ""
+        }, () => {
             this.hydrateChords(this.state.chords.filter(chord => {
                 return !chord.diagram;
             }));
@@ -159,8 +149,8 @@ export default class AddNewSongPage extends BasePageTemplate {
 
     validateAll = () => {
         return Validator.validatePerformer(this.state.performerName, this.state.performerExists, true)
-            && Validator.validateLyrics(this.state.song.lyrics, true)
-            && Validator.validateTitle(this.state.song.title, true)
+            && Validator.validateLyrics(this.state.songLyrics, true)
+            && Validator.validateTitle(this.state.songTitle, true)
             && this.validateChords();
     };
 
@@ -194,13 +184,13 @@ export default class AddNewSongPage extends BasePageTemplate {
 
                 <FormGroupEditTitle
                     disabled={this.state.submitting}
-                    value={this.state.song.title}
+                    value={this.state.songTitle}
                     onChange={this.handleTitleChange}
                 />
 
                 <FormGroupEditLyrics
                     disabled={this.state.submitting}
-                    value={this.state.song.lyrics}
+                    value={this.state.songLyrics}
                     onChange={this.handleLyricsChange}
                 />
 
