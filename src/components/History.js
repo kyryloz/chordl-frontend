@@ -2,8 +2,7 @@ import React from "react";
 import {Button, Modal, Collapse, Panel} from "react-bootstrap/lib";
 import HistoryList from "./HistoryList";
 import Highlight from "./Highlight";
-import api from "../global/api";
-import * as $ from "jquery";
+import {requestGetPrettyHistory, requestApplyHistory} from "../global/api";
 import moment from "moment";
 
 export default class History extends React.Component {
@@ -29,39 +28,29 @@ export default class History extends React.Component {
     };
 
     handleHistoryClick = (history) => {
-        $.ajax({
-            url: `${api.history}/pretty?historyId=${history.id}`,
-            type: 'GET',
-            success: function (data) {
+        requestGetPrettyHistory(history)
+            .then(data => {
                 this.setState({
                     historyPretty: data.diff,
                     historyPrettyModalOpened: true,
                     historyClickedId: history.id,
                     historyDate: moment(history.timestamp).format("MMMM, D, YYYY, HH:mm")
                 });
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(xhr, status, err);
-            }
-        });
+            })
+            .catch(console.error);
     };
 
-    handleApplyClick = (history) => {
-        $.ajax({
-            url: `${api.history}/apply?historyId=${this.state.historyClickedId}&songId=${this.state.id}`,
-            type: 'GET',
-            success: function (data) {
+    handleApplyClick = () => {
+        requestApplyHistory(this.state.historyClickedId, this.state.id)
+            .then(data => {
                 this.props.callback(data);
                 this.setState({
                     historyPretty: "",
                     historyPrettyModalOpened: false,
                     historyClickedId: -1
                 });
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(xhr, status, err);
-            }
-        });
+            })
+            .catch(console.error);
     };
 
     handleHistoryModalClose = () => {

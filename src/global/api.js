@@ -12,7 +12,6 @@ export default {
     index: `${backend}/index`,
     featured: `${backend}/featured`,
     auth: `${backend}/auth`,
-    history: `${backend}/history`,
 };
 
 export function requestGetAllPerformers() {
@@ -47,6 +46,15 @@ export function requestPostChords(chords) {
     return Promise.all(
         chords.map(chord => json(fetch(`${backend}/chord`, createPostProps(chord))))
     );
+}
+
+export function requestGetPrettyHistory(history) {
+    return json(fetch(`${backend}/history/pretty?historyId=${history.id}`, createGetProps()));
+}
+
+export function requestApplyHistory(historyId, songId) {
+    return json(fetch(`${backend}/history/apply?historyId=${historyId}&songId=${songId}`,
+        createGetProps()));
 }
 
 function checkStatus(response) {
