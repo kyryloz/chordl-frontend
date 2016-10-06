@@ -1,5 +1,6 @@
 import "whatwg-fetch";
 import LocalStorage from "../util/LocalStorage";
+
 const storage = new LocalStorage();
 
 const backend = '/api';
@@ -16,45 +17,37 @@ export default {
 };
 
 export function requestGetAllPerformers() {
-    return fetch(`${backend}/performers/all`, createGetProps())
-        .then(checkStatus)
-        .then(res => res.json());
+    return json(fetch(`${backend}/performers/all`, createGetProps()));
 }
 
 export function requestGetPerformerIdByName(name) {
-    return fetch(`${backend}/performers/v2/search/?name=${name}`, createGetProps())
-        .then(checkStatus)
-        .then(res => res.json());
+    return json(fetch(`${backend}/performers/v2/search/?name=${name}`, createGetProps()));
 }
 
 export function requestGetSongById(id) {
-    return fetch(`${backend}/songs/${id}`, createGetProps())
-        .then(checkStatus)
-        .then(res => res.json());
+    return json(fetch(`${backend}/songs/${id}`, createGetProps()));
 }
 
 export function requestPostSong(song) {
-    return fetch(`${backend}/songs`, createPostProps(song))
-        .then(checkStatus)
-        .then(res => res.json());
+    return json(fetch(`${backend}/songs`, createPostProps(song)));
 }
 
 export function requestEditSong(song) {
-    return fetch(`${backend}/songs`, createPutProps(song))
-        .then(checkStatus)
-        .then(res => res.json());
+    return json(fetch(`${backend}/songs`, createPutProps(song)));
 }
 
 export function requestDeleteSong(id) {
-    return fetch(`${backend}/songs/${id}`, createDeleteProps())
-        .then(checkStatus)
-        .then(res => res.json());
+    return json(fetch(`${backend}/songs/${id}`, createDeleteProps()));
 }
 
 export function requestHydrateChords(input) {
-    return fetch(`${backend}/chord/hydrate`, createPostProps(input))
-        .then(checkStatus)
-        .then(res => res.json());
+    return json(fetch(`${backend}/chord/hydrate`, createPostProps(input)));
+}
+
+export function requestPostChords(chords) {
+    return Promise.all(
+        chords.map(chord => json(fetch(`${backend}/chord`, createPostProps(chord))))
+    );
 }
 
 function checkStatus(response) {
@@ -106,4 +99,8 @@ function applyBearer(props) {
     if (jwtToken) {
         props.headers["Authorization"] = `Bearer ${jwtToken}`;
     }
+}
+
+function json(promise) {
+    return promise.then(checkStatus).then(res => res.json())
 }

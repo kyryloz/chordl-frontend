@@ -5,7 +5,8 @@ import {
     requestPostSong,
     requestGetPerformerIdByName,
     requestHydrateChords,
-    requestGetSongById
+    requestGetSongById,
+    requestPostChords
 } from "../global/api";
 import {HelpBlock} from "react-bootstrap/lib";
 import FormGroupSelectPerformer from "../components/FormGroupSelectPerformer";
@@ -21,12 +22,13 @@ import SongTitle from "../components/SongTitle";
 
 export default class EditSongPage extends BasePageTemplate {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             songTitle: "",
             songLyrics: "",
+            songId: props.params.id,
             performerName: "",
             performerId: -1,
             performerExists: false,
@@ -50,11 +52,7 @@ export default class EditSongPage extends BasePageTemplate {
                     });
                     this.finishLoading();
                 })
-                .catch(() => {
-                    this.setState({
-                        error: "Can't load song, please try again later"
-                    })
-                })
+                .catch(this.handleError);
         }
     }
 
@@ -70,58 +68,53 @@ export default class EditSongPage extends BasePageTemplate {
         });
 
         if (this.props.params.id) {
-            requestEditSong({
+            const song = {
                 id: this.props.params.id,
                 title: this.state.songTitle,
                 lyrics: this.state.songLyrics,
                 performerId: this.state.performerId,
                 performerName: this.state.performerName
-            })
-                .then(data => {
-                    this.setState({
-                        submitting: false
-                    });
-                    this.context.router.replace("/song/" + data.id)
-                })
-                .catch(() => {
-                    this.setState({
-                        error: "Can't process request, please try again later"
-                    })
-                })
+            };
+
+            requestEditSong(song)
+                .then(this.handleSubmitSuccess)
+                .catch(this.handleError)
         } else {
             requestGetPerformerIdByName(this.state.performerName)
-                .then(data => {
-                    this.submitSong(data.id);
-                })
-                .catch(() => {
-                    this.setState({
-                        submitting: false,
-                        error: `Performer '${this.state.performerName}' not found`
-                    })
-                });
+                .then(this.postSong)
+                .then(this.postChords)
+                .then(this.handleSubmitSuccess)
+                .catch(this.handleError)
         }
     };
 
-    submitSong = (performerId) => {
+    postSong = (performer) => {
         var song = {
-            performerId: performerId,
+            performerId: performer.id,
             title: this.state.songTitle.trim(),
             lyrics: this.state.songLyrics.trim(),
         };
 
-        requestPostSong(song)
-            .then(data => {
-                this.setState({
-                    submitting: false
-                });
-                this.context.router.replace(`/song/${data.id}`);
-            })
-            .catch(() => {
-                this.setState({
-                    submitting: false,
-                    error: "Can't process request, please try again later"
-                })
-            });
+        return requestPostSong(song);
+    };
+
+    postChords = (song) => {
+        this.setState({songId: song.id});
+        return requestPostChords(this.state.chords)
+    };
+
+    handleSubmitSuccess = () => {
+        this.setState({
+            submitting: false
+        });
+        this.context.router.replace(`/song/${this.state.songId}`);
+    };
+
+    handleError = () => {
+        this.setState({
+            submitting: false,
+            error: "Can't process request, please try again later"
+        })
     };
 
     handlePerformerNameChange = (name, exists) => {
@@ -283,8 +276,6 @@ export default class EditSongPage extends BasePageTemplate {
                     onChange={this.handleLyricsChange}
                 />
 
-                <HelpBlock style={{color: "red"}}>{this.state.error}</HelpBlock>
-
                 {this.hasUnknownChords() &&
                 <ChordInputList
                     disabled={this.state.submitting}
@@ -292,6 +283,8 @@ export default class EditSongPage extends BasePageTemplate {
                     chords={this.state.chords}
                 />
                 }
+
+                <HelpBlock style={{color: "red"}}>{this.state.error}</HelpBlock>
 
                 <FormGroupSongSubmitButtons
                     disabled={this.state.submitting || !this.validateAll()}
