@@ -10,51 +10,57 @@ export default {
     songs: `${backend}/songs`,
     search: `${backend}/search/`,
     index: `${backend}/index`,
-    featured: `${backend}/featured`,
-    auth: `${backend}/auth`,
+    featured: `${backend}/featured`
 };
 
 export function requestGetAllPerformers() {
-    return json(fetch(`${backend}/performers/all`, createGetProps()));
+    return json(fetch(`${backend}/performers/all`, get()));
 }
 
 export function requestGetPerformerIdByName(name) {
-    return json(fetch(`${backend}/performers/v2/search/?name=${name}`, createGetProps()));
+    return json(fetch(`${backend}/performers/v2/search/?name=${name}`, get()));
 }
 
 export function requestGetSongById(id) {
-    return json(fetch(`${backend}/songs/${id}`, createGetProps()));
+    return json(fetch(`${backend}/songs/${id}`, get()));
 }
 
 export function requestPostSong(song) {
-    return json(fetch(`${backend}/songs`, createPostProps(song)));
+    return json(fetch(`${backend}/songs`, post(song)));
 }
 
 export function requestEditSong(song) {
-    return json(fetch(`${backend}/songs`, createPutProps(song)));
+    return json(fetch(`${backend}/songs`, put(song)));
 }
 
 export function requestDeleteSong(id) {
-    return json(fetch(`${backend}/songs/${id}`, createDeleteProps()));
+    return json(fetch(`${backend}/songs/${id}`, del()));
 }
 
 export function requestHydrateChords(input) {
-    return json(fetch(`${backend}/chord/hydrate`, createPostProps(input)));
+    return json(fetch(`${backend}/chord/hydrate`, post(input)));
 }
 
 export function requestPostChords(chords) {
     return Promise.all(
-        chords.map(chord => json(fetch(`${backend}/chord`, createPostProps(chord))))
+        chords.map(chord => json(fetch(`${backend}/chord`, post(chord))))
     );
 }
 
 export function requestGetPrettyHistory(history) {
-    return json(fetch(`${backend}/history/pretty?historyId=${history.id}`, createGetProps()));
+    return json(fetch(`${backend}/history/pretty?historyId=${history.id}`, get()));
 }
 
 export function requestApplyHistory(historyId, songId) {
-    return json(fetch(`${backend}/history/apply?historyId=${historyId}&songId=${songId}`,
-        createGetProps()));
+    return json(fetch(`${backend}/history/apply?historyId=${historyId}&songId=${songId}`, get()));
+}
+
+export function requestAuthUser(authData) {
+    return json(fetch(`${backend}/auth/signin`, post(authData)));
+}
+
+export function requestGetMe() {
+    return json(fetch(`${backend}/auth/me`, get()));
 }
 
 function checkStatus(response) {
@@ -68,19 +74,19 @@ function checkStatus(response) {
 }
 
 
-function createGetProps() {
+function get() {
     return createAuthorizedRequestProps("get");
 }
 
-function createPutProps(data) {
+function put(data) {
     return createAuthorizedRequestProps("put", data);
 }
 
-function createPostProps(data) {
+function post(data) {
     return createAuthorizedRequestProps("post", data);
 }
 
-function createDeleteProps() {
+function del() {
     return createAuthorizedRequestProps("delete");
 }
 
