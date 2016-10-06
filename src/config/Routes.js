@@ -1,6 +1,5 @@
 import React from "react";
 import {Router, Route, IndexRoute} from "react-router";
-import AddNewSongPage from "../pages/AddNewSongPage";
 import PerformerPage from "../pages/PerformerPage";
 import SongPage from "../pages/SongPage";
 import HomePage from "../pages/HomePage";
@@ -46,11 +45,11 @@ export default class Routes extends React.Component {
                     <Router history={history} onUpdate={this.handleUpdate}>
                         <Route path='/' component={App}>
                             <IndexRoute component={HomePage}/>
-                            <Route path='/add' component={onlyAuthenticated(AddNewSongPage)}/>
+                            <Route path='/add' component={onlyAuthenticated(EditSongPage)}/>
                             <Route path='/performer/:id' component={PerformerPage}/>
                             <Route path='/performer/:id/edit' component={onlyAdmin(EditPerformerPage)}/>
                             <Route path='/song/:id' component={SongPage}/>
-                            <Route path='/song/:id/edit' mode="edit" component={AddNewSongPage}/>
+                            <Route path='/song/:id/edit' component={onlyAuthenticated(EditSongPage)}/>
                             <Route path='/search' component={SearchPage}/>
                             <Route path='/about' component={AboutPage}/>
                             <Route path='*' component={NotFoundPage}/>

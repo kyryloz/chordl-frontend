@@ -27,8 +27,26 @@ export function requestGetPerformerIdByName(name) {
         .then(res => res.json());
 }
 
-export function requestSubmitNewSong(song) {
+export function requestGetSongById(id) {
+    return fetch(`${backend}/songs/${id}`, createGetProps())
+        .then(checkStatus)
+        .then(res => res.json());
+}
+
+export function requestPostSong(song) {
     return fetch(`${backend}/songs`, createPostProps(song))
+        .then(checkStatus)
+        .then(res => res.json());
+}
+
+export function requestEditSong(song) {
+    return fetch(`${backend}/songs`, createPutProps(song))
+        .then(checkStatus)
+        .then(res => res.json());
+}
+
+export function requestDeleteSong(id) {
+    return fetch(`${backend}/songs/${id}`, createDeleteProps())
         .then(checkStatus)
         .then(res => res.json());
 }
@@ -51,29 +69,30 @@ function checkStatus(response) {
 
 
 function createGetProps() {
-    const props = {
-        dataType: "json",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-        },
-        method: "get"
-    };
+    return createAuthorizedRequestProps("get");
+}
 
-    applyBearer(props);
-
-    return props;
+function createPutProps(data) {
+    return createAuthorizedRequestProps("put", data);
 }
 
 function createPostProps(data) {
+    return createAuthorizedRequestProps("post", data);
+}
+
+function createDeleteProps() {
+    return createAuthorizedRequestProps("delete");
+}
+
+function createAuthorizedRequestProps(method, data) {
     const props = {
         dataType: "json",
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
         },
-        method: "post",
-        body: JSON.stringify(data)
+        method,
+        body: data ? JSON.stringify(data) : null
     };
 
     applyBearer(props);

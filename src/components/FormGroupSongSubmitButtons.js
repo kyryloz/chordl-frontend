@@ -3,11 +3,6 @@ import {Button, FormGroup} from "react-bootstrap/lib";
 
 export default class FormGroupSongSubmitButtons extends React.Component {
 
-    handleCancel = (e) => {
-        e.preventDefault();
-        this.context.router.goBack();
-    };
-
     render() {
         return (
             <FormGroup>
@@ -21,14 +16,10 @@ export default class FormGroupSongSubmitButtons extends React.Component {
                 <Button
                     disabled={this.props.submitting}
                     style={{marginLeft: 16, width: 120}}
-                    onClick={this.handleCancel}>
+                    onClick={this.props.onCancelClick}>
                     Cancel
                 </Button>
             </FormGroup>
         )
     }
 }
-
-FormGroupSongSubmitButtons.contextTypes = {
-    router: React.PropTypes.object
-};
