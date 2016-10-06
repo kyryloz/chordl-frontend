@@ -1,13 +1,11 @@
 import React from "react";
-import * as $ from "jquery";
 import {Link} from "react-router";
 import BasePageTemplate from "./BasePageTemplate";
 import SongTitle from "../components/SongTitle";
-import api from "../global/api";
+import {requestHydrateChords, requestGetSongById} from "../global/api";
 import {Button} from "react-bootstrap/lib";
 import History from "../components/History";
 import {Chordify, Chord, Parser} from "react-chord-parser";
-import {requestHydrateChords} from "../global/api";
 
 export default class SongPage extends BasePageTemplate {
 
@@ -32,19 +30,14 @@ export default class SongPage extends BasePageTemplate {
 
     loadSong() {
         this.startLoading();
-        $.ajax({
-            url: `${api.songs}/${this.props.params.id}`,
-            type: 'GET',
-            success: function (data) {
+        requestGetSongById(this.props.params.id)
+            .then(data => {
                 this.setState({
                     ...data,
                     createdByName: data.createdBy ? data.createdBy.name : "Unknown"
                 }, () => this.hydrateChords());
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(xhr, status, err);
-            }
-        });
+            })
+            .catch(console.error);
     }
 
     hydrateChords = () => {

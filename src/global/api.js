@@ -6,8 +6,7 @@ const storage = new LocalStorage();
 const backend = '/api';
 
 export default {
-    performers: `${backend}/performers`,
-    songs: `${backend}/songs`
+    performers: `${backend}/performers`
 };
 
 export function requestGetAllPerformers() {
