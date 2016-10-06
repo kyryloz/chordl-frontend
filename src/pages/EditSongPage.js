@@ -79,6 +79,7 @@ export default class EditSongPage extends BasePageTemplate {
             };
 
             requestEditSong(song)
+                .then(this.postChords)
                 .then(this.handleSubmitSuccess)
                 .catch(this.handleError)
         } else {
@@ -102,7 +103,7 @@ export default class EditSongPage extends BasePageTemplate {
 
     postChords = (song) => {
         this.setState({songId: song.id});
-        return requestPostChords(this.state.chords)
+        return requestPostChords(this.state.chords.filter(chord => !chord.exists));
     };
 
     handleSubmitSuccess = () => {
@@ -169,7 +170,7 @@ export default class EditSongPage extends BasePageTemplate {
             .then(data => {
                 const result = [
                     ...this.state.chords,
-                    ...data.map(chord => ({exists: chord.diagram ? true : false, ...chord}))
+                    ...data.map(chord => ({exists: !!chord.diagram, ...chord}))
                 ];
                 const chords = [...new Set(result.map(chord => chord.name))]
                     .map(chordName => result.filter(chord => chord.name === chordName)[0]);
@@ -220,7 +221,7 @@ export default class EditSongPage extends BasePageTemplate {
     };
 
     hasUnknownChords = () => {
-        return this.state.chords.filter(chord => !chord.diagram).length > 0;
+        return this.state.chords.filter(chord => !chord.exists).length > 0;
     };
 
     renderHeader() {
