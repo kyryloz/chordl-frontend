@@ -38,11 +38,11 @@ export default class BasePageTemplate extends React.Component {
         })
     }
 
-    finishLoading() {
+    finishLoading = () => {
         this.setState({
             loading: false
         })
-    }
+    };
 
     renderHeader() {
         return null;

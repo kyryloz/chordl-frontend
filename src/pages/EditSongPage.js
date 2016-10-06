@@ -42,19 +42,21 @@ export default class EditSongPage extends BasePageTemplate {
         if (typeof this.props.params.id !== "undefined") {
             this.startLoading();
             requestGetSongById(this.props.params.id)
-                .then(data => {
-                    this.setState({
-                        songTitle: data.title,
-                        songLyrics: data.lyrics,
-                        performerName: data.performerName,
-                        performerId: data.performerId,
-                        chords: this.parseChords(data.lyrics),
-                    });
-                    this.finishLoading();
-                })
+                .then(this.hydrateSong)
+                .then(this.parseChords)
+                .then(this.finishLoading)
                 .catch(this.handleError);
         }
     }
+
+    hydrateSong = (song) => {
+        this.setState({
+            songTitle: song.title,
+            songLyrics: song.lyrics,
+            performerName: song.performerName,
+            performerId: song.performerId,
+        });
+    };
 
     isUserAdmin = () => {
         return this.props.user ? this.props.user.isAdmin : false;
@@ -110,11 +112,12 @@ export default class EditSongPage extends BasePageTemplate {
         this.context.router.replace(`/song/${this.state.songId}`);
     };
 
-    handleError = () => {
+    handleError = (error) => {
         this.setState({
             submitting: false,
             error: "Can't process request, please try again later"
-        })
+        });
+        throw error;
     };
 
     handlePerformerNameChange = (name, exists) => {
@@ -134,37 +137,26 @@ export default class EditSongPage extends BasePageTemplate {
 
     handleLyricsChange = (e) => {
         const newLyrics = e.target.value;
-        const uniqueChords = this.parseChords(newLyrics);
 
         this.setState({
             songLyrics: newLyrics,
-            chords: uniqueChords,
             error: ""
-        }, () => {
-            this.hydrateChords(this.state.chords.filter(chord => {
-                return !chord.diagram;
-            }));
-        });
+        }, this.parseChords);
     };
 
-    parseChords(text) {
-        const uniqueChords = new Parser(text)
+    parseChords = () => {
+        const uniqueChords = new Parser(this.state.songLyrics)
             .unique()
-            .map(chordName => ({name: chordName}));
+            .map(chordName => ({
+                name: chordName,
+                diagram: Optional.ofNullable(
+                    this.state.chords.filter(chord => chord.name === chordName)[0])
+                    .map(chord => chord.diagram)
+                    .orElse("")
+            }));
 
-        uniqueChords.forEach(uniqueChord => {
-            var foundChord = this.state.chords.filter(chord => chord.name === uniqueChord.name)[0];
-            uniqueChord.diagram = Optional
-                .ofNullable(foundChord)
-                .map(chord => chord.diagram)
-                .orElse("");
-            uniqueChord.isNew = Optional
-                .ofNullable(foundChord)
-                .map(chord => chord.isNew)
-                .orElse(false)
-        });
-        return uniqueChords;
-    }
+        this.hydrateChords(uniqueChords.filter(chord => !chord.diagram));
+    };
 
     hydrateChords = (inputChords) => {
         if (inputChords.length === 0) return;
@@ -175,16 +167,18 @@ export default class EditSongPage extends BasePageTemplate {
 
         requestHydrateChords(input)
             .then(data => {
-                const {chords} = this.state;
+                const result = [
+                    ...this.state.chords,
+                    ...data.map(chord => ({exists: chord.diagram ? true : false, ...chord}))
+                ];
+                const chords = [...new Set(result.map(chord => chord.name))]
+                    .map(chordName => result.filter(chord => chord.name === chordName)[0]);
 
-                chords.filter(chord => inputChords.map(input => input.name).indexOf(chord.name) > 0)
-                    .forEach(chord =>
-                        chord.diagram = data
-                            .filter(dataChord => dataChord.name === chord.name)[0].diagram);
-
-                this.setState({chords});
+                this.setState({
+                    chords
+                });
             })
-            .catch(error => console.error(error));
+            .catch(this.handleError);
     };
 
     handleChordDiagramChange = (newChord) => {
@@ -193,7 +187,6 @@ export default class EditSongPage extends BasePageTemplate {
         chords.forEach(chord => {
             if (chord.name === newChord.name) {
                 chord.diagram = newChord.diagram;
-                chord.isNew = true;
             }
         });
 
@@ -227,7 +220,7 @@ export default class EditSongPage extends BasePageTemplate {
     };
 
     hasUnknownChords = () => {
-        return this.state.chords.filter(chord => !chord.diagram || chord.isNew).length > 0;
+        return this.state.chords.filter(chord => !chord.diagram).length > 0;
     };
 
     renderHeader() {
@@ -280,7 +273,7 @@ export default class EditSongPage extends BasePageTemplate {
                 <ChordInputList
                     disabled={this.state.submitting}
                     onChange={this.handleChordDiagramChange}
-                    chords={this.state.chords}
+                    chords={this.state.chords.filter(chord => !chord.exists)}
                 />
                 }
 
