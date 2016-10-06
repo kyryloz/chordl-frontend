@@ -10,6 +10,9 @@ import ChordInputList from "../components/ChordInputList";
 import * as Validator from "../util/validator";
 import {Parser} from "react-chord-parser";
 import Optional from "optional-js";
+import api from "../global/api";
+import * as $ from "jquery";
+import SongTitle from "../components/SongTitle";
 
 export default class AddNewSongPage extends BasePageTemplate {
 
@@ -26,6 +29,40 @@ export default class AddNewSongPage extends BasePageTemplate {
             submitting: false,
             chords: []
         };
+    }
+
+    componentDidMount() {
+        if (typeof this.props.params.id !== "undefined") {
+            this.loadSong();
+        }
+    }
+
+    loadSong() {
+        this.startLoading();
+        $.ajax({
+            url: `${api.songs}/${this.props.params.id}`,
+            dataType: 'json',
+            type: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            success: function (data) {
+                this.setState({
+                    songTitle: data.title,
+                    songLyrics: data.lyrics,
+                    performerName: data.performerName,
+                    performerId: data.performerId,
+                    chords: this.parseChords(data.lyrics),
+                });
+                this.finishLoading();
+            }.bind(this),
+            error: function (xhr, status, err) {
+                this.setState({
+                    error: "Can't load song, please try again later"
+                })
+            }.bind(this)
+        });
     }
 
     handleSongSubmit = (e) => {
@@ -86,7 +123,21 @@ export default class AddNewSongPage extends BasePageTemplate {
 
     handleLyricsChange = (e) => {
         const newLyrics = e.target.value;
-        const uniqueChords = new Parser(newLyrics)
+        const uniqueChords = this.parseChords(newLyrics);
+
+        this.setState({
+            songLyrics: newLyrics,
+            chords: uniqueChords,
+            error: ""
+        }, () => {
+            this.hydrateChords(this.state.chords.filter(chord => {
+                return !chord.diagram;
+            }));
+        });
+    };
+
+    parseChords(text) {
+        const uniqueChords = new Parser(text)
             .unique()
             .map(chordName => ({name: chordName}));
 
@@ -101,17 +152,8 @@ export default class AddNewSongPage extends BasePageTemplate {
                 .map(chord => chord.isNew)
                 .orElse(false)
         });
-
-        this.setState({
-            songLyrics: newLyrics,
-            chords: uniqueChords,
-            error: ""
-        }, () => {
-            this.hydrateChords(this.state.chords.filter(chord => {
-                return !chord.diagram;
-            }));
-        });
-    };
+        return uniqueChords;
+    }
 
     hydrateChords = (inputChords) => {
         if (inputChords.length === 0) return;
@@ -148,7 +190,14 @@ export default class AddNewSongPage extends BasePageTemplate {
     };
 
     validateAll = () => {
-        return Validator.validatePerformer(this.state.performerName, this.state.performerExists, true)
+        let performerValidated = true;
+
+        if (!this.props.params.id) {
+            performerValidated =
+                Validator.validatePerformer(this.state.performerName, this.state.performerExists, true);
+        }
+
+        return performerValidated
             && Validator.validateLyrics(this.state.songLyrics, true)
             && Validator.validateTitle(this.state.songTitle, true)
             && this.validateChords();
@@ -166,21 +215,38 @@ export default class AddNewSongPage extends BasePageTemplate {
     };
 
     renderHeader() {
-        return (
-            <h3>Add new song</h3>
-        )
+        if (this.props.params.id) {
+            return (
+                <h3>
+                    <SongTitle
+                        song={{
+                            title: this.state.songTitle,
+                            id: this.props.params.id,
+                            performerName: this.state.performerName,
+                            performerId: this.state.performerId
+                        }}
+                    />
+                </h3>
+            )
+        } else {
+            return (
+                <h3>Add new song</h3>
+            )
+        }
     }
 
     renderContent() {
         return (
             <form onSubmit={this.handleSongSubmit} style={{marginTop: 16}}>
 
+                {!this.props.params.id &&
                 <FormGroupSelectPerformer
                     disabled={this.state.submitting}
                     performerName={this.state.performerName}
                     performerExists={this.state.performerExists}
                     onChange={this.handlePerformerNameChange}
                 />
+                }
 
                 <FormGroupEditTitle
                     disabled={this.state.submitting}

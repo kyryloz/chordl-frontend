@@ -50,7 +50,7 @@ export default class Routes extends React.Component {
                             <Route path='/performer/:id' component={PerformerPage}/>
                             <Route path='/performer/:id/edit' component={onlyAdmin(EditPerformerPage)}/>
                             <Route path='/song/:id' component={SongPage}/>
-                            <Route path='/song/:id/edit' component={EditSongPage}/>
+                            <Route path='/song/:id/edit' mode="edit" component={AddNewSongPage}/>
                             <Route path='/search' component={SearchPage}/>
                             <Route path='/about' component={AboutPage}/>
                             <Route path='*' component={NotFoundPage}/>
