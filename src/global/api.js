@@ -7,9 +7,7 @@ const backend = '/api';
 
 export default {
     performers: `${backend}/performers`,
-    songs: `${backend}/songs`,
-    search: `${backend}/search/`,
-    index: `${backend}/index`
+    songs: `${backend}/songs`
 };
 
 export function requestGetAllPerformers() {
@@ -64,6 +62,10 @@ export function requestGetMe() {
 
 export function requestGetFeatured() {
     return json(`${backend}/featured`)
+}
+
+export function requestSearch(term, page, size) {
+    return json(`${backend}/search?query=${term}&page=${page}$size=${size}`, get());
 }
 
 function checkStatus(response) {

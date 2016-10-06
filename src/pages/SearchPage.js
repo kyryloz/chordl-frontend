@@ -1,7 +1,6 @@
 import React from "react";
-import * as $ from "jquery";
 import SearchResultList from "../components/SearchResultList";
-import api from "../global/api";
+import {requestSearch} from "../global/api";
 import BasePageTemplate from "./BasePageTemplate";
 import {Pagination} from "react-bootstrap/lib";
 
@@ -39,10 +38,8 @@ export default class SearchPage extends BasePageTemplate {
             loading: true
         });
 
-        $.ajax({
-            url: api.search + "?query=" + term + "&page=" + (page - 1) + "&size=" + DEFAULT_PAGE_LIMIT,
-            type: 'GET',
-            success: function (data) {
+        requestSearch(term, page - 1, DEFAULT_PAGE_LIMIT)
+            .then(data => {
                 this.setState({
                     content: data.content,
                     page: data.number + 1,
@@ -50,14 +47,13 @@ export default class SearchPage extends BasePageTemplate {
                     loading: false,
                     error: ""
                 });
-            }.bind(this),
-            error: function (xhr, status, err) {
+            })
+            .catch(() => {
                 this.setState({
                     loading: false,
                     error: "Error has occurred, please try again later"
                 });
-            }.bind(this)
-        });
+            });
     }
 
     componentWillReceiveProps(nextProps) {
