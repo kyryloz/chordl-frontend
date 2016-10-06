@@ -9,8 +9,7 @@ export default {
     performers: `${backend}/performers`,
     songs: `${backend}/songs`,
     search: `${backend}/search/`,
-    index: `${backend}/index`,
-    featured: `${backend}/featured`
+    index: `${backend}/index`
 };
 
 export function requestGetAllPerformers() {
@@ -61,6 +60,10 @@ export function requestAuthUser(authData) {
 
 export function requestGetMe() {
     return json(`${backend}/auth/me`, get());
+}
+
+export function requestGetFeatured() {
+    return json(`${backend}/featured`)
 }
 
 function checkStatus(response) {

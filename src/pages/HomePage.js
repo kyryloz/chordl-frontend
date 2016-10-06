@@ -1,8 +1,7 @@
 import React from "react";
-import * as $ from "jquery";
 import LastUpdatedList from "../components/LastUpdatedList";
 import BasePageTemplate from "./BasePageTemplate";
-import api from "../global/api";
+import {requestGetFeatured} from "../global/api";
 import {Badge} from "react-bootstrap/lib";
 import {Link} from "react-router";
 
@@ -31,21 +30,16 @@ export default class HomePage extends BasePageTemplate {
 
     loadFeatured() {
         this.startLoading();
-        $.ajax({
-            url: api.featured,
-            dataType: 'json',
-            type: 'GET',
-            success: function (data) {
+
+        requestGetFeatured()
+            .then(data => {
                 this.setState({
                     songs: data.songs,
                     performers: data.performers,
                 });
                 this.finishLoading();
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(status, err.toString());
-            }
-        });
+            })
+            .catch(console.error);
     }
 
     renderPerformerItem(performer) {
