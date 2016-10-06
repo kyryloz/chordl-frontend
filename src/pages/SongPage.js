@@ -7,6 +7,7 @@ import api from "../global/api";
 import {Button} from "react-bootstrap/lib";
 import History from "../components/History";
 import {Chordify, Chord, Parser} from "react-chord-parser";
+import {requestHydrateChords} from "../global/api";
 
 export default class SongPage extends BasePageTemplate {
 
@@ -55,11 +56,8 @@ export default class SongPage extends BasePageTemplate {
             input: chords
         };
 
-        $.ajax({
-            url: `${api.chord}/hydrate`,
-            type: 'POST',
-            data: JSON.stringify(input),
-            success: function (data) {
+        requestHydrateChords(input)
+            .then(data => {
                 const result = {};
                 data.forEach(chordDto => result[chordDto.name] = chordDto.diagram || "xxxxxx");
 
@@ -67,11 +65,8 @@ export default class SongPage extends BasePageTemplate {
                     chords: result
                 });
                 this.finishLoading();
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(xhr, status, err);
-            }
-        });
+            })
+            .catch(console.error);
     };
 
     onHistoryApplied = (song) => {

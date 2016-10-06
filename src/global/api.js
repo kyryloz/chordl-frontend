@@ -13,7 +13,6 @@ export default {
     featured: `${backend}/featured`,
     auth: `${backend}/auth`,
     history: `${backend}/history`,
-    chord: `${backend}/chord`
 };
 
 export function requestGetAllPerformers() {
