@@ -14,53 +14,53 @@ export default {
 };
 
 export function requestGetAllPerformers() {
-    return json(fetch(`${backend}/performers/all`, get()));
+    return json(`${backend}/performers/all`, get());
 }
 
 export function requestGetPerformerIdByName(name) {
-    return json(fetch(`${backend}/performers/v2/search/?name=${name}`, get()));
+    return json(`${backend}/performers/v2/search/?name=${name}`, get());
 }
 
 export function requestGetSongById(id) {
-    return json(fetch(`${backend}/songs/${id}`, get()));
+    return json(`${backend}/songs/${id}`, get());
 }
 
 export function requestPostSong(song) {
-    return json(fetch(`${backend}/songs`, post(song)));
+    return json(`${backend}/songs`, post(song));
 }
 
 export function requestEditSong(song) {
-    return json(fetch(`${backend}/songs`, put(song)));
+    return json(`${backend}/songs`, put(song));
 }
 
 export function requestDeleteSong(id) {
-    return json(fetch(`${backend}/songs/${id}`, del()));
+    return json(`${backend}/songs/${id}`, del());
 }
 
 export function requestHydrateChords(input) {
-    return json(fetch(`${backend}/chord/hydrate`, post(input)));
+    return json(`${backend}/chord/hydrate`, post(input));
 }
 
 export function requestPostChords(chords) {
     return Promise.all(
-        chords.map(chord => json(fetch(`${backend}/chord`, post(chord))))
+        chords.map(chord => json(`${backend}/chord`, post(chord)))
     );
 }
 
 export function requestGetPrettyHistory(history) {
-    return json(fetch(`${backend}/history/pretty?historyId=${history.id}`, get()));
+    return json(`${backend}/history/pretty?historyId=${history.id}`, get());
 }
 
 export function requestApplyHistory(historyId, songId) {
-    return json(fetch(`${backend}/history/apply?historyId=${historyId}&songId=${songId}`, get()));
+    return json(`${backend}/history/apply?historyId=${historyId}&songId=${songId}`, get());
 }
 
 export function requestAuthUser(authData) {
-    return json(fetch(`${backend}/auth/signin`, post(authData)));
+    return json(`${backend}/auth/signin`, post(authData));
 }
 
 export function requestGetMe() {
-    return json(fetch(`${backend}/auth/me`, get()));
+    return json(`${backend}/auth/me`, get());
 }
 
 function checkStatus(response) {
@@ -114,6 +114,8 @@ function applyBearer(props) {
     }
 }
 
-function json(promise) {
-    return promise.then(checkStatus).then(res => res.json())
+function json(path, method) {
+    return fetch(path, method)
+        .then(checkStatus)
+        .then(res => res.json());
 }
