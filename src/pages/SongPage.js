@@ -74,7 +74,7 @@ export default class SongPage extends BasePageTemplate {
     renderUniqueChords() {
         return new Parser(this.state.lyrics)
             .unique()
-            .map(chord => <Chord key={chord} name={chord} diagram={this.state.chords[chord] || "xxxxxx"}/>);
+            .map(chord => <Chord style={{width: 100, height: 100}}key={chord} name={chord} diagram={this.state.chords[chord] || "xxxxxx"}/>);
     }
 
     renderHeader() {
@@ -99,13 +99,13 @@ export default class SongPage extends BasePageTemplate {
     renderContent() {
         return (
             <div style={{marginTop: 16}}>
-                <div style={{display: "flex", flexDirection: "row"}}>
+                <div style={{display: "flex", flexDirection: "column"}}>
                     <div style={{flexGrow: 1}}>
                         <pre>
                             <Chordify color="#aa4444" input={this.state.lyrics}/>
                         </pre>
                     </div>
-                    <div style={{width: 100, marginLeft: 70}}>
+                    <div style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
                         {this.renderUniqueChords()}
                     </div>
                 </div>
