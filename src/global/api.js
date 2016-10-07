@@ -25,6 +25,10 @@ export function requestUpdatePerformer(performer) {
     return json(`${backend}/performers/${performer.id}`, put(performer));
 }
 
+export function requestPostPerformer(performer) {
+    return json(`${backend}/performers`, post(performer));
+}
+
 export function requestDeletePerformer(id) {
     return json(`${backend}/performers/${id}`, del());
 }

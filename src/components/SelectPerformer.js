@@ -1,6 +1,5 @@
 import React from "react";
-import * as $ from "jquery";
-import api from "../global/api";
+import {requestPostPerformer} from "../global/api";
 import Typeahead from "react-bootstrap-typeahead";
 import {Button} from "react-bootstrap/lib";
 import * as validator from "../util/validator";
@@ -48,34 +47,25 @@ export default class SelectPerformer extends React.Component {
             performerSubmitting: true
         });
 
-        $.ajax({
-            url: api.performers,
-            type: 'POST',
-            data: JSON.stringify(data),
-            success: function (data) {
-                this.onPerformerSubmitted(data);
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(status, err.toString());
-                this.onPerformerSubmitted();
-            }.bind(this)
-        });
+        requestPostPerformer(data)
+            .then(this.handlePerformerSubmitted)
+            .catch(this.handleError);
     };
 
-    onPerformerSubmitted(data) {
-        if (data) {
-            this.props.performerNames.push(data.name);
+    handlePerformerSubmitted = (data) => {
+        this.props.performerNames.push(data.name);
 
-            this.setState({
-                performerName: data.name,
-                performerSubmitting: false,
-            });
-            this.props.onChange(data.name, true);
-        } else {
-            this.setState({
-                performerSubmitting: false,
-            });
-        }
+        this.setState({
+            performerName: data.name,
+            performerSubmitting: false,
+        });
+        this.props.onChange(data.name, true);
+    };
+
+    handleError = () => {
+        this.setState({
+            performerSubmitting: false,
+        });
     };
 
     renderCreatePerformerButton = () => {
