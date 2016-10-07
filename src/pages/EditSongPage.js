@@ -156,6 +156,8 @@ export default class EditSongPage extends BasePageTemplate {
                     .orElse("")
             }));
 
+        this.setState({chords: uniqueChords});
+
         this.hydrateChords(uniqueChords.filter(chord => !chord.diagram));
     };
 
@@ -168,16 +170,27 @@ export default class EditSongPage extends BasePageTemplate {
 
         requestHydrateChords(input)
             .then(data => {
-                const result = [
-                    ...this.state.chords,
-                    ...data.map(chord => ({exists: !!chord.diagram, ...chord}))
-                ];
-                const chords = [...new Set(result.map(chord => chord.name))]
-                    .map(chordName => result.filter(chord => chord.name === chordName)[0]);
 
-                this.setState({
-                    chords
-                });
+                const {chords} = this.state;
+                chords.forEach(chord => {
+                    const hydratedChord = data.filter(dataChord => dataChord.name === chord.name)[0];
+                    if (hydratedChord) {
+                        chord.diagram = hydratedChord.diagram;
+                        chord.exists = !!hydratedChord.diagram;
+                    }
+                })
+
+                console.log("chords", chords);
+
+                // const result = [
+                //     ...this.state.chords,
+                //     ...data.map(chord => ({exists: !!chord.diagram, ...chord}))
+                // ];
+
+                // const chords = [...new Set(result.map(chord => chord.name))]
+                //     .map(chordName => result.filter(chord => chord.name === chordName)[0]);
+
+                this.setState({chords});
             })
             .catch(this.handleError);
     };
