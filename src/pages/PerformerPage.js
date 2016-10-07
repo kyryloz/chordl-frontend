@@ -1,10 +1,9 @@
 import React from "react";
-import * as $ from "jquery";
 import SongsList from "../components/SongsList";
 import {Link} from "react-router";
 import BasePageTemplate from "./BasePageTemplate";
 import {Button} from "react-bootstrap/lib";
-import api from "../global/api";
+import {requestGetPerformerById, requestGetPerformerSongs} from "../global/api";
 
 export default class PerformerPage extends BasePageTemplate {
 
@@ -24,38 +23,26 @@ export default class PerformerPage extends BasePageTemplate {
 
     loadPerformer() {
         this.startLoading();
-        $.ajax({
-            url: `${api.performers}/${this.props.params.id}`,
-            dataType: 'json',
-            type: 'GET',
-            success: function (data) {
+        requestGetPerformerById(this.props.params.id)
+            .then(data => {
                 this.setState({
                     performer: data
                 });
 
                 this.loadSongs(data);
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(status, err.toString());
-            }
-        });
+            })
+            .catch(console.error);
     }
 
     loadSongs(performer) {
-        $.ajax({
-            url: `${api.performers}/${performer.id}/songs`,
-            dataType: 'json',
-            type: 'GET',
-            success: function (data) {
+        requestGetPerformerSongs(performer.id)
+            .then(data => {
                 this.setState({
                     songs: data
                 });
                 this.finishLoading();
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(status, err.toString());
-            }
-        });
+            })
+            .catch(console.error);
     }
 
     handleEdit = (e) => {

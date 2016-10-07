@@ -5,16 +5,28 @@ const storage = new LocalStorage();
 
 const backend = '/api';
 
-export default {
-    performers: `${backend}/performers`
-};
-
 export function requestGetAllPerformers() {
     return json(`${backend}/performers/all`, get());
 }
 
 export function requestGetPerformerIdByName(name) {
     return json(`${backend}/performers/v2/search/?name=${name}`, get());
+}
+
+export function requestGetPerformerById(id) {
+    return json(`${backend}/performers/${id}`, get());
+}
+
+export function requestGetPerformerSongs(id) {
+    return json(`${backend}/performers/${id}/songs`, get());
+}
+
+export function requestUpdatePerformer(performer) {
+    return json(`${backend}/performers/${performer.id}`, put(performer));
+}
+
+export function requestDeletePerformer(id) {
+    return json(`${backend}/performers/${id}`, del());
 }
 
 export function requestGetSongById(id) {

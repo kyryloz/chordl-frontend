@@ -1,8 +1,7 @@
 import React from "react";
-import * as $ from "jquery";
 import update from "react-addons-update";
 import BasePageTemplate from "./BasePageTemplate";
-import api from "../global/api";
+import {requestGetPerformerById, requestUpdatePerformer, requestDeletePerformer} from "../global/api";
 import {Button, FormGroup, ControlLabel, FormControl} from "react-bootstrap/lib";
 import * as validator from "../util/validator";
 
@@ -23,34 +22,21 @@ export default class EditPerformerPage extends BasePageTemplate {
 
     loadPerformer() {
         this.startLoading();
-        $.ajax({
-            url: `${api.performers}/${this.props.params.id}`,
-            dataType: 'json',
-            type: 'GET',
-            success: function (data) {
+        requestGetPerformerById(this.props.params.id)
+            .then(data => {
                 this.setState({performer: data});
                 this.finishLoading();
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(status, err.toString());
-            }
-        });
+            })
+            .catch(console.error);
     }
 
     updatePerformer() {
-        $.ajax({
-            url: `${api.performers}/${this.state.performer.id}`,
-            dataType: 'json',
-            type: 'PUT',
-            data: JSON.stringify(this.state.performer),
-            success: function (data) {
+        requestUpdatePerformer(this.state.performer)
+            .then(data => {
                 this.setState({performer: data});
                 this.handleCancel();
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(status, err.toString());
-            }
-        });
+            })
+            .catch(console.error);
     }
 
     handleNameChange = (event) => {
@@ -72,16 +58,11 @@ export default class EditPerformerPage extends BasePageTemplate {
     };
 
     deletePerformer() {
-        $.ajax({
-            url: `${api.performers}/${this.state.performer.id}`,
-            type: 'DELETE',
-            success: function (data) {
+        requestDeletePerformer(this.state.performer.id)
+            .then(() => {
                 this.context.router.replace("/");
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(xhr, status, err);
-            }
-        });
+            })
+            .catch(console.error)
     }
 
     handleDelete = () => {
