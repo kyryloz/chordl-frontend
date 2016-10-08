@@ -153,7 +153,11 @@ export default class EditSongPage extends BasePageTemplate {
                 diagram: Optional.ofNullable(
                     this.state.chords.filter(chord => chord.name === chordName)[0])
                     .map(chord => chord.diagram)
-                    .orElse("")
+                    .orElse(""),
+                exists: Optional.ofNullable(
+                    this.state.chords.filter(chord => chord.name === chordName)[0])
+                    .map(chord => chord.exists)
+                    .orElse(false)
             }));
 
         this.setState({chords: uniqueChords});
@@ -179,16 +183,6 @@ export default class EditSongPage extends BasePageTemplate {
                         chord.exists = !!hydratedChord.diagram;
                     }
                 })
-
-                console.log("chords", chords);
-
-                // const result = [
-                //     ...this.state.chords,
-                //     ...data.map(chord => ({exists: !!chord.diagram, ...chord}))
-                // ];
-
-                // const chords = [...new Set(result.map(chord => chord.name))]
-                //     .map(chordName => result.filter(chord => chord.name === chordName)[0]);
 
                 this.setState({chords});
             })

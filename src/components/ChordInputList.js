@@ -7,6 +7,7 @@ export default class ChordInputList extends React.Component {
         const nodes = [];
 
         this.props.chords.forEach(chord => {
+            console.log("chord", chord)
             nodes.push(<ChordInput
                 callback={this.props.onChange}
                 chord={chord}
