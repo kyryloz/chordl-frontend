@@ -105,7 +105,7 @@ export default class SongPage extends BasePageTemplate {
                             <Chordify color="#aa4444" input={this.state.lyrics}/>
                         </pre>
                     </div>
-                    <div style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
+                    <div style={{display: "flex", flexDirection: "row", flexWrap: "wrap", marginTop: 16}}>
                         {this.renderUniqueChords()}
                     </div>
                 </div>

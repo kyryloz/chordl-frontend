@@ -19,6 +19,12 @@ import * as Validator from "../util/validator";
 import {Parser} from "react-chord-parser";
 import Optional from "optional-js";
 import SongTitle from "../components/SongTitle";
+import DOMPurify from "dompurify";
+
+const domPurifyConfig = {
+    ALLOWED_TAGS: [],
+    KEEP_CONTENT: true
+};
 
 export default class EditSongPage extends BasePageTemplate {
 
@@ -140,7 +146,7 @@ export default class EditSongPage extends BasePageTemplate {
         const newLyrics = e.target.value;
 
         this.setState({
-            songLyrics: newLyrics,
+            songLyrics: DOMPurify.sanitize(newLyrics, config),
             error: ""
         }, this.parseChords);
     };
