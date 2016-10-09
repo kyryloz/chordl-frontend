@@ -6,7 +6,8 @@ import {
     requestGetPerformerIdByName,
     requestHydrateChords,
     requestGetSongById,
-    requestPostChords
+    requestPostChords,
+    requestPostPerformer
 } from "../global/api";
 import {HelpBlock} from "react-bootstrap/lib";
 import FormGroupSelectPerformer from "../components/FormGroupSelectPerformer";
@@ -89,11 +90,19 @@ export default class EditSongPage extends BasePageTemplate {
                 .then(this.handleSubmitSuccess)
                 .catch(this.handleError)
         } else {
-            requestGetPerformerIdByName(this.state.performerName)
-                .then(this.postSong)
-                .then(this.postChords)
-                .then(this.handleSubmitSuccess)
-                .catch(this.handleError)
+            if (this.state.performerExists) {
+                requestGetPerformerIdByName(this.state.performerName)
+                    .then(this.postSong)
+                    .then(this.postChords)
+                    .then(this.handleSubmitSuccess)
+                    .catch(this.handleError)
+            } else {
+                 requestPostPerformer({name: this.state.performerName})
+                    .then(this.postSong)
+                    .then(this.postChords)
+                    .then(this.handleSubmitSuccess)
+                    .catch(this.handleError)
+            }
         }
     };
 
@@ -146,7 +155,7 @@ export default class EditSongPage extends BasePageTemplate {
         const newLyrics = e.target.value;
 
         this.setState({
-            songLyrics: DOMPurify.sanitize(newLyrics, config),
+            songLyrics: DOMPurify.sanitize(newLyrics, domPurifyConfig),
             error: ""
         }, this.parseChords);
     };
@@ -217,7 +226,7 @@ export default class EditSongPage extends BasePageTemplate {
 
         if (!this.props.params.id) {
             performerValidated =
-                Validator.validatePerformer(this.state.performerName, this.state.performerExists, true);
+                Validator.validatePerformer(this.state.performerName, true, true);
         }
 
         return performerValidated

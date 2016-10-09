@@ -24,17 +24,33 @@ export default class FormGroupSelectPerformer extends React.Component {
             .catch(console.log)
     }
 
+    isPerformerExists = (performerName) => {
+        return this.state.performerNames
+            .some(e => performerName.toLowerCase() === e.toLowerCase());
+    };
+
+    shouldRenderPerformerCreateLabel = () => {
+        return this.props.performerName.length > 1 && !this.isPerformerExists(this.props.performerName);
+    };
+
+    onPerformerChange = (performerName) => {
+        this.props.onChange(performerName, this.isPerformerExists(performerName));
+    }
+
     render() {
         return (
             <FormGroup
                 controlId="formBasicText"
-                validationState={Validator.validatePerformer(this.props.performerName, this.props.performerExists)}
+                validationState={Validator.validatePerformer(
+                        this.props.performerName,
+                        this.isPerformerExists(this.props.performerName))}
             >
                 <ControlLabel>Performer</ControlLabel>
                 <SelectPerformer
                     disabled={this.props.disabled}
-                    onChange={this.props.onChange}
-                    performerNames={this.state.performerNames}/>
+                    onChange={this.onPerformerChange}
+                    performerNames={this.state.performerNames}
+                    renderCreateLabel={this.shouldRenderPerformerCreateLabel()}/>
                 <FormControl.Feedback />
             </FormGroup>
         )
