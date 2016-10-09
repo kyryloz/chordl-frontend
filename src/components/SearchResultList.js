@@ -15,7 +15,7 @@ export default class SearchResultList extends React.Component {
     renderSnippet(snippet) {
         return (
             <pre style={{marginTop: 16, marginLeft: 16}}>
-                <Highlight text={snippet}/>
+                <Highlight enabled={true} text={snippet}/>
             </pre>
         )
     }
