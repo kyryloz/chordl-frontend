@@ -61,7 +61,7 @@ export default class EditSongPage extends BasePageTemplate {
             songTitle: song.title,
             songLyrics: song.lyrics,
             performerName: song.performerName,
-            performerId: song.performerId,
+            performerId: song.performerId
         });
     };
 
