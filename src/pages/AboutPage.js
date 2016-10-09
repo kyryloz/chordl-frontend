@@ -1,5 +1,6 @@
 import React from "react";
 import BasePageTemplate from "./BasePageTemplate";
+import {version} from '../../package.json';
 
 export default class AboutPage extends BasePageTemplate {
 
@@ -72,6 +73,9 @@ export default class AboutPage extends BasePageTemplate {
                     All source code is available on <a href="https://github.com/kyryloz">GitHub</a>.
                     Pull requests are welcome. Feel free to create an issue if something went wrong.
                 </p>
+                <small style={{color: "lightgrey"}}>
+                    Version: {version}
+                </small>
             </div>
         )
     }
