@@ -21,7 +21,7 @@ export default class FormGroupEditLyrics extends React.Component {
                     onChange={this.props.onChange}
                 />
                 <FormControl.Feedback />
-                <HelpBlock>Wrap each chord into braces (e.g., [Am]), so we can recognize it</HelpBlock>
+                <HelpBlock>You can escape chord with "\" character, e.g. "What \A Hell", so it won't be rendered</HelpBlock>
             </FormGroup>
         )
     }
